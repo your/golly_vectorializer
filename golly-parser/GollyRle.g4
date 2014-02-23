@@ -4,14 +4,14 @@ rle	: COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
 	;
 
 
-header	: x_pos ',' y_pos (',' RULE_)? NEWLINE?
-//header	: x_pos ',' y_pos  NEWLINE
+header	: xPos ',' yPos (',' RULE_)? NEWLINE?
+//header	: xPos ',' yPos  NEWLINE
 	;
 
-x_pos	: 'x' '=' UINT
+xPos	: 'x' '=' UINT
 	;
 
-y_pos	: 'y' '=' UINT
+yPos	: 'y' '=' UINT
 	;
 
 RULE_: 'rule' WS? '=' WS? RULE_STR
@@ -21,51 +21,51 @@ RULE_: 'rule' WS? '=' WS? RULE_STR
 pattern	: row+
 	;
 
-row	: cell_pattern* NEWLINE? cell_pattern* end_row
+row	: cellPattern* NEWLINE? cellPattern* end_row
 	;
 
-cell_pattern : UINT? cell_state
+cellPattern : UINT? cell_state
 	     ;
 
-cell_state : active_state
-	   | inactive_state
+cell_state : activeState
+	   | inactiveState
 	   ;
 
-active_state : SINGLE_ACTIVE_STATE
-	     | PREFIX_STATE? MULTI_ACTIVE_STATE
+activeState : SINGLE_ACTIVESTATE
+	     | PREFIX_STATE? MULTI_ACTIVESTATE
 	     ;
 
-inactive_state : SINGLE_INACTIVE_STATE
-	       | MULTI_INACTIVE_STATE
+inactiveState : SINGLE_INACTIVESTATE
+	       | MULTI_INACTIVESTATE
 	       ;
 	     
-end_row : end_line
+end_row : endLine
 	| END_PATTERN
 	;
 	
-end_line : UINT? END_LINE
+endLine : UINT? ENDLINE
 	 ;
 
 
-END_LINE : '$'
+ENDLINE : '$'
 	 ;
 	  
 END_PATTERN : '!'
 	    ;
 
-SINGLE_INACTIVE_STATE : 'b'
+SINGLE_INACTIVESTATE : 'b'
 		      ;
 
-MULTI_INACTIVE_STATE : '.'
+MULTI_INACTIVESTATE : '.'
 		     ;
 		      
-SINGLE_ACTIVE_STATE : 'o'
+SINGLE_ACTIVESTATE : 'o'
 		    ;
 
 PREFIX_STATE : [p-y]
 	     ;
 
-MULTI_ACTIVE_STATE : [A-X]
+MULTI_ACTIVESTATE : [A-X]
 		   ;
 	   
 COMMENT	: '#' .*? NEWLINE
