@@ -42,13 +42,13 @@ cell_state :
   ;
 
 activeState :
-    SINGLE_ACTIVE_STATE
-  | PREFIX_STATE? MULTI_ACTIVE_STATE
+    SINGLE_ACTIVE_STATE #SingleActive
+  | PREFIX_STATE? MULTI_ACTIVE_STATE #MultiActive
   ;
 
 inactiveState :
-    SINGLE_INACTIVE_STATE
-  | MULTI_INACTIVE_STATE
+    SINGLE_INACTIVE_STATE #SingleInactive
+  | MULTI_INACTIVE_STATE #MultiInactive
   ;
 	     
 // end_row : endLine
