@@ -4,16 +4,17 @@ JC := javac
 JFLAGS := -g
 ANTLR := antlr4
 
-GRAMMAR := golly_rle.g4
-GOLLY_ANTLR_JAVA := golly_rleLexer.java \
-                    golly_rleBaseListener.java \
-                    golly_rleListener.java \
-                    golly_rleParser.java
+GRAMMAR := GollyRle.g4
+GOLLY_ANTLR_JAVA := GollyRleLexer.java \
+                    GollyRleBaseListener.java \
+                    GollyRleListener.java \
+                    GollyRleParser.java
 GOLLY_ANTLR := $(GOLLY_ANTLR_JAVA) \
-               golly_rle.tokens \
-               golly_rleLexer.tokens
+               GollyRle.tokens \
+               GollyRleLexer.tokens
 GOLLY_TEST_JAVA := BailErrorStrategy.java \
-                   golly_rleReader.java
+                   GollyRleReader.java \
+                   GollyRleFileLoader.java
 
 
 default: $(BIN_DIR) golly_antlr_classes

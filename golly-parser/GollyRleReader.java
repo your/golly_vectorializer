@@ -4,10 +4,10 @@ import java.io.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-public class golly_rleReader
+public class GollyRleReader
 {
-	public static class BailGolly_rleLexer extends golly_rleLexer {
-        public BailGolly_rleLexer(CharStream input) { super(input); }
+	public static class BailGollyRleLexer extends GollyRleLexer {
+        public BailGollyRleLexer(CharStream input) { super(input); }
         public void recover(LexerNoViableAltException e) {
             throw new RuntimeException(e); // Bail out
         }
@@ -17,7 +17,7 @@ public class golly_rleReader
 	{
 		if(args.length == 0)
 		{
-			System.err.println("Syntax: golly_rleReader <golly_ca.rle>");
+			System.err.println("Syntax: GollyRleReader <golly_ca.rle>");
 			System.exit(1);
 		}
 		else
@@ -26,15 +26,19 @@ public class golly_rleReader
 			{
 				FileInputStream fis = new FileInputStream(args[0]);
 				ANTLRInputStream input = new ANTLRInputStream(fis);
-				BailGolly_rleLexer lexer = new BailGolly_rleLexer(input);
+				BailGollyRleLexer lexer = new BailGollyRleLexer(input);
 				CommonTokenStream tokens = new CommonTokenStream(lexer);
-				golly_rleParser parser = new golly_rleParser(tokens);
+				GollyRleParser parser = new GollyRleParser(tokens);
 				parser.removeErrorListeners();
 				parser.setErrorHandler(new BailErrorStrategy());
 
 				try
 				{
-					parser.rle();
+				  ParseTreeWalker walker = new ParseTreeWalker();
+				  GollyRleFileLoader loader = new GollyRleFileLoader();
+				  ParseTree tree = parser.rle();
+				  walker.walk(loader, tree);
+				  
 					System.out.println("File is valid!");
 					//ParseTree tree = parser.rle(); // begin parsing at init rule
 					//System.out.println(tree.toStringTree(parser));// print LISP-style tree
@@ -64,7 +68,7 @@ public class golly_rleReader
 				//ParseTreeWalker walker = new ParseTreeWalker();
 
 				// Walk the tree created during the parse, trigger callbacks
-				//walker.walk(new golly_rleFileValidation(), tree);
+				//walker.walk(new GollyRleFileValidation(), tree);
 				
 
 				//System.out.println(); // print a \n after translation

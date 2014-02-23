@@ -1,4 +1,4 @@
-grammar golly_rle;
+grammar GollyRle;
 
 rle	: COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
 	;
