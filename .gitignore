@@ -1,2 +1,9 @@
 *.class
 *.DS_Store
+./bin/*
+golly_rleLexer.java
+golly_rleBaseListener.java
+golly_rleListener.java 
+golly_rleParser.java
+golly_rle.tokens
+golly_rleLexer.tokens
