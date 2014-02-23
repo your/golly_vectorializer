@@ -1,24 +1,28 @@
 grammar GollyRle;
 
-rle	: COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
-	;
+rle :
+    COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
+  ;
 
 
-header	: xPos ',' yPos (',' RULE_)? NEWLINE?
-//header	: xPos ',' yPos  NEWLINE
-	;
+header :
+    xPos ',' yPos (',' RULE_)? NEWLINE?
+  ;
 
-xPos	: 'x' '=' UINT
-	;
+xPos :
+    'x' '=' UINT
+  ;
 
-yPos	: 'y' '=' UINT
-	;
+yPos :
+    'y' '=' UINT
+  ;
 
-RULE_: 'rule' WS? '=' WS? RULE_STR
-	;
+RULE_ :
+    'rule' WS? '=' WS? RULE_STR
+  ;
 
-
-pattern	: row* finalRow
+pattern	:
+    row* finalRow
   ;
 
 row	: cellPattern* NEWLINE? cellPattern* endRow
@@ -28,20 +32,24 @@ finalRow: row
   | cellPattern+ END_PATTERN
   ;
 
-cellPattern : UINT? cell_state
-	     ;
+cellPattern :
+    UINT? cell_state
+  ;
 
-cell_state : activeState
-	   | inactiveState
-	   ;
+cell_state :
+    activeState
+  | inactiveState
+  ;
 
-activeState : SINGLE_ACTIVE_STATE
-	     | PREFIX_STATE? MULTI_ACTIVE_STATE
-	     ;
+activeState :
+    SINGLE_ACTIVE_STATE
+  | PREFIX_STATE? MULTI_ACTIVE_STATE
+  ;
 
-inactiveState : SINGLE_INACTIVE_STATE
-	       | MULTI_INACTIVE_STATE
-	       ;
+inactiveState :
+    SINGLE_INACTIVE_STATE
+  | MULTI_INACTIVE_STATE
+  ;
 	     
 // end_row : endLine
 // 	| END_PATTERN
@@ -49,43 +57,60 @@ inactiveState : SINGLE_INACTIVE_STATE
 	
 // endLine : UINT? ENDLINE
 // 	 ;
-endRow : UINT? ENDLINE
+endRow :
+    UINT? ENDLINE
   ;
 
 
-ENDLINE : '$'
-	 ;
-	  
-END_PATTERN : '!'
-	    ;
+ENDLINE :
+    '$'
+  ;
 
-SINGLE_INACTIVE_STATE : 'b'
-		      ;
+END_PATTERN :
+    '!'
+  ;
 
-MULTI_INACTIVE_STATE : '.'
-		     ;
-		      
-SINGLE_ACTIVE_STATE : 'o'
-		    ;
+SINGLE_INACTIVE_STATE :
+    'b'
+  ;
 
-PREFIX_STATE : [p-y]
-	     ;
+MULTI_INACTIVE_STATE :
+    '.'
+  ;
 
-MULTI_ACTIVE_STATE : [A-X]
-		   ;
+SINGLE_ACTIVE_STATE :
+    'o'
+  ;
+
+PREFIX_STATE :
+    [p-y]
+  ;
+
+MULTI_ACTIVE_STATE :
+    [A-X]
+  ;
 	   
-COMMENT	: '#' .*? NEWLINE
-	;
+COMMENT	:
+    '#' FREE_COMMENT
+  ;
 
-UINT	: [0-9]+
-	;
+FREE_COMMENT :
+     .*? NEWLINE
+  ;
+
+UINT :
+    [0-9]+
+  ;
 
 fragment
-RULE_STR: [a-zA-Z0-9/]+
-	;
+RULE_STR:
+    [a-zA-Z0-9/]+
+  ;
 	
-NEWLINE	: [\n\r]+ -> skip
-	;
+NEWLINE	:
+    [\n\r]+ -> skip
+  ;
 
-WS	: [ \t]+ -> skip
-	;
+WS	:
+    [ \t]+ -> skip
+  ;
