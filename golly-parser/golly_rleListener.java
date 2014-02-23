@@ -1,4 +1,4 @@
-// Generated from golly_rle.g4 by ANTLR 4.1
+// Generated from golly_rle.g4 by ANTLR 4.2
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -96,17 +96,6 @@ public interface golly_rleListener extends ParseTreeListener {
 	void exitEnd_line(@NotNull golly_rleParser.End_lineContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link golly_rleParser#inactive_state}.
-	 * @param ctx the parse tree
-	 */
-	void enterInactive_state(@NotNull golly_rleParser.Inactive_stateContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link golly_rleParser#inactive_state}.
-	 * @param ctx the parse tree
-	 */
-	void exitInactive_state(@NotNull golly_rleParser.Inactive_stateContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link golly_rleParser#row}.
 	 * @param ctx the parse tree
 	 */
@@ -127,15 +116,4 @@ public interface golly_rleListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitHeader(@NotNull golly_rleParser.HeaderContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link golly_rleParser#active_state}.
-	 * @param ctx the parse tree
-	 */
-	void enterActive_state(@NotNull golly_rleParser.Active_stateContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link golly_rleParser#active_state}.
-	 * @param ctx the parse tree
-	 */
-	void exitActive_state(@NotNull golly_rleParser.Active_stateContext ctx);
 }

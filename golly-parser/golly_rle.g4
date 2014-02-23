@@ -14,7 +14,7 @@ x_pos	: 'x' '=' UINT
 y_pos	: 'y' '=' UINT
 	;
 
-RULE_: 'rule' '=' RULE_STR
+RULE_: 'rule' WS? '=' WS? RULE_STR
 	;
 	
 
@@ -27,15 +27,15 @@ row	: cell_pattern* end_row
 cell_pattern : UINT? cell_state
 	     ;
 
-cell_state : active_state
-	   | inactive_state
+cell_state : Active_state
+	   | Inactive_state
 	   ;
 
-active_state : SINGLE_ACTIVE_STATE
+Active_state : SINGLE_ACTIVE_STATE
 	     | PREFIX_STATE? MULTI_ACTIVE_STATE
 	     ;
 
-inactive_state : SINGLE_INACTIVE_STATE
+Inactive_state : SINGLE_INACTIVE_STATE
 	       | MULTI_INACTIVE_STATE
 	       ;
 	     
@@ -53,19 +53,19 @@ END_LINE : '$'
 END_PATTERN : '!'
 	    ;
 
-SINGLE_INACTIVE_STATE : 'b'
+fragment SINGLE_INACTIVE_STATE : 'b'
 		      ;
 
-MULTI_INACTIVE_STATE : '.'
+fragment MULTI_INACTIVE_STATE : '.'
 		     ;
 		      
-SINGLE_ACTIVE_STATE : 'o'
+fragment SINGLE_ACTIVE_STATE : 'o'
 		    ;
 
-PREFIX_STATE : [p-y]
+fragment PREFIX_STATE : [p-y]
 	     ;
 
-MULTI_ACTIVE_STATE : [A-X]
+fragment MULTI_ACTIVE_STATE : [A-X]
 		   ;
 	   
 COMMENT	: '#' .*? NEWLINE
