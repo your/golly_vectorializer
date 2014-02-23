@@ -18,11 +18,15 @@ RULE_: 'rule' WS? '=' WS? RULE_STR
 	;
 
 
-pattern	: row+
-	;
+pattern	: row* finalRow
+  ;
 
-row	: cellPattern* NEWLINE? cellPattern* end_row
-	;
+row	: cellPattern* NEWLINE? cellPattern* endRow
+  ;
+
+finalRow: row
+  | cellPattern+ END_PATTERN
+  ;
 
 cellPattern : UINT? cell_state
 	     ;
@@ -31,20 +35,22 @@ cell_state : activeState
 	   | inactiveState
 	   ;
 
-activeState : SINGLE_ACTIVESTATE
-	     | PREFIX_STATE? MULTI_ACTIVESTATE
+activeState : SINGLE_ACTIVE_STATE
+	     | PREFIX_STATE? MULTI_ACTIVE_STATE
 	     ;
 
-inactiveState : SINGLE_INACTIVESTATE
-	       | MULTI_INACTIVESTATE
+inactiveState : SINGLE_INACTIVE_STATE
+	       | MULTI_INACTIVE_STATE
 	       ;
 	     
-end_row : endLine
-	| END_PATTERN
-	;
+// end_row : endLine
+// 	| END_PATTERN
+// 	;
 	
-endLine : UINT? ENDLINE
-	 ;
+// endLine : UINT? ENDLINE
+// 	 ;
+endRow : UINT? ENDLINE
+  ;
 
 
 ENDLINE : '$'
@@ -53,19 +59,19 @@ ENDLINE : '$'
 END_PATTERN : '!'
 	    ;
 
-SINGLE_INACTIVESTATE : 'b'
+SINGLE_INACTIVE_STATE : 'b'
 		      ;
 
-MULTI_INACTIVESTATE : '.'
+MULTI_INACTIVE_STATE : '.'
 		     ;
 		      
-SINGLE_ACTIVESTATE : 'o'
+SINGLE_ACTIVE_STATE : 'o'
 		    ;
 
 PREFIX_STATE : [p-y]
 	     ;
 
-MULTI_ACTIVESTATE : [A-X]
+MULTI_ACTIVE_STATE : [A-X]
 		   ;
 	   
 COMMENT	: '#' .*? NEWLINE

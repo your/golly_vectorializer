@@ -20,7 +20,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   
   /******* listeners overridding ********/
-  public void exitY_pos( GollyRleParser.Y_posContext ctx)
+  public void exitYPos( GollyRleParser.YPosContext ctx)
   {
     String val = ctx.UINT().getText();
     System.out.println("Y VAL: " + val);
