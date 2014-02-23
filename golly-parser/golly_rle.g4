@@ -1,10 +1,10 @@
 grammar golly_rle;
 
-rle	: COMMENT* header COMMENT* pattern COMMENT* EOF
+rle	: COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
 	;
 
 
-header	: x_pos ',' y_pos (',' RULE_)? NEWLINE
+header	: x_pos ',' y_pos (',' RULE_)? NEWLINE?
 //header	: x_pos ',' y_pos  NEWLINE
 	;
 
@@ -21,7 +21,7 @@ RULE_: 'rule' WS? '=' WS? RULE_STR
 pattern	: row+
 	;
 
-row	: cell_pattern* end_row
+row	: cell_pattern* NEWLINE? cell_pattern* end_row
 	;
 
 cell_pattern : UINT? cell_state
@@ -78,7 +78,7 @@ fragment
 RULE_STR: [a-zA-Z0-9/]+
 	;
 	
-NEWLINE	: [\n\r]+
+NEWLINE	: [\n\r]+ -> skip
 	;
 
 WS	: [ \t]+ -> skip

@@ -49,6 +49,7 @@ public class golly_rleParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class RleContext extends ParserRuleContext {
+		public TerminalNode NEWLINE() { return getToken(golly_rleParser.NEWLINE, 0); }
 		public TerminalNode EOF() { return getToken(golly_rleParser.EOF, 0); }
 		public PatternContext pattern() {
 			return getRuleContext(PatternContext.class,0);
@@ -122,7 +123,15 @@ public class golly_rleParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(40); match(EOF);
+			setState(41);
+			_la = _input.LA(1);
+			if (_la==NEWLINE) {
+				{
+				setState(40); match(NEWLINE);
+				}
+			}
+
+			setState(43); match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -166,19 +175,26 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(42); x_pos();
-			setState(43); match(3);
-			setState(44); y_pos();
-			setState(47);
+			setState(45); x_pos();
+			setState(46); match(3);
+			setState(47); y_pos();
+			setState(50);
 			_la = _input.LA(1);
 			if (_la==3) {
 				{
-				setState(45); match(3);
-				setState(46); match(RULE_);
+				setState(48); match(3);
+				setState(49); match(RULE_);
 				}
 			}
 
-			setState(49); match(NEWLINE);
+			setState(53);
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			case 1:
+				{
+				setState(52); match(NEWLINE);
+				}
+				break;
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -214,9 +230,9 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(51); match(1);
-			setState(52); match(4);
-			setState(53); match(UINT);
+			setState(55); match(1);
+			setState(56); match(4);
+			setState(57); match(UINT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -252,9 +268,9 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(55); match(2);
-			setState(56); match(4);
-			setState(57); match(UINT);
+			setState(59); match(2);
+			setState(60); match(4);
+			setState(61); match(UINT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -292,23 +308,29 @@ public class golly_rleParser extends Parser {
 	public final PatternContext pattern() throws RecognitionException {
 		PatternContext _localctx = new PatternContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_pattern);
-		int _la;
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60); 
+			setState(64); 
 			_errHandler.sync(this);
-			_la = _input.LA(1);
+			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			do {
-				{
-				{
-				setState(59); row();
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(63); row();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
-				}
-				setState(62); 
+				setState(66); 
 				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Active_state) | (1L << Inactive_state) | (1L << END_LINE) | (1L << END_PATTERN) | (1L << UINT))) != 0) );
+				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+			} while ( _alt!=2 && _alt!=-1 );
 			}
 		}
 		catch (RecognitionException re) {
@@ -323,6 +345,7 @@ public class golly_rleParser extends Parser {
 	}
 
 	public static class RowContext extends ParserRuleContext {
+		public TerminalNode NEWLINE() { return getToken(golly_rleParser.NEWLINE, 0); }
 		public End_rowContext end_row() {
 			return getRuleContext(End_rowContext.class,0);
 		}
@@ -349,26 +372,50 @@ public class golly_rleParser extends Parser {
 	public final RowContext row() throws RecognitionException {
 		RowContext _localctx = new RowContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_row);
+		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67);
+			setState(71);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=2 && _alt!=-1 ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(64); cell_pattern();
+					setState(68); cell_pattern();
 					}
 					} 
 				}
-				setState(69);
+				setState(73);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
-			setState(70); end_row();
+			setState(75);
+			_la = _input.LA(1);
+			if (_la==NEWLINE) {
+				{
+				setState(74); match(NEWLINE);
+				}
+			}
+
+			setState(80);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(77); cell_pattern();
+					}
+					} 
+				}
+				setState(82);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+			}
+			setState(83); end_row();
 			}
 		}
 		catch (RecognitionException re) {
@@ -408,15 +455,15 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(73);
+			setState(86);
 			_la = _input.LA(1);
 			if (_la==UINT) {
 				{
-				setState(72); match(UINT);
+				setState(85); match(UINT);
 				}
 			}
 
-			setState(75); cell_state();
+			setState(88); cell_state();
 			}
 		}
 		catch (RecognitionException re) {
@@ -454,7 +501,7 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(77);
+			setState(90);
 			_la = _input.LA(1);
 			if ( !(_la==Active_state || _la==Inactive_state) ) {
 			_errHandler.recoverInline(this);
@@ -496,19 +543,19 @@ public class golly_rleParser extends Parser {
 		End_rowContext _localctx = new End_rowContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_end_row);
 		try {
-			setState(81);
+			setState(94);
 			switch (_input.LA(1)) {
 			case END_LINE:
 			case UINT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(79); end_line();
+				setState(92); end_line();
 				}
 				break;
 			case END_PATTERN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(80); match(END_PATTERN);
+				setState(93); match(END_PATTERN);
 				}
 				break;
 			default:
@@ -550,15 +597,15 @@ public class golly_rleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(97);
 			_la = _input.LA(1);
 			if (_la==UINT) {
 				{
-				setState(83); match(UINT);
+				setState(96); match(UINT);
 				}
 			}
 
-			setState(86); match(END_LINE);
+			setState(99); match(END_LINE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -573,28 +620,32 @@ public class golly_rleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\17[\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\17h\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3"+
 		"\2\7\2\30\n\2\f\2\16\2\33\13\2\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\3\2"+
-		"\3\2\7\2&\n\2\f\2\16\2)\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\5\3\62\n\3\3"+
-		"\3\3\3\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\6\6\6?\n\6\r\6\16\6@\3\7\7\7"+
-		"D\n\7\f\7\16\7G\13\7\3\7\3\7\3\b\5\bL\n\b\3\b\3\b\3\t\3\t\3\n\3\n\5\n"+
-		"T\n\n\3\13\5\13W\n\13\3\13\3\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\3"+
-		"\3\2\b\tY\2\31\3\2\2\2\4,\3\2\2\2\6\65\3\2\2\2\b9\3\2\2\2\n>\3\2\2\2\f"+
-		"E\3\2\2\2\16K\3\2\2\2\20O\3\2\2\2\22S\3\2\2\2\24V\3\2\2\2\26\30\7\f\2"+
-		"\2\27\26\3\2\2\2\30\33\3\2\2\2\31\27\3\2\2\2\31\32\3\2\2\2\32\34\3\2\2"+
-		"\2\33\31\3\2\2\2\34 \5\4\3\2\35\37\7\f\2\2\36\35\3\2\2\2\37\"\3\2\2\2"+
-		" \36\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#\'\5\n\6\2$&\7\f\2\2%$\3\2"+
-		"\2\2&)\3\2\2\2\'%\3\2\2\2\'(\3\2\2\2(*\3\2\2\2)\'\3\2\2\2*+\7\2\2\3+\3"+
-		"\3\2\2\2,-\5\6\4\2-.\7\5\2\2.\61\5\b\5\2/\60\7\5\2\2\60\62\7\7\2\2\61"+
-		"/\3\2\2\2\61\62\3\2\2\2\62\63\3\2\2\2\63\64\7\16\2\2\64\5\3\2\2\2\65\66"+
-		"\7\3\2\2\66\67\7\6\2\2\678\7\r\2\28\7\3\2\2\29:\7\4\2\2:;\7\6\2\2;<\7"+
-		"\r\2\2<\t\3\2\2\2=?\5\f\7\2>=\3\2\2\2?@\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\13"+
-		"\3\2\2\2BD\5\16\b\2CB\3\2\2\2DG\3\2\2\2EC\3\2\2\2EF\3\2\2\2FH\3\2\2\2"+
-		"GE\3\2\2\2HI\5\22\n\2I\r\3\2\2\2JL\7\r\2\2KJ\3\2\2\2KL\3\2\2\2LM\3\2\2"+
-		"\2MN\5\20\t\2N\17\3\2\2\2OP\t\2\2\2P\21\3\2\2\2QT\5\24\13\2RT\7\13\2\2"+
-		"SQ\3\2\2\2SR\3\2\2\2T\23\3\2\2\2UW\7\r\2\2VU\3\2\2\2VW\3\2\2\2WX\3\2\2"+
-		"\2XY\7\n\2\2Y\25\3\2\2\2\13\31 \'\61@EKSV";
+		"\3\2\7\2&\n\2\f\2\16\2)\13\2\3\2\5\2,\n\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3"+
+		"\5\3\65\n\3\3\3\5\38\n\3\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\6\6\6C\n\6"+
+		"\r\6\16\6D\3\7\7\7H\n\7\f\7\16\7K\13\7\3\7\5\7N\n\7\3\7\7\7Q\n\7\f\7\16"+
+		"\7T\13\7\3\7\3\7\3\b\5\bY\n\b\3\b\3\b\3\t\3\t\3\n\3\n\5\na\n\n\3\13\5"+
+		"\13d\n\13\3\13\3\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\3\3\2\b\tj\2"+
+		"\31\3\2\2\2\4/\3\2\2\2\69\3\2\2\2\b=\3\2\2\2\nB\3\2\2\2\fI\3\2\2\2\16"+
+		"X\3\2\2\2\20\\\3\2\2\2\22`\3\2\2\2\24c\3\2\2\2\26\30\7\f\2\2\27\26\3\2"+
+		"\2\2\30\33\3\2\2\2\31\27\3\2\2\2\31\32\3\2\2\2\32\34\3\2\2\2\33\31\3\2"+
+		"\2\2\34 \5\4\3\2\35\37\7\f\2\2\36\35\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2"+
+		" !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#\'\5\n\6\2$&\7\f\2\2%$\3\2\2\2&)\3\2\2"+
+		"\2\'%\3\2\2\2\'(\3\2\2\2(+\3\2\2\2)\'\3\2\2\2*,\7\16\2\2+*\3\2\2\2+,\3"+
+		"\2\2\2,-\3\2\2\2-.\7\2\2\3.\3\3\2\2\2/\60\5\6\4\2\60\61\7\5\2\2\61\64"+
+		"\5\b\5\2\62\63\7\5\2\2\63\65\7\7\2\2\64\62\3\2\2\2\64\65\3\2\2\2\65\67"+
+		"\3\2\2\2\668\7\16\2\2\67\66\3\2\2\2\678\3\2\2\28\5\3\2\2\29:\7\3\2\2:"+
+		";\7\6\2\2;<\7\r\2\2<\7\3\2\2\2=>\7\4\2\2>?\7\6\2\2?@\7\r\2\2@\t\3\2\2"+
+		"\2AC\5\f\7\2BA\3\2\2\2CD\3\2\2\2DB\3\2\2\2DE\3\2\2\2E\13\3\2\2\2FH\5\16"+
+		"\b\2GF\3\2\2\2HK\3\2\2\2IG\3\2\2\2IJ\3\2\2\2JM\3\2\2\2KI\3\2\2\2LN\7\16"+
+		"\2\2ML\3\2\2\2MN\3\2\2\2NR\3\2\2\2OQ\5\16\b\2PO\3\2\2\2QT\3\2\2\2RP\3"+
+		"\2\2\2RS\3\2\2\2SU\3\2\2\2TR\3\2\2\2UV\5\22\n\2V\r\3\2\2\2WY\7\r\2\2X"+
+		"W\3\2\2\2XY\3\2\2\2YZ\3\2\2\2Z[\5\20\t\2[\17\3\2\2\2\\]\t\2\2\2]\21\3"+
+		"\2\2\2^a\5\24\13\2_a\7\13\2\2`^\3\2\2\2`_\3\2\2\2a\23\3\2\2\2bd\7\r\2"+
+		"\2cb\3\2\2\2cd\3\2\2\2de\3\2\2\2ef\7\n\2\2f\25\3\2\2\2\17\31 \'+\64\67"+
+		"DIMRX`c";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

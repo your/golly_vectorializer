@@ -164,5 +164,5 @@ public class golly_rleBaseListener implements golly_rleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
+	@Override public void visitErrorNode(@NotNull ErrorNode node) { System.out.println("Errore?"); }
 }
