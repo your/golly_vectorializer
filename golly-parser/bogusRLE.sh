@@ -8,7 +8,7 @@ else
 
 		echo "\nLooking for lines ending with integers..."
 
-		find $1 -type f -exec awk --posix '{if ($0~/^.*[0-9]$/ && $0!~/^(#)/ && $0!~/^.*(=).*$/) print "WARN: "FILENAME"@line "NR" contains INTEGER!!!"}' \{\} \;
+		find $1 -type f -name '*.rle' -exec awk --posix '{if ($0~/^.*[0-9]$/ && $0!~/^(#)/ && $0!~/^.*(=).*$/) print "WARN: "FILENAME"@line "NR" ends with INTEGER!!!"}' \{\} \;
 
 		echo "...done!"
 
