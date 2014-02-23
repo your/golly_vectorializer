@@ -67,7 +67,7 @@ ENDLINE :
   ;
 
 END_PATTERN :
-    '!'
+    '!' (NEWLINE FREE_COMMENT*)?
   ;
 
 SINGLE_INACTIVE_STATE :
@@ -94,10 +94,11 @@ COMMENT	:
     '#' FREE_COMMENT
   ;
 
+fragment
 FREE_COMMENT :
-     .*? NEWLINE
+     .*? NEWLINE -> skip
   ;
-
+  
 UINT :
     [0-9]+
   ;
