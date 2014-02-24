@@ -45,7 +45,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     /* assuming there is at least one row */
     int lastRow = matrix.size() - 1;
     addMatrixCell(lastRow, value);
-    System.out.println("Adding cell value: " + value);
+    //System.out.println("Adding cell value: " + value);
   }
   
   private void addEmptyMatrixRow(int columns)
@@ -95,6 +95,13 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     addMatrixRow();
     
   }
+
+  public void enterFinalRow(GollyRleParser.FinalRowContext ctx)
+  {
+    /* forget me not */
+    addMatrixRow();
+
+  }
   
   public void exitHeight(GollyRleParser.HeightContext ctx)
   {
@@ -127,7 +134,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
  
     cellMultiplier = Integer.parseInt(mult);
 
-    System.out.println("Found " + cellMultiplier + " cell" + (cellMultiplier==1?"":"s") + ":");
+    System.out.println("--> Adding " + cellMultiplier + " cell" + (cellMultiplier==1?"":"s") + " with value: " + cellState);
 
     /* Adding cells */
     for (int i = 0; i<cellMultiplier; ++i)
@@ -147,7 +154,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
     int emptyRowMultiplier = Integer.parseInt(mult) - 1;
 
-    System.out.println("Found " + emptyRowMultiplier + " emptyRow" + (emptyRowMultiplier==1?"":"s") + "!");
+    System.out.println("--> Adding " + emptyRowMultiplier + " emptyRow" + (emptyRowMultiplier==1?"":"s"));
 
     /* Adding (if present) empty rows */
     for (int i = 0; i<emptyRowMultiplier; ++i)
