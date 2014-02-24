@@ -54,7 +54,7 @@ row :
 
 finalRow :
     row
-  | cellPattern+ END_PATTERN
+  | cellPattern+ ENDLINE? END_PATTERN // <finalRow>$! should be allowed too
   ;
 
 cellPattern :

@@ -10,9 +10,8 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   /******* members *********/
   private ArrayList<String> errors = new ArrayList<String>();
-  private int width;
-  private int height;
-  private int cellMultiplier;
+  private int matrixWidth;
+  private int matrixHeight;
   private int cellState;
   private String rule;
   private ArrayList<ArrayList<Integer>> matrix =
@@ -25,7 +24,35 @@ public class GollyRleFileLoader extends GollyRleBaseListener
   private static final String voidPrefix = "None";
 
   /******* accessors *********/
+  public void setMatrixWidth(int width)
+  {
+    this.matrixWidth = width;
+  }
 
+  public void setMatrixHeight(int height)
+  {
+    this.matrixHeight = height;
+  }
+
+  public void setCellState(int cellState)
+  {
+    this.cellState = cellState;
+  }
+
+  public int getMatrixWidth()
+  {
+    return this.matrixWidth;
+  }
+
+  public int getMatrixHeight()
+  {
+    return this.matrixHeight;
+  }
+
+  public int getCellState()
+  {
+    return this.cellState;
+  }
 
   /******* utilities *********/
   private void addMatrixRow()
@@ -98,22 +125,29 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   public void enterFinalRow(GollyRleParser.FinalRowContext ctx)
   {
-    /* forget me not */
-    addMatrixRow();
+    /* forget me not: parser rule 'finalRow' could contain another row...
+       or *just* cell patterns! In this case new row is needed before proceeding
+     */
+    if (ctx.END_PATTERN() != null)
+    {
+      addMatrixRow();
+    }
 
   }
   
   public void exitHeight(GollyRleParser.HeightContext ctx)
   {
     String val = ctx.UINT().getText();
-    height = Integer.parseInt(val);
+    int height = Integer.parseInt(val);
+    setMatrixHeight(height);
     System.out.println("HEIGHT: " + height);
   }
 
   public void exitWidth(GollyRleParser.WidthContext ctx)
   {
     String val = ctx.UINT().getText();
-    width = Integer.parseInt(val);
+    int width = Integer.parseInt(val);
+    setMatrixWidth(width);
     System.out.println("WIDTH: " + width);
   }
 
@@ -132,12 +166,13 @@ public class GollyRleFileLoader extends GollyRleBaseListener
        mult = ctx.UINT().getText();
     }
  
-    cellMultiplier = Integer.parseInt(mult);
+    int cellMult = Integer.parseInt(mult);
+    int cellState = getCellState();
 
-    System.out.println("--> Adding " + cellMultiplier + " cell" + (cellMultiplier==1?"":"s") + " with value: " + cellState);
+    System.out.println("--> Adding " + cellMult + " cell" + (cellMult==1?"":"s") + " with value: " + cellState);
 
     /* Adding cells */
-    for (int i = 0; i<cellMultiplier; ++i)
+    for (int i = 0; i<cellMult; ++i)
     {
        addMatrixCell(cellState);
     }
@@ -159,20 +194,20 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     /* Adding (if present) empty rows */
     for (int i = 0; i<emptyRowMultiplier; ++i)
     {
-       addEmptyMatrixRow(width);
+       addEmptyMatrixRow(getMatrixWidth());
     }
   }
 
   public void exitSingleActive(GollyRleParser.SingleActiveContext ctx)
   {
     String state = ctx.SINGLE_ACTIVE_STATE().getText();
-    cellState = 1;
+    setCellState(1);
   }
 
   public void exitSingleInactive(GollyRleParser.SingleInactiveContext ctx)
   {
     String state = ctx.SINGLE_INACTIVE_STATE().getText();
-    cellState = 0;
+    setCellState(0);
   }
 
   public void exitMultiActive(GollyRleParser.MultiActiveContext ctx)
@@ -190,15 +225,15 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     }
 
     System.out.println("PREFIX: " + prefix + " STATE: " + state);
-    cellState = translateCellState(prefix, state);
+    int cellState = translateCellState(prefix, state);
     System.out.println("Translated: " + cellState);
-  //addMatrixCell(cellState);
+    setCellState(cellState);
   }
 
   public void exitMultiInactive(GollyRleParser.MultiInactiveContext ctx)
   {
     String state = ctx.MULTI_INACTIVE_STATE().getText();
-    cellState = 0;
+    setCellState(0);
   }
 }
 
