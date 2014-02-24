@@ -1,7 +1,7 @@
 grammar GollyRle;
 
 rle :
-    COMMENT* header COMMENT* pattern COMMENT* NEWLINE? EOF
+    COMMENT* header COMMENT* pattern NEWLINE? COMMENT* EOF
   ;
 
 
@@ -92,7 +92,7 @@ ENDLINE :
   ;
 
 END_PATTERN :
-    '!' (NEWLINE FREE_COMMENT*)?
+    EXLAM (NEWLINE FREE_COMMENT*)?
   ;
 
 SINGLE_INACTIVE_STATE :
@@ -116,7 +116,7 @@ MULTI_ACTIVE_STATE :
   ;
 	   
 COMMENT	:
-    '#' FREE_COMMENT
+    HASH FREE_COMMENT
   ;
 
 fragment
@@ -140,7 +140,15 @@ COMMA :
 EQUAL :
     '='
   ;
-	
+
+HASH :
+    '#'
+  ;
+
+EXLAM :
+    '!'
+  ;
+
 NEWLINE	:
     [\n\r]+ -> skip
   ;
