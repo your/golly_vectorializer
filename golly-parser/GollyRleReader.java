@@ -45,6 +45,7 @@ public class GollyRleReader
 				}
 				catch (RuntimeException e)
 				{
+					e.printStackTrace();
 					System.err.println("File is NOT valid!");
 				}
 /*				catch (RuntimeException ex)
