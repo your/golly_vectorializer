@@ -10,8 +10,8 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   /******* members *********/
   private ArrayList<String> errors = new ArrayList<String>();
-  private int xPos;
-  private int yPos;
+  private int width;
+  private int height;
   private int cellMultiplier;
   private int cellState;
   private String rule;
@@ -96,18 +96,18 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     
   }
   
-  public void exitYPos(GollyRleParser.YPosContext ctx)
+  public void exitHeight(GollyRleParser.HeightContext ctx)
   {
     String val = ctx.UINT().getText();
-    yPos = Integer.parseInt(val);
-    System.out.println("Y VAL: " + yPos);
+    height = Integer.parseInt(val);
+    System.out.println("HEIGHT: " + height);
   }
 
-  public void exitXPos(GollyRleParser.XPosContext ctx)
+  public void exitWidth(GollyRleParser.WidthContext ctx)
   {
     String val = ctx.UINT().getText();
-    xPos = Integer.parseInt(val);
-    System.out.println("X VAL: " + xPos);
+    width = Integer.parseInt(val);
+    System.out.println("WIDTH: " + width);
   }
 
   public void exitRle(GollyRleParser.RleContext ctx)
@@ -152,7 +152,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     /* Adding (if present) empty rows */
     for (int i = 0; i<emptyRowMultiplier; ++i)
     {
-       addEmptyMatrixRow(xPos);
+       addEmptyMatrixRow(width);
     }
   }
 

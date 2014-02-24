@@ -6,29 +6,54 @@ rle :
 
 
 header :
-    xPos ',' yPos (',' RULE_)? NEWLINE?
+    width WS? COMMA WS? height WS? (COMMA CA_RULE)? WS? NEWLINE?
   ;
 
-xPos :
-    'x' '=' UINT
+width :
+    ASSGNX UINT
   ;
 
-yPos :
-    'y' '=' UINT
+height :
+    ASSGNY UINT
   ;
 
-RULE_ :
-    'rule' WS? '=' WS? RULE_STR
+ASSGNX :
+    XCOORD WS? EQUAL WS?
   ;
+
+ASSGNY :
+    YCOORD WS? EQUAL WS?
+  ;
+
+fragment
+XCOORD :
+    'x'
+  ;
+
+fragment
+YCOORD :
+    'y'
+  ;
+
+CA_RULE :
+    RULE_KEYW WS? EQUAL WS? RULE_STR
+  ;
+
+fragment
+RULE_KEYW :
+    'rule'
+;
 
 pattern	:
     row* finalRow
   ;
 
-row	: cellPattern* NEWLINE? cellPattern* endRow
+row :
+    cellPattern* NEWLINE? cellPattern* endRow
   ;
 
-finalRow: row
+finalRow :
+    row
   | cellPattern+ END_PATTERN
   ;
 
@@ -104,8 +129,16 @@ UINT :
   ;
 
 fragment
-RULE_STR:
+RULE_STR :
     [a-zA-Z0-9/]+
+  ;
+
+COMMA :
+    ','
+  ;
+
+EQUAL :
+    '='
   ;
 	
 NEWLINE	:
