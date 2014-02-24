@@ -194,6 +194,12 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     System.out.println("Translated: " + cellState);
   //addMatrixCell(cellState);
   }
+
+  public void exitMultiInactive(GollyRleParser.MultiInactiveContext ctx)
+  {
+    String state = ctx.MULTI_INACTIVE_STATE().getText();
+    cellState = 0;
+  }
 }
 
 
