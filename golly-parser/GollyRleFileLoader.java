@@ -9,7 +9,44 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 {
 
   /******* members *********/
+  private ArrayList<String> errors;
   GollyRleConfiguration config;
+
+  private static final char startingPrefix = 'p';
+  private static final char startingActiveState = 'A';
+  private static final int states = 24;
+
+
+  /******* utilities ********/
+  public int translatePrefix(String prefix)
+  {
+    /* getting a char, btw the string is assumed to be of length 1 */
+    char p = prefix.charAt(0);
+    return p - startingPrefix + 1;
+  }
+
+  public int translateCellState(String state)
+  {
+    /* getting a char, btw the string is assumed to be of length 1 */
+    char s = state.charAt(0);
+    return s - startingActiveState + 1;
+  }
+
+  public int translateCellState(String prefix, String state)
+  {
+    int p = 0;
+    int c = translateCellState(state);
+
+    /* If prefix is not void, translate it */
+    // if (!prefix.equals(voidPrefix))
+    // {
+    //   p = translatePrefix(prefix);
+    // }
+    p = translatePrefix(prefix);
+
+    return p * states + c;
+  }
+  
   
   /******* constructors *******/
   GollyRleFileLoader()
@@ -62,20 +99,27 @@ public class GollyRleFileLoader extends GollyRleBaseListener
   public void exitCellPattern(GollyRleParser.CellPatternContext ctx)
   {
     /* Exiting cellPattern, cellMultiplier and cellState are known */
-    String mult = config.voidMult;
+    // String mult = config.voidMult;
+
+    int cellMult;
 
     if (ctx.UINT() != null)
     {
-       mult = ctx.UINT().getText();
+      String mult = ctx.UINT().getText();
+      cellMult = Integer.parseInt(mult);
+    }
+    else
+    {
+      cellMult = 1;
     }
  
-    int cellMult = Integer.parseInt(mult);
+    // int cellMult = Integer.parseInt(mult);
     int cellState = config.getCellState();
 
     //System.out.println("--> Adding " + cellMult + " cell" + (cellMult==1?"":"s") + " with value: " + cellState);
 
     /* Adding cells */
-    for (int i = 0; i<cellMult; ++i)
+    for (int i = 0; i < cellMult; ++i)
     {
        config.addMatrixCell(cellState);
     }
@@ -83,14 +127,21 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   public void exitEndRow(GollyRleParser.EndRowContext ctx)
   {
-    String mult = config.voidMult;
+    int emptyRowMultiplier;
+      
+    // String mult = config.voidMult;
 
     if (ctx.UINT() != null)
     {
-       mult = ctx.UINT().getText();
+      String mult = ctx.UINT().getText();
+      emptyRowMultiplier = Integer.parseInt(mult) - 1;
+    }
+    else
+    {
+      emptyRowMultiplier = 0;
     }
 
-    int emptyRowMultiplier = Integer.parseInt(mult) - 1;
+    // int emptyRowMultiplier = Integer.parseInt(mult) - 1;
 
     //System.out.println("--> Adding " + emptyRowMultiplier + " emptyRow" + (emptyRowMultiplier==1?"":"s"));
 
@@ -115,20 +166,30 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   public void exitMultiActive(GollyRleParser.MultiActiveContext ctx)
   {
-    String prefix;
+    // String prefix;
     String state = ctx.MULTI_ACTIVE_STATE().getText();
+    int cellState;
 
-    if (ctx.PREFIX_STATE() == null)
+    // if (ctx.PREFIX_STATE() == null)
+    // {
+    //   prefix = config.voidPrefix;
+    // }
+    // else
+    // {
+    //   prefix = ctx.PREFIX_STATE().getText();
+    // }
+    if (ctx.PREFIX_STATE() != null)
     {
-      prefix = config.voidPrefix;
+      String prefix = ctx.PREFIX_STATE().getText();
+      cellState = translateCellState(prefix, state);
     }
     else
     {
-      prefix = ctx.PREFIX_STATE().getText();
+      cellState = translateCellState(state);
     }
 
     //System.out.println("PREFIX: " + prefix + " STATE: " + state);
-    int cellState = config.translateCellState(prefix, state);
+    // int cellState = translateCellState(prefix, state);
     //System.out.println("Translated: " + cellState);
     config.setCellState(cellState);
   }
@@ -139,6 +200,10 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     config.setCellState(0);
   }
 }
+
+
+
+
 
 
 

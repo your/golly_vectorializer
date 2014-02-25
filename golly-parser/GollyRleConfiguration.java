@@ -3,24 +3,18 @@ import java.util.*;
 public class GollyRleConfiguration
 {
   /******* members *********/
-  private ArrayList<String> errors;
   private int matrixWidth;
   private int matrixHeight;
   private int cellState;
   private String rule;
   private ArrayList<ArrayList<Integer>> matrix;
 
-  private static final char startingPrefix = 'p';
-  private static final char startingActiveState = 'A';
-  private static final int states = 24;
-
-  public static final String voidMult = "1";
-  public static final String voidPrefix = "None";
+  // public static final String voidMult = "1";
+  // public static final String voidPrefix = "None";
 
   /******* constructors *********/
   GollyRleConfiguration()
   {
-    this.errors = new ArrayList<String>();
     this.matrix = new ArrayList<ArrayList<Integer>>();
     this.cellState = 0; //default
   }
@@ -99,6 +93,7 @@ public class GollyRleConfiguration
     matrix.add(row);
   }
 
+  /********** config checks ***********/
   public int checkMatrixHeight()
   {
     /* Exit codes:
@@ -205,33 +200,5 @@ public class GollyRleConfiguration
     System.out.println("---> Detected ROWS: " + (caughtERows?("[Y] EXACT: "+rowsExact+" "):"")
                                               + (caughtSRows?("[?] SMALLER: "+rowsSmaller+" "):"")
                                               + (caughtLRows?("[!] LARGER: "+rowsLarger+" "):""));
-  }
-
-  public int translatePrefix(String prefix)
-  {
-    /* getting a char, btw the string is assumed to be of length 1 */
-    char p = prefix.charAt(0);
-    return p - startingPrefix + 1;
-  }
-
-  public int translateCellState(String state)
-  {
-    /* getting a char, btw the string is assumed to be of length 1 */
-    char s = state.charAt(0);
-    return s - startingActiveState + 1;
-  }
-
-  public int translateCellState(String prefix, String state)
-  {
-    int p = 0;
-    int c = translateCellState(state);
-
-    /* If prefix is not void, translate it */
-    if (!prefix.equals(voidPrefix))
-    {
-      p = translatePrefix(prefix);
-    }
-
-    return p * states + c;
   }
 }
