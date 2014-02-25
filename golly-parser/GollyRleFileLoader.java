@@ -42,7 +42,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     String val = ctx.UINT().getText();
     int height = Integer.parseInt(val);
     config.setMatrixHeight(height);
-    System.out.println("HEIGHT: " + height);
+    //System.out.println("HEIGHT: " + height);
   }
 
   public void exitWidth(GollyRleParser.WidthContext ctx)
@@ -50,13 +50,13 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     String val = ctx.UINT().getText();
     int width = Integer.parseInt(val);
     config.setMatrixWidth(width);
-    System.out.println("WIDTH: " + width);
+    //System.out.println("WIDTH: " + width);
   }
 
   public void exitRle(GollyRleParser.RleContext ctx)
   {
      config.checkMatrixIntegrity();
-     config.drawMatrix();
+     //config.drawMatrix();
   }
 
   public void exitCellPattern(GollyRleParser.CellPatternContext ctx)
@@ -72,7 +72,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     int cellMult = Integer.parseInt(mult);
     int cellState = config.getCellState();
 
-    System.out.println("--> Adding " + cellMult + " cell" + (cellMult==1?"":"s") + " with value: " + cellState);
+    //System.out.println("--> Adding " + cellMult + " cell" + (cellMult==1?"":"s") + " with value: " + cellState);
 
     /* Adding cells */
     for (int i = 0; i<cellMult; ++i)
@@ -92,7 +92,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
     int emptyRowMultiplier = Integer.parseInt(mult) - 1;
 
-    System.out.println("--> Adding " + emptyRowMultiplier + " emptyRow" + (emptyRowMultiplier==1?"":"s"));
+    //System.out.println("--> Adding " + emptyRowMultiplier + " emptyRow" + (emptyRowMultiplier==1?"":"s"));
 
     /* Adding (if present) empty rows */
     for (int i = 0; i<emptyRowMultiplier; ++i)
@@ -127,9 +127,9 @@ public class GollyRleFileLoader extends GollyRleBaseListener
       prefix = ctx.PREFIX_STATE().getText();
     }
 
-    System.out.println("PREFIX: " + prefix + " STATE: " + state);
+    //System.out.println("PREFIX: " + prefix + " STATE: " + state);
     int cellState = config.translateCellState(prefix, state);
-    System.out.println("Translated: " + cellState);
+    //System.out.println("Translated: " + cellState);
     config.setCellState(cellState);
   }
 

@@ -3,6 +3,7 @@ import java.io.*;
 // import ANTLR's runtime libraries
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 
 public class GollyRleReader
 {
@@ -34,6 +35,7 @@ public class GollyRleReader
 				BailGollyRleLexer lexer = new BailGollyRleLexer(input);
 				CommonTokenStream tokens = new CommonTokenStream(lexer);
 				GollyRleParser parser = new GollyRleParser(tokens);
+                                parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // faster
 				parser.removeErrorListeners();
 				parser.setErrorHandler(new BailErrorStrategy());
 
