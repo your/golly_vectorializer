@@ -54,6 +54,13 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     this.config = new GollyRleConfiguration();
   }
 
+
+  /******* accessors *********/
+  public GollyRleConfiguration getConfiguration()
+  {
+    return config;
+  }
+
   /******* listeners overridding ********/
   public void enterRow(GollyRleParser.RowContext ctx)
   {
@@ -92,7 +99,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   public void exitRle(GollyRleParser.RleContext ctx)
   {
-     config.checkMatrixIntegrity();
+     // config.checkMatrixIntegrity();
      //config.drawMatrix();
   }
 

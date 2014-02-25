@@ -36,15 +36,18 @@ public class GollyBatchTester
                      }
                });
             GollyRleReader reader = new GollyRleReader();
-            String[] actualFile = new String[1];
+            // String[] actualFile = new String[1];
 
             for (int i = 0; i < rlesList.size(); ++i)
             {
-               actualFile[0] = rlesList.get(i);
+               String actualFile = rlesList.get(i);
                try
                {
-                  System.out.println("\n##### TESTING FILE: " + actualFile[0]);
-                  reader.main(actualFile);
+                  System.out.println("\n##### TESTING FILE: " + actualFile);
+                  // reader.main(actualFile);
+		  boolean validFile = reader.parseFile(actualFile);
+		  System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
+
                }
                catch (Exception e)
                {
