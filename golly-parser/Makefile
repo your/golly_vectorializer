@@ -14,7 +14,8 @@ GOLLY_ANTLR := $(GOLLY_ANTLR_JAVA) \
                GollyRleLexer.tokens
 GOLLY_TEST_JAVA := BailErrorStrategy.java \
                    GollyRleReader.java \
-                   GollyRleFileLoader.java
+                   GollyRleFileLoader.java \
+                   GollyBatchTester.java
 
 
 default: $(BIN_DIR) golly_antlr_classes
