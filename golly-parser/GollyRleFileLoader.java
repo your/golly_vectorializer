@@ -36,7 +36,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     }
 
   }
-  
+
   public void exitHeight(GollyRleParser.HeightContext ctx)
   {
     String val = ctx.UINT().getText();
@@ -55,6 +55,7 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
   public void exitRle(GollyRleParser.RleContext ctx)
   {
+     config.checkMatrixIntegrity();
      config.drawMatrix();
   }
 
@@ -138,19 +139,6 @@ public class GollyRleFileLoader extends GollyRleBaseListener
     config.setCellState(0);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

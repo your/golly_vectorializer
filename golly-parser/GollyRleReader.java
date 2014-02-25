@@ -6,12 +6,17 @@ import org.antlr.v4.runtime.tree.*;
 
 public class GollyRleReader
 {
-	public static class BailGollyRleLexer extends GollyRleLexer {
-        public BailGollyRleLexer(CharStream input) { super(input); }
-        public void recover(LexerNoViableAltException e) {
-            throw new RuntimeException(e); // Bail out
-        }
-    }
+	public static class BailGollyRleLexer extends GollyRleLexer
+	{
+        	public BailGollyRleLexer(CharStream input)
+		{
+			super(input);
+		}
+		public void recover(LexerNoViableAltException e)
+		{
+            		throw new RuntimeException(e); // Bail out
+        	}
+    	}
 
 	public static void main(String[] args) throws Exception
 	{
@@ -39,14 +44,14 @@ public class GollyRleReader
 				  ParseTree tree = parser.rle();
 				  walker.walk(loader, tree);
 				  
-					System.out.println("File is valid!");
-					//ParseTree tree = parser.rle(); // begin parsing at init rule
-					//System.out.println(tree.toStringTree(parser));// print LISP-style tree
+				  //System.out.println("File is valid!");
+				  //ParseTree tree = parser.rle(); // begin parsing at init rule
+				  //System.out.println(tree.toStringTree(parser));// print LISP-style tree
 				}
 				catch (RuntimeException e)
 				{
-					e.printStackTrace();
-					System.err.println("File is NOT valid!");
+					//e.printStackTrace();
+					System.err.println("ERROR: File is NOT in a valid Golly RLE format!");
 				}
 /*				catch (RuntimeException ex)
 				{
@@ -65,18 +70,10 @@ public class GollyRleReader
 					}					
 				}
 */
-				// Create a generic parse tree walker that can trigger callbacks
-				//ParseTreeWalker walker = new ParseTreeWalker();
-
-				// Walk the tree created during the parse, trigger callbacks
-				//walker.walk(new GollyRleFileValidation(), tree);
-				
-
-				//System.out.println(); // print a \n after translation
 			}
 			catch (IOException e)
 			{
-				System.err.println("Error: " + e.getMessage());
+				System.err.println("ERROR: " + e.getMessage());
 			}
 		}
 	}

@@ -99,6 +99,114 @@ public class GollyRleConfiguration
     matrix.add(row);
   }
 
+  public int checkMatrixHeight()
+  {
+    /* Exit codes:
+       0 : height exactly matched
+       1 : smaller than expected matrix built
+      -1 : larger than expected matrix built
+     */
+    int result;
+    int arrayListRows = matrix.size();
+
+    if (arrayListRows == this.matrixHeight)
+    {
+      result = 0;
+    }
+    else
+    {
+      if (arrayListRows < this.matrixHeight)
+      {
+        result = 1;
+      }
+      else
+      {
+        result = -1;
+      }
+    }
+    return result;
+  }
+
+  public ArrayList<Integer> checkMatrixWidth()
+  {
+    /* Will return an ArrayList with exit codes for every row */
+    int arrayListRows = matrix.size();
+    ArrayList<Integer> rowsWidth = new ArrayList<Integer>();
+
+    for (int i = 0; i < arrayListRows; ++i)
+    {
+      int result;
+      ArrayList<Integer> currentArrayListRow = matrix.get(i);
+      int currentRowWidth = currentArrayListRow.size();
+
+      if (currentRowWidth == this.matrixWidth)
+      {
+        result = 0;
+      }
+      else
+      {
+        if (currentRowWidth < this.matrixWidth)
+        {
+          result = 1;
+        }
+        else
+        {
+          result = -1;
+        }
+      }
+      rowsWidth.add(result);
+    }
+   return rowsWidth;
+  }
+
+  public void checkMatrixIntegrity()
+  {
+    int heightIntegrity = checkMatrixHeight();
+    ArrayList<Integer> widthIntegrity = checkMatrixWidth();
+
+    int rowsExact = 0;
+    int rowsSmaller = 0;
+    int rowsLarger = 0;
+
+    boolean caughtERows = false;
+    boolean caughtSRows = false;
+    boolean caughtLRows = false;
+
+    for (int i = 0; i < widthIntegrity.size(); ++i)
+    {
+      int currentRow = widthIntegrity.get(i);
+      switch(currentRow)
+      {
+        case 0:
+        {
+          rowsExact++;
+          caughtERows = true;
+          break;
+        }
+        case 1:
+        {
+          rowsSmaller++;
+          caughtSRows = true;
+          break;
+        }
+        case -1:
+        {
+          rowsLarger++;
+          caughtLRows = true;
+          break;
+        }
+      }
+    }
+    System.out.println("#### MATRIX INTEGRITY RESULTS ####");
+    System.out.println("---> Detected COLS: " + (heightIntegrity==0?("[Y] EXACT")
+                                               :(heightIntegrity<0?"[?] SMALLER than expected"
+                                                                  :"[!] LARGER than expected")));
+
+    System.out.println("---> Detected ROWS: " + (caughtERows?("[Y] EXACT: "+rowsExact+" "):"")
+                                              + (caughtSRows?("[?] SMALLER: "+rowsSmaller+" "):"")
+                                              + (caughtLRows?("[!] LARGER: "+rowsLarger+" "):""));
+  }
+
   public int translatePrefix(String prefix)
   {
     /* getting a char, btw the string is assumed to be of length 1 */
