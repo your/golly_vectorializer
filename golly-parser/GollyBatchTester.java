@@ -41,18 +41,9 @@ public class GollyBatchTester
             for (int i = 0; i < rlesList.size(); ++i)
             {
                String actualFile = rlesList.get(i);
-               try
-               {
-                  System.out.println("\n##### TESTING FILE: " + actualFile);
-                  // reader.main(actualFile);
-		  boolean validFile = reader.parseFile(actualFile);
-		  System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
-
-               }
-               catch (Exception e)
-               {
-                 System.err.println("ERROR: ???");
-               }
+               System.out.println("\n##### TESTING FILE: " + actualFile);
+               boolean validFile = reader.parseFile(actualFile);
+               System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
             }
             System.out.println();
          }
