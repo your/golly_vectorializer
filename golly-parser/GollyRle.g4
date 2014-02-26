@@ -36,7 +36,7 @@ YCOORD :
   ;
 
 CA_RULE :
-    RULE_KEYW WS? EQUAL WS? RULE_STR
+    RULE_KEYW WS? EQUAL WS? .*? NEWLINE
   ;
 
 fragment
@@ -121,17 +121,17 @@ COMMENT	:
 
 fragment
 FREE_COMMENT :
-     .*? NEWLINE -> skip
+     .*? (NEWLINE|EOF) -> skip
   ;
   
 UINT :
     [0-9]+
   ;
 
-fragment
-RULE_STR :
-    [a-zA-Z0-9/:_-]+
-  ;
+//fragment
+//RULE_STR :
+//    [a-zA-Z0-9/:_-]+
+//  ;
 
 COMMA :
     ','
