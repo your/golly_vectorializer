@@ -87,10 +87,10 @@ public class GollyRleConfiguration
     for (int i = 0; i < times; ++i)
     {
       addMatrixRow();
-      for (int j = 0; j < this.matrixWidth; ++j)
-      {
-        addMatrixCell(0);
-      }
+      // for (int j = 0; j < this.matrixWidth; ++j)
+      // {
+      //   addMatrixCell(0);
+      // }
     }
   }
 
