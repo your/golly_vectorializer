@@ -7,17 +7,17 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 
 public class GollyRleReader
 {
-	public class BailGollyRleLexer extends GollyRleLexer
-	{
-        	public BailGollyRleLexer(CharStream input)
-		{
-			super(input);
-		}
-		public void recover(LexerNoViableAltException e)
-		{
-            		throw new RuntimeException(e); // Bail out
-        	}
-    	}
+  public class BailGollyRleLexer extends GollyRleLexer
+  {
+    public BailGollyRleLexer(CharStream input)
+    {
+      super(input);
+    }
+    public void recover(LexerNoViableAltException e)
+    {
+      throw new RuntimeException(e); // Bail out
+    }
+  }
 
   public boolean parseFile(String file)
   {
@@ -39,35 +39,31 @@ public class GollyRleReader
         GollyRleFileLoader loader = new GollyRleFileLoader();
         ParseTree tree = parser.rle();
         walker.walk(loader, tree);
-	GollyRleConfiguration config = loader.getConfiguration();
-	config.checkMatrixIntegrity();
-
+//	GollyRleConfiguration config = loader.getConfiguration();
+//	config.checkMatrixIntegrity();
 	validFile = true;
-        //System.out.println("File is valid!");
-        //ParseTree tree = parser.rle(); // begin parsing at init rule
-        //System.out.println(tree.toStringTree(parser));// print LISP-style tree
       }
       catch (RuntimeException e)
       {
-        //e.printStackTrace();
-        System.err.println("ERROR: File is NOT in a valid Golly RLE format!");
+        // e.printStackTrace();
+        System.err.println("Exception caught: " + e.getCause());
       }
-/*                              catch (RuntimeException ex)
-                                {
-                                if (ex.getClass() == RuntimeException.class &&
-                                ex.getCause() instanceof RecognitionException)
-                                {
-                                // The BailErrorStrategy wraps the RecognitionExceptions in
-                                // RuntimeExceptions so we have to make sure we're detecting
-                                // a true RecognitionException not some other kind
-                                tokens.reset(); // rewind input stream
-                                                // back to standard listeners/handlers
-                                                parser.addErrorListener(ConsoleErrorListener.INSTANCE);
-                                                parser.setErrorHandler(new DefaultErrorStrategy());
-                                                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-                                                parser.rle();
-                                                }                                       
-                                                }
+/*    catch (RuntimeException ex)
+      {
+        if (ex.getClass() == RuntimeException.class &&
+            ex.getCause() instanceof RecognitionException)
+        {
+          // The BailErrorStrategy wraps the RecognitionExceptions in
+          // RuntimeExceptions so we have to make sure we're detecting
+          // a true RecognitionException not some other kind
+          tokens.reset(); // rewind input stream
+          // back to standard listeners/handlers
+          parser.addErrorListener(ConsoleErrorListener.INSTANCE);
+          parser.setErrorHandler(new DefaultErrorStrategy());
+          parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+          parser.rle();
+        }
+      }
 */
     }
     catch (IOException e)
