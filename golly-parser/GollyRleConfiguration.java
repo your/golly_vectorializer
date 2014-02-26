@@ -7,15 +7,13 @@ public class GollyRleConfiguration
   private int matrixHeight;
   private int cellState;
   private String rule;
-  private ArrayList<ArrayList<Integer>> matrix;
-
-  // public static final String voidMult = "1";
-  // public static final String voidPrefix = "None";
+  private int [][] matrix;
+  private int actualRow;
+  private int actualCol;
 
   /******* constructors *********/
   GollyRleConfiguration()
   {
-    this.matrix = new ArrayList<ArrayList<Integer>>();
     this.cellState = 0; //default
   }
 
@@ -53,54 +51,57 @@ public class GollyRleConfiguration
   /******* utilities *********/
   public void drawMatrix()
   {
-    for (List<Integer> list : this.matrix)
+    for (int i = 0; i < this.matrixHeight; ++i)
     {
-      for (Integer i : list)
+      for (int j = 0; j < this.matrixWidth; ++j)
       {
-        System.out.print(i + " "); 
+        System.out.print(this.matrix[i][j] + " ");
       }
       System.out.println();
     }
   }
 
-  public void addMatrixRow()
+  public void initMatrix()
   {
-    ArrayList<Integer> row = new ArrayList<Integer>();
-    matrix.add(row);
+    this.matrix = new int[this.matrixHeight][this.matrixWidth];
+    this.actualRow = -1;
+    this.actualCol = 0;
   }
 
-  public void addMatrixCell(int index, int value)
+  public void addMatrixRow()
   {
-    ArrayList<Integer> row = matrix.get(index);
-    row.add(value);
+    this.actualCol = 0;
+    this.actualRow++;
   }
 
   public void addMatrixCell(int value)
   {
     /* assuming there is at least one row */
-    int lastRow = matrix.size() - 1;
-    addMatrixCell(lastRow, value);
+    // System.out.println("Row: " + actualRow + " | Col: " + actualCol + " : value " + value);
+    this.matrix[this.actualRow][this.actualCol] = value;
+    this.actualCol++;
   }
-  
-  public void addEmptyMatrixRow(int columns)
+
+  public void addEmptyMatrixRow(int times)
   {
-    ArrayList<Integer> row = new ArrayList<Integer>();
-    for(int i = 0; i < columns; ++i)
+    for (int i = 0; i < times; ++i)
     {
-      /* adding zero values */
-      row.add(0);
+      addMatrixRow();
+      for (int j = 0; j < this.matrixWidth; ++j)
+      {
+        addMatrixCell(0);
+      }
     }
-    matrix.add(row);
   }
 
   /********** config checks ***********/
-  public int checkMatrixHeight()
+/*public int checkMatrixHeight()
   {
-    /* Exit codes:
-       0 : height exactly matched
-       1 : smaller than expected matrix built
-      -1 : larger than expected matrix built
-     */
+     //  Exit codes:
+     //  0 : height exactly matched
+     //  1 : smaller than expected matrix built
+     // -1 : larger than expected matrix built
+
     int result;
     int arrayListRows = matrix.size();
 
@@ -124,7 +125,7 @@ public class GollyRleConfiguration
 
   public ArrayList<Integer> checkMatrixWidth()
   {
-    /* Will return an ArrayList with exit codes for every row */
+    // Will return an ArrayList with exit codes for every row
     int arrayListRows = matrix.size();
     ArrayList<Integer> rowsWidth = new ArrayList<Integer>();
 
@@ -200,5 +201,5 @@ public class GollyRleConfiguration
     System.out.println("---> Detected ROWS: " + (caughtERows?("[Y] EXACT: "+rowsExact+" "):"")
                                               + (caughtSRows?("[?] SMALLER: "+rowsSmaller+" "):"")
                                               + (caughtLRows?("[!] LARGER: "+rowsLarger+" "):""));
-  }
+  }*/
 }
