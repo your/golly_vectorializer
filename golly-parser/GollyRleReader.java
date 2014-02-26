@@ -19,9 +19,9 @@ public class GollyRleReader
     }
   }
 
-  public boolean parseFile(String file)
+  public GollyRleConfiguration parseFile(String file)
   {
-    boolean validFile = false;
+    GollyRleConfiguration config = new GollyRleConfiguration();
     try
     {
       FileInputStream fis = new FileInputStream(file);
@@ -39,9 +39,8 @@ public class GollyRleReader
         GollyRleFileLoader loader = new GollyRleFileLoader();
         ParseTree tree = parser.rle();
         walker.walk(loader, tree);
-//	GollyRleConfiguration config = loader.getConfiguration();
-//	config.checkMatrixIntegrity();
-	validFile = true;
+        config = loader.getConfiguration();
+        System.out.println("Golly RLE format validation: PASSED");
       }
 /*    catch (RuntimeException e)
       {
@@ -65,6 +64,7 @@ public class GollyRleReader
           parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
           parser.rle();
         }
+        System.out.println("Golly RLE format validation: FAILED");
       }
 
     }
@@ -73,7 +73,7 @@ public class GollyRleReader
       System.err.println("ERROR: " + e.getMessage());
     }
 
-    return validFile;
+    return config;
   }
 
   public boolean parseString(String text)
@@ -82,19 +82,74 @@ public class GollyRleReader
     return validString;
   }
 
-	public static void main(String[] args) throws Exception
-	{
-		if(args.length == 0)
-		{
-			System.err.println("Syntax: GollyRleReader <golly_ca.rle>");
-			System.exit(1);
-		}
-		else
-		{
-		  GollyRleReader reader = new GollyRleReader();
-		  boolean validFile = reader.parseFile(args[0]);
-		  
-		  System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
-		}
-	}
+  public static void compareMatrices(GollyRleConfiguration config) throws IOException
+  {
+    GollyRleFileLoader loader = new GollyRleFileLoader();
+    GollyRleManualInput manual = new GollyRleManualInput();
+    GollyRleConfiguration inputConfig = new GollyRleConfiguration();
+    inputConfig = manual.fillManualMatrix();
+    boolean matchingMatrices = loader.areMatricesEqual(config,inputConfig);
+    if (matchingMatrices) System.out.println("MATRICES MATCH");
+    else System.out.println("MATRICES DON'T MATCH");
+  }
+
+  public static void main(String[] args) throws Exception
+  {
+
+    if(args.length == 0)
+    {
+      System.err.println("For a list of the available commands type: GollyRleReader -h");
+      System.exit(1);
+    }
+    else
+    {
+      String actualFile = args[0];
+      if (actualFile.equals("-h"))
+      {
+        System.out.println("Syntax\t: GollyRleReader <FILE> [OPTIONS]\n\n"
+                         + " <FILE> is a mandatory field;\n"
+                         + " [OPTIONS] are optional fields:\n"
+                         + "    -d   : draw the matrix\n"
+                         + "    -l   : parse the file and validate the expected matrix from stdin input\n");
+      }
+      else
+      {
+        GollyRleReader reader = new GollyRleReader();
+        GollyRleConfiguration config = reader.parseFile(actualFile);
+
+        // Perform other actions if requested
+        if (args.length > 1)
+        {
+          boolean alreadyDrown = false;
+          boolean alreadyCompared = false;
+          for (int i = 1; i < args.length; i++)
+          {
+            switch(args[i])
+            {
+              case "-d":
+              {
+                if (!alreadyDrown)
+                {
+                  config.drawMatrix();
+                  alreadyDrown = true;
+                }
+                break;
+              }
+              case "-l":
+              {
+                if (!alreadyCompared)
+                {
+                  compareMatrices(config);
+                  alreadyCompared = true;
+                }
+                break;
+              }
+            }
+          }
+        }
+        //System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
+      }
+    }
+  }
+
 }

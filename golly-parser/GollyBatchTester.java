@@ -10,9 +10,10 @@ public class GollyBatchTester
 
    public static void main(String[] args) throws IOException
    {
+      System.out.println("Golly BATCH RLE file parser");
       if(args.length == 0)
       {
-         System.err.println("Syntax: GollyBatchTester <DIR>");
+         System.err.println("Syntax: GollyBatchTester <DIR> [OPTIONS] -- (see GollyRleReader -h)\n");
          System.exit(1);
       }
       else
@@ -41,9 +42,19 @@ public class GollyBatchTester
             for (int i = 0; i < rlesList.size(); ++i)
             {
                String actualFile = rlesList.get(i);
+               args[0] = actualFile; // overwrite each time <FILE> field
+               //String[] actualFile = new String[] {rlesList.get(i)};
                System.out.println("\n##### TESTING FILE: " + actualFile);
-               boolean validFile = reader.parseFile(actualFile);
-               System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
+               try
+               {
+                 reader.main(args);
+               }
+               catch(Exception e)
+               {
+                 System.err.println("Exception caught: " + e.getCause());
+               }
+               //GollyRleConfiguration config = reader.parseFile(args);
+               //System.out.println("FILE is " + (validFile? "VALID": "NOT VALID"));
             }
             System.out.println();
          }

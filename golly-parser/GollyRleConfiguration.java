@@ -48,6 +48,11 @@ public class GollyRleConfiguration
     return this.cellState;
   }
 
+  public int getCellState(int row, int col)
+  {
+    return this.matrix[row][col];
+  }
+
   /******* utilities *********/
   public void drawMatrix()
   {

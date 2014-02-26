@@ -18,6 +18,47 @@ public class GollyRleFileLoader extends GollyRleBaseListener
 
 
   /******* utilities ********/
+  public boolean areMatricesEqual(GollyRleConfiguration matrixOne,
+                                  GollyRleConfiguration matrixTwo)
+  {
+    boolean result = false;
+    int matrixOneHeight = matrixOne.getMatrixHeight();
+    int matrixOneWidth = matrixOne.getMatrixWidth();
+    int matrixTwoHeight = matrixTwo.getMatrixHeight();
+    int matrixTwoWidth = matrixTwo.getMatrixWidth();
+
+    if (matrixOneHeight != matrixTwoHeight |
+        matrixTwoWidth != matrixTwoWidth)
+    {
+      result = false;
+    }
+    else
+    {
+      for (int i = 0; i < matrixOneHeight; i++)
+      {
+        for (int j = 0; j < matrixOneWidth; j++)
+        {
+          int matrixOneCell = matrixOne.getCellState(i,j);
+          int matrixTwoCell = matrixTwo.getCellState(i,j);
+          if (matrixOneCell != matrixTwoCell)
+          {
+            result = false;
+            break;
+          }
+          else
+          {
+            result = true;
+          }
+        }
+        if (result == false)
+        {
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
   public int translatePrefix(String prefix)
   {
     /* getting a char, btw the string is assumed to be of length 1 */
