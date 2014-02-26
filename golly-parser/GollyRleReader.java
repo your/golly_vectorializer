@@ -43,13 +43,15 @@ public class GollyRleReader
 //	config.checkMatrixIntegrity();
 	validFile = true;
       }
-      catch (RuntimeException e)
+/*    catch (RuntimeException e)
       {
         // e.printStackTrace();
         System.err.println("Exception caught: " + e.getCause());
       }
-/*    catch (RuntimeException ex)
+*/    catch (RuntimeException ex)
       {
+        // try to recover from a RecognEx
+        System.err.println("Exception caught: " + ex.getCause());
         if (ex.getClass() == RuntimeException.class &&
             ex.getCause() instanceof RecognitionException)
         {
@@ -64,7 +66,7 @@ public class GollyRleReader
           parser.rle();
         }
       }
-*/
+
     }
     catch (IOException e)
     {
