@@ -15,6 +15,7 @@ GOLLY_ANTLR := $(GOLLY_ANTLR_JAVA) \
 GOLLY_TEST_JAVA := BailErrorStrategy.java \
                    GollyRleReader.java \
                    GollyRleFileLoader.java \
+                   GollyRleManualInput.java \
                    GollyBatchTester.java
 
 
