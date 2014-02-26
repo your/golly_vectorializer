@@ -1,0 +1,672 @@
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Banks/Banks-I-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Banks/Banks-II-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Banks/Banks-III-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Banks/Banks-IV-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/clocking-on-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/coders-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/construction-arm-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/crossover-unidir-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/echo-discriminator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/echo-switch-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/extend-coder-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/gates-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/repeater-emitter-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/sensing-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/sheathing-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/sheathing-problems.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/signals-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Codd/tape-reader-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Devore/crossover.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Devore/Devore-body.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Devore/Devore-rep.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Devore/discriminator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Generations/Delta.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Generations/Sawfish.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/Boustrophedon-replicator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/cell-coders-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/codon4-auto-retract.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/codon5-auto-retract.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/construction-arm-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/counter-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/golly-constructor.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/Hutton-replicator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/N-compressed-replicator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/JvN/read-arm-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/agar-p3.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/cross-surface.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/herringbone-agar-p14.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/Klein-bottle.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/lightspeed-bubble.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/pulsars-in-tube.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/sphere.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/torus-with-shift.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Bounded-Grids/torus.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/c4-diag-switch-engines.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/LWSS-breeder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/p100-H-channel-breeder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/p90-rake-factory.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/pi-blink-breeder1.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/pi-blink-breeder2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/rake-breeder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/slide-breeder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/spacefiller.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/switch-engine-breeder-MR.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Breeders/switch-engine-breeder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/2c5-spaceship-gun-p416.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/2c5-spaceship-gun-p690.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/7-in-a-row-Cordership-V-gun.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/Cordership-gun-p784.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/golly-ticker.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/gun-p165mwss.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/p690-PT-Cordership-gun.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/pseudo-p34-gun.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Guns/vacuum-cleaner.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/ark1.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/ark2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/blom.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/iwona.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/justyna.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/lidka-predecessor.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/natural-LWSS.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/rabbits-relation-17423.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/rabbits-relation-17465.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Methuselahs/temp-pulsars-big-s.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/blockstacker.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/Cambrian-Explosion.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/diagfuse1.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/die658.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/elbow-ladders.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/fermat-primes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/infinity-hotel0.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/infinity-hotel1.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/infinity-hotel2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/infinity-hotel3.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/lightspeed.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/loggrow-corder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/sawtooth6b.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/tubstretch-c124b.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/twinprimes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Miscellaneous/wicks-DRH-2002.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/billiard-table.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/DRH-oscillators.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/extensible-low-period.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/glider-stream-crystal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/low-period.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/p103079214841.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/p138.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/queen-bee-turn.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/traffic-light-hasslers.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Oscillators/unique-high-period.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/c4-diagonal-puffer.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/line-puffer-superstable.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/line-puffer-unstable.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/p100-H-track-puffer.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/pi-fuse-puffer.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/puffer-2c5.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/puffer-train.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Puffers/zigzag-wickstretcher.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/2c5-engineless-rake-p185.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/2c5-spaceship-rake-p240.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/basic-rakes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/c2-Cordership-rake.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/c3-forward-rake-p333.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/c4-sideways-rake.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/c5-adjustable-rake.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/forward-LWSS-rake-p90.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/p270-frothing-puffer-rake.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Rakes/spider-rake.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/advancer.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/constructor-memory-tape.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/heisenblinker-30.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/heisenburp-30.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/heisenburp-46-natural.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/heisenburp-46.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/Herschel-conduit-stamp-collection.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/lightspeed-telegraph.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/p30-racetrack.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/p46racetrack.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/reflectors.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/reflectors2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/signal-turn.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/stargate.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/traffic-lights-extruder.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/Turing-Machine-3-state.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/Unit-Life-Cell-512x512.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Signal-Circuitry/Unit-Life-Deep-Cell.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/2c5-orthogonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/adjustable-Corder-lineship.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/c3-orthogonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/c4-diagonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/c4-orthogonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/Corder-lineship.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/Cordership-boat-burner.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/Cordership-LWSS-freeze-tag.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/corderships.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/diagonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/orthogonal.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/short-thin-race.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/smallest-low-period.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Spaceships/spaceship-types.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/1998-eater-stamp-collection.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/eaters-misc.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/eaters.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/random.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/ss-eaters.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Still-Lifes/stripey.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/109-still-lifes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/29-still-lifes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/blockish-and-blockic-seeds.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/life-integer-constructions.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-harbor.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-lightbulb.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-osc-p3.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-osc-p4.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-osc-p5-plus.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-p11.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-p18.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/make-p33.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/oscillator-syntheses.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/slow-salvo-eater-recipes.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life/Syntheses/two-glider-collisions.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/coral.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/Day-and-Night-gun-and-antigun.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/ice-nine.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/Morley/breeder2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/Morley/enterprise-gun.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/Morley/growing-ship.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/p168-knightship.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/replicator.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/spiral-growth.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Life-Like/white-whale.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Byl-Loop.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Chou-Reggia-Loop-1.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Chou-Reggia-Loop-2.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Evoloop-finite.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Evoloop.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Langtons-Loops.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Perrier-Loop.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Perrier-Parenthesis-Checker.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/SDSR-Loop.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Loops/Tempesti-Loop.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/BBM.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/CrittersCircle.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/CrittersOscillators.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/DLA.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/HPP.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/HPP_large.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/Sand-Test.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/Sand.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/TMGas.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/TMGas_largeWithHole.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/TripATron.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Margolus/TripATron_BlockAligned.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/Ed-rep.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/golly-ants.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/HPP-demo-small.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/HPP-demo.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/Langtons-Ant.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/life-on-the-edge.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Other-Rules/life-on-the-slope.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Patersons-Worms/worm-1040512.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Patersons-Worms/worm-1042015.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Patersons-Worms/worm-1042020.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Patersons-Worms/worm-1252121.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Patersons-Worms/worm-1525115.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/AlienCounter.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/ComputerArt.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/Extinction.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/FibonacciSpiral.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/Highway2074575.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/LangtonsAnt_LLRR.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/Perfectionist.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/TriangularAnt_period92.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/TriangularLangtonsAnt.rle
+FILE is VALID
+
+##### TESTING FILE: /Users/admin/Downloads/golly-2.5-mac/Patterns/Turmites/WormTrails.rle
+FILE is VALID
