@@ -14,13 +14,13 @@ public class GollyRleManualInput
   public GollyRleConfiguration fillManualMatrix() throws IOException
   {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    System.out.print("MATRIX HEIGHT --> ");
-    int height = readIntFromInput(br);
-    inputConfig.setMatrixHeight(height);
-    
     System.out.print("MATRIX WIDTH --> ");
     int width = readIntFromInput(br);
     inputConfig.setMatrixWidth(width);
+
+    System.out.print("MATRIX HEIGHT --> ");
+    int height = readIntFromInput(br);
+    inputConfig.setMatrixHeight(height);
 
     inputConfig.initMatrix();
 
