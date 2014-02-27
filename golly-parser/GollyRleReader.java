@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 // import ANTLR's runtime libraries
 import org.antlr.v4.runtime.*;
@@ -85,7 +86,10 @@ public class GollyRleReader
   public static void compareMatrices(GollyRleConfiguration config, String manualMatrixFile) throws IOException
   {
     manualMatrixFile += ".txt"; // rude temporary choice
-    boolean matchingMatrices = config.matrixEquals(manualMatrixFile); 
+    GollyMatrixReader manualMatrix = new GollyMatrixReader(manualMatrixFile);
+    ArrayList<ArrayList<Integer>> newMatrix = manualMatrix.parseMatrixFile();
+    GollyRleConfiguration manualConfig = new GollyRleConfiguration(newMatrix);
+    boolean matchingMatrices = config.equalsToMatrix(manualConfig); 
     System.out.print("Golly RLE decoded matrix VS handwritten one: ");
     if (matchingMatrices) System.out.println("MATRICES MATCH");
     else System.out.println("MATRICES DON'T MATCH");

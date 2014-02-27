@@ -1,5 +1,4 @@
 import java.util.*;
-import java.io.*;
 
 public class GollyRleConfiguration
 {
@@ -16,6 +15,26 @@ public class GollyRleConfiguration
   GollyRleConfiguration()
   {
     this.cellState = 0; //default
+  }
+
+  GollyRleConfiguration(ArrayList<ArrayList<Integer>> newMatrix)
+  {
+    int actualRow = 0;
+    int actualCol = 0;
+    this.matrixHeight = newMatrix.size();
+    this.matrixWidth = newMatrix.get(0).size();
+    this.matrix = new int[this.matrixHeight][this.matrixWidth];
+    for (List<Integer> cellList : newMatrix)
+    {
+      this.matrixWidth = cellList.size();
+      for (Integer cellState : cellList)
+      {
+	this.matrix[actualRow][actualCol] = cellState;
+	actualCol++;
+      }
+      actualRow++;
+      actualCol = 0;
+    }
   }
 
   /******* accessors *********/
@@ -55,35 +74,46 @@ public class GollyRleConfiguration
   }
 
   /******* utilities *********/
-    public boolean matrixEquals(String manualMatrixFile) throws IOException
-    {
-	int currentRow = 0;
-	int currentCol = 0;
-	boolean matrixEquals = false;
-	GollyMatrixReader manualReader = new GollyMatrixReader(manualMatrixFile);
-	ArrayList<ArrayList<Integer>> manualMatrix = manualReader.parseMatrixFile();
+  public boolean equalsToMatrix(GollyRleConfiguration newConfig)
+  {
+    boolean result = false;
+    int newHeight = newConfig.getMatrixHeight();
+    int newWidth = newConfig.getMatrixWidth();
 
-	for (List<Integer> list : manualMatrix)
-	    {
-		for (Integer actualManualCell : list)
-		    {
-			if (this.matrix[currentRow][currentCol] == actualManualCell)
-			    {
-				matrixEquals = true;
-			    }
-			else
-			    {
-				matrixEquals = false;
-			    }
-			currentCol++;
-			if (!matrixEquals) break;
-		    }
-		if (!matrixEquals) break;
-		currentRow++;
-		currentCol = 0;
-	    }
-	return matrixEquals;
+    if (matrixHeight != newHeight | matrixWidth != newWidth)
+    {
+      result = false;
     }
+    else
+    {
+      for (int i = 0; i < matrixHeight; i++)
+      {
+        for (int j = 0; j < matrixWidth; j++)
+        {
+          int matrixCellState = matrix[i][j];
+          int newMatrixCellState = newConfig.getCellState(i,j);
+          if (matrixCellState != newMatrixCellState)
+          {
+            result = false;
+            break;
+          }
+          else
+          {
+            result = true;
+          }
+	  if (result == false)
+	  {
+	    break;
+	  }
+        }
+        if (result == false)
+        {
+          break;
+        }
+      }
+    }
+    return result;
+  }
 
   public void drawMatrix()
   {
