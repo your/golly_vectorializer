@@ -36,7 +36,7 @@ public class GollyBatchTester
 			return FileVisitResult.CONTINUE;
                      }
                });
-            GollyRleReader reader = new GollyRleReader();
+            // GollyRleReader reader = new GollyRleReader();
             // String[] actualFile = new String[1];
 
             for (int i = 0; i < rlesList.size(); ++i)
@@ -47,7 +47,7 @@ public class GollyBatchTester
                System.out.println("\n##### TESTING FILE: " + actualFile);
                try
                {
-                 reader.main(args);
+                 GollyRleReader.main(args);
                }
                catch(Exception e)
                {
