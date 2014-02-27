@@ -86,13 +86,33 @@ public class GollyRleReader
   public static void compareMatrices(GollyRleConfiguration config, String manualMatrixFile) throws IOException
   {
     manualMatrixFile += ".txt"; // rude temporary choice
-    GollyMatrixReader manualMatrix = new GollyMatrixReader(manualMatrixFile);
-    ArrayList<ArrayList<Integer>> newMatrix = manualMatrix.parseMatrixFile();
-    GollyRleConfiguration manualConfig = new GollyRleConfiguration(newMatrix);
-    boolean matchingMatrices = config.equalsToMatrix(manualConfig); 
-    System.out.print("Golly RLE decoded matrix VS handwritten one: ");
-    if (matchingMatrices) System.out.println("MATRICES MATCH");
-    else System.out.println("MATRICES DON'T MATCH");
+    ArrayList<ArrayList<Integer>> newMatrix = new ArrayList<ArrayList<Integer>>();
+    boolean ioError = false;
+    try
+	{
+	    GollyMatrixReader manualMatrix = new GollyMatrixReader(manualMatrixFile);
+	    newMatrix = manualMatrix.parseMatrixFile();
+	}
+    catch(IOException e)
+	{
+	    System.out.println("ERROR: " + e.getMessage());
+	    ioError = true;
+	}
+    finally
+	{
+	    if (!ioError)
+		{
+		    GollyRleConfiguration manualConfig = new GollyRleConfiguration(newMatrix);
+		    boolean matchingMatrices = config.equalsToMatrix(manualConfig);
+		    System.out.print("Golly RLE decoded matrix VS handwritten one: ");
+		    if (matchingMatrices) System.out.println("MATRICES MATCH");
+		    else System.out.println("MATRICES DON'T MATCH");
+		}
+	    else
+		{
+		    System.out.println("ERROR: I was not able to compare matrices!");
+		}
+	}
   }
 
   public static void main(String[] args) throws Exception
