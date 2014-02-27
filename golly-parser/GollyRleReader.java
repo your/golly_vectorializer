@@ -82,13 +82,13 @@ public class GollyRleReader
     return validString;
   }
 
-  public static void compareMatrices(GollyRleConfiguration config) throws IOException
+  public static void compareMatrices(GollyRleConfiguration config, String manualMatrixFile) throws IOException
   {
-    GollyRleFileLoader loader = new GollyRleFileLoader();
-    GollyRleManualInput manual = new GollyRleManualInput();
-    GollyRleConfiguration inputConfig = new GollyRleConfiguration();
-    inputConfig = manual.fillManualMatrix();
-    boolean matchingMatrices = loader.areMatricesEqual(config,inputConfig);
+    manualMatrixFile += ".txt"; // rude temporary choice
+    GollyMatrixReader manualMatrix = new GollyMatrixReader(manualMatrixFile);
+    manualMatrix.createConfig();
+    boolean matchingMatrices = manualMatrix.isManualMatrixEqual(config);
+    System.out.print("Golly RLE decoded matrix VS handwritten one: ");
     if (matchingMatrices) System.out.println("MATRICES MATCH");
     else System.out.println("MATRICES DON'T MATCH");
   }
@@ -110,7 +110,7 @@ public class GollyRleReader
                          + " <FILE> is a mandatory field;\n"
                          + " [OPTIONS] are optional fields:\n"
                          + "    -d   : draw the matrix\n"
-                         + "    -l   : parse the file and validate the expected matrix from stdin input\n");
+                         + "    -c   : parse FILE(.RLE) and validate the equivalent handwritted FILE(.RLE.TXT) file in the same dir\n");
       }
       else
       {
@@ -135,11 +135,11 @@ public class GollyRleReader
                 }
                 break;
               }
-              case "-l":
+              case "-c":
               {
                 if (!alreadyCompared)
                 {
-                  compareMatrices(config);
+		  compareMatrices(config, actualFile);
                   alreadyCompared = true;
                 }
                 break;
