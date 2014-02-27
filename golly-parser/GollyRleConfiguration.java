@@ -29,8 +29,8 @@ public class GollyRleConfiguration
       this.matrixWidth = cellList.size();
       for (Integer cellState : cellList)
       {
-	this.matrix[actualRow][actualCol] = cellState;
-	actualCol++;
+	  this.matrix[actualRow][actualCol] = cellState;
+	  actualCol++;
       }
       actualRow++;
       actualCol = 0;
@@ -95,7 +95,6 @@ public class GollyRleConfiguration
           if (matrixCellState != newMatrixCellState)
           {
             result = false;
-            break;
           }
           else
           {
