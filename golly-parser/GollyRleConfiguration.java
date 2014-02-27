@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class GollyRleConfiguration
 {
@@ -54,6 +55,36 @@ public class GollyRleConfiguration
   }
 
   /******* utilities *********/
+    public boolean matrixEquals(String manualMatrixFile) throws IOException
+    {
+	int currentRow = 0;
+	int currentCol = 0;
+	boolean matrixEquals = false;
+	GollyMatrixReader manualReader = new GollyMatrixReader(manualMatrixFile);
+	ArrayList<ArrayList<Integer>> manualMatrix = manualReader.parseMatrixFile();
+
+	for (List<Integer> list : manualMatrix)
+	    {
+		for (Integer actualManualCell : list)
+		    {
+			if (this.matrix[currentRow][currentCol] == actualManualCell)
+			    {
+				matrixEquals = true;
+			    }
+			else
+			    {
+				matrixEquals = false;
+			    }
+			currentCol++;
+			if (!matrixEquals) break;
+		    }
+		if (!matrixEquals) break;
+		currentRow++;
+		currentCol = 0;
+	    }
+	return matrixEquals;
+    }
+
   public void drawMatrix()
   {
     for (int i = 0; i < this.matrixHeight; ++i)

@@ -85,9 +85,7 @@ public class GollyRleReader
   public static void compareMatrices(GollyRleConfiguration config, String manualMatrixFile) throws IOException
   {
     manualMatrixFile += ".txt"; // rude temporary choice
-    GollyMatrixReader manualMatrix = new GollyMatrixReader(manualMatrixFile);
-    manualMatrix.createConfig();
-    boolean matchingMatrices = manualMatrix.isManualMatrixEqual(config);
+    boolean matchingMatrices = config.matrixEquals(manualMatrixFile); 
     System.out.print("Golly RLE decoded matrix VS handwritten one: ");
     if (matchingMatrices) System.out.println("MATRICES MATCH");
     else System.out.println("MATRICES DON'T MATCH");
