@@ -59,11 +59,16 @@
   {
     return this.origin;
   }
-  
-  PVector [][] getPoints()
+
+  PVector getPoint(int x, int y)
   {
-    return this.points;
+    return points[x][y];
   }
+  
+  // PVector [][] getPoints()
+  // {
+  //   return this.points;
+  // }
   
   float getCellWidth()
   {
