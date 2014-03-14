@@ -14,27 +14,30 @@ public class GollyHistoryManager {
   /** Methods */
   public void addConfiguration(GollyRleConfiguration newConfig) {
     configHistory.add(newConfig);
+    historyIndex++;
   }
 
   /** Checking history emptiness */
   public boolean emptyHistory() {
-    boolean isEmpty = false;
-    if (configHistory.isEmpty())
-      isEmpty = true;
-    return isEmpty;
+    return configHistory.isEmpty();
   }
 
   /** Getting curreng configuration */
   public GollyRleConfiguration getCurrentConfiguration() {
-    GollyRleConfiguration currentConfig = configHistory.get(historyIndex);
+    GollyRleConfiguration currentConfig = null;
+    if (historyIndex > -1 ) {
+      currentConfig = configHistory.get(historyIndex);
+    }
     return currentConfig;
   }
 
   /** Going back-and-forth */
   public void forwardHistory() {
-    historyIndex++;
+    if (historyIndex < configHistory.size() - 1)
+      historyIndex++;
   }
   public void rewindHistory() {
-    historyIndex--;
+    if (historyIndex > 0)
+      historyIndex--;
   }
 }
