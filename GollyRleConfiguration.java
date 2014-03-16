@@ -74,6 +74,23 @@ public class GollyRleConfiguration
   }
 
   /******* utilities *********/
+  public int enumStates()
+  {
+    List<Integer> states = new ArrayList<Integer>();
+    for (int i = 0; i < matrixHeight; i++)
+    {
+      for (int j = 0; j < matrixWidth; j++)
+      {
+	int currentState = matrix[i][j];
+	if (!states.contains(currentState))
+	{
+	  states.add(currentState);
+	}
+      }
+    }
+    return states.size();
+  }
+  
   public boolean equalsToMatrix(GollyRleConfiguration newConfig)
   {
     boolean result = false;
