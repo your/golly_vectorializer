@@ -22,7 +22,7 @@ public class GollyHistoryManager {
     return configHistory.isEmpty();
   }
 
-  /** Getting curreng configuration */
+  /** Getting current configuration */
   public GollyRleConfiguration getCurrentConfiguration() {
     GollyRleConfiguration currentConfig = null;
     if (historyIndex > -1 ) {
