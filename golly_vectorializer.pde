@@ -15,12 +15,12 @@ color bg;
 void setup()
 {
   /** Setting up main display settings */
-  x = 800;
-  y = 600;
-  bg = color(255,255,255);
+  x = 1024;
+  y = 768;
+  bg = color(200,210,200);
   
-  background(bg);
   size(x,y);
+  background(bg);
   noStroke();
 
   /** Building CP5 objects */
@@ -40,11 +40,11 @@ void setup()
     .setPosition(width/2+20,height-50)
     .setSize(35,25)
     ;
-
+  
   /** Global objects init */
   manager = new GollyHistoryManager();
   reader = new GollyRleReader();
-  currentSettings = new GollyPatternSettings(255,255,255,10,10);
+  currentSettings = new GollyPatternSettings(bg,10,10);
 }
 
 /** CP5 objects callbacks */
