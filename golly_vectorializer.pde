@@ -1,14 +1,3 @@
-/** What did I do:
- * 1. Added drawShape() using (faster?) P2D rendering engine needed for PShape
- *    (http://www.processing.org/tutorials/pshape/);
- *    (I had to add a CellShape.java containing CellShape enum (che brutta cosa))
- * 2. Added CP5 controls (stub) and a custom Class (it extends a CP5 one)
- * 3. Added dragging of pattern grid
- * 4. Added methods to get and set origin to Grid2D.pde class
- * 5. Added Config and Settings arrayList to HistoryManager (to handle history still)
- * 6. Added Alert Box on wrong file input (stub)
- * 7. minor changes
- */
 import java.io.*;
 import java.util.*;
 import controlP5.*;
@@ -30,7 +19,10 @@ int cellDim = 10;
 float xO = 10;
 float yO = 10;
 color bg = color(255);
-boolean builtSliders = false;
+color cp = color(10,20,10,200);
+color cq = color(10,10,10,100);
+boolean builtSettingsControls = false;
+boolean keepRatio = true;
 
 /** Pattern drag'n'drop vars */
 float xOffset = 0.0;
@@ -46,6 +38,8 @@ void setup()
   
   size(x,y,P2D);
   background(bg);
+  noStroke();
+  noFill();
 
   /** Building CP5 objects */
   cp5 = new ControlP5(this);
@@ -64,18 +58,25 @@ void setup()
     .setLabel("Aggiungi File RLE di Golly")
     .setPosition(40,20)
     .setSize(110,19)
+    .setColorBackground(cp)
     .moveTo(mainG)
     ;
   cp5.addButton("rewindConfigHistory")
     .setLabel("< prev")
     .setPosition((width-sizeCP5Group)/2-20,height-50)
+    .setColorBackground(cp)
     .setSize(35,25)
     ;
   cp5.addButton("forwardConfigHistory")
     .setLabel("next >")
     .setPosition((width-sizeCP5Group)/2+20,height-50)
+    .setColorBackground(cp)
     .setSize(35,25)
     ;
+
+  // starting locks
+  setLock(mainG.getController("rewindConfigHistory"),true);
+  setLock(mainG.getController("forwardConfigHistory"),true);
   
   /** Global objects init */
   manager = new GollyHistoryManager();
@@ -83,21 +84,21 @@ void setup()
   currentSettings = new GollyPatternSettings();
 }
 
-void buildSliders()
+void buildSettingsControls()
 {
-  if (!builtSliders)
+  if (!builtSettingsControls)
   {
     ResizableColorPicker cp5e;
     Group gridG = cp5.addGroup("gridControls")
       .setPosition(10,100)
-      .setSize(180,60)
+      .setSize(180,95)
       .setBackgroundColor(color(20,0,20,150))
       .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
       .moveTo(mainG)
       ;
     Group settG = cp5.addGroup("settControls")
-      .setPosition(10,200)
-      .setSize(180,100)
+      .setPosition(10,250)
+      .setSize(180,220)
       .setBackgroundColor(color(20,0,20,150))
       .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
       .moveTo(mainG)
@@ -124,23 +125,64 @@ void buildSliders()
       .setRange(0,200)
       .moveTo(gridG)
       ;
+    cp5.addToggle("toggleKeepRatio")
+      .setLabel("Keep Ratio")
+      .setPosition(5,60)
+      .setSize(42,15)
+      .setValue(true)
+      .setMode(ControlP5.SWITCH)
+      .moveTo(gridG)
+      ;
 
     cp5.addTextlabel("pickerFillLabel")
       .setPosition(2,10)
-      .setText("COLORE CELLE ATTIVE")
+      .setText("RIEMPIMENTO CELLE ATTIVE")
       .moveTo(settG)
       ;
-    // color pickers (resizeble)
+    // color pickers (resizable)
     cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
     cp5e.setPosition(2,25)
       .setColorValue(color(currentSettings.getFillRActive(),
                            currentSettings.getFillGActive(),
-                           currentSettings.getFillBActive()))
+                           currentSettings.getFillBActive(),
+                           currentSettings.getFillAActive()))
       .moveTo(settG)
       ;
-    cp5e.setItemSize(175,10);
+    cp5e.setItemSize(175,10)
+      ;
+    cp5.addToggle("toggleNoFill")
+      .setLabel("No Fill")
+      .setPosition(135,100)
+      .setSize(42,15)
+      .setValue(false)
+      .setMode(ControlP5.SWITCH)
+      .moveTo(settG)
+      ;
+    cp5.addTextlabel("pickerStrokeLabel")
+      .setPosition(2,115)
+      .setText("BORDO CELLE ATTIVE")
+      .moveTo(settG)
+      ;
+    cp5e = new ResizableColorPicker(cp5,"pickerStrokeActive");
+    cp5e.setPosition(2,130)
+      .setColorValue(color(currentSettings.getStrokeRActive(),
+                           currentSettings.getStrokeGActive(),
+                           currentSettings.getStrokeBActive(),
+                           currentSettings.getStrokeAActive()))
+      .moveTo(settG)
+      ;
+    cp5e.setItemSize(175,10)
+      ;
+    cp5.addToggle("toggleNoStroke")
+      .setLabel("No Stroke")
+      .setPosition(135,175)
+      .setSize(42,15)
+      .setValue(false)
+      .setMode(ControlP5.SWITCH)
+      .moveTo(settG)
+      ;
     
-    builtSliders = true;
+    builtSettingsControls = true;
   }
 }
 
@@ -197,29 +239,68 @@ class ResizableColorPicker extends ColorPicker
     sliderAlpha.setPosition(PVector.add(sliderAlpha.getPosition(), new PVector(0, 3*(h-10))));
   }
 }
+void setLock(Controller theController, boolean theValue)
+{
+  theController.setLock(theValue);
+  if(theValue)
+  {
+    theController.setColorBackground(cq);
+  }
+  else
+  {
+    theController.setColorBackground(cp);
+  }
+}
   
 /** CP5 objects callbacks */
 void cellWidth(int val)
 {
   currentGrid.setCellWidth(val);
+  if (keepRatio)
+    currentGrid.setCellHeight(val);
 }
 void cellHeight(int val)
 {
   currentGrid.setCellHeight(val);
+  if (keepRatio)
+    currentGrid.setCellWidth(val);
 }
 void forwardConfigHistory(int status)
 {
   manager.forwardConfigHistory();
   manager.forwardGridHistory();
+  checkConfigHistory();
 }
 void rewindConfigHistory(int status)
 {
   manager.rewindConfigHistory();
   manager.rewindGridHistory();
+  checkConfigHistory();
 }
 void loadRleConfig(int status)
 {
   selectInput("Selezionare un file RLE di Golly:", "fileSelected");
+}
+void toggleKeepRatio(boolean flag)
+{
+  if (flag == true)
+    keepRatio = true;
+  else
+    keepRatio = false;
+}
+void toggleNoStroke(boolean flag)
+{
+  if (g.getStyle().stroke)
+    g.noStroke();
+  else
+    g.stroke(g.getStyle().strokeColor); 
+}
+void toggleNoFill(boolean flag)
+{
+  if (g.getStyle().fill)
+    g.noFill();
+  else
+    g.fill(g.getStyle().fillColor); 
 }
 void buttonOk(int theValue) {
   lockG.hide();
@@ -229,6 +310,18 @@ void pickerFillActive(int val)
   currentSettings.setFillRActive((int)red(val));
   currentSettings.setFillGActive((int)green(val));
   currentSettings.setFillBActive((int)blue(val));
+  currentSettings.setFillAActive((int)alpha(val));
+
+  /** Adding settings to history */
+  manager.addSettings(currentSettings); // todo: handle settings history
+}
+void pickerStrokeActive(int val)
+{
+  currentSettings.setStrokeRActive((int)red(val));
+  currentSettings.setStrokeGActive((int)green(val));
+  currentSettings.setStrokeBActive((int)blue(val));
+  currentSettings.setStrokeAActive((int)alpha(val));
+
   /** Adding settings to history */
   manager.addSettings(currentSettings); // todo: handle settings history
 }
@@ -242,16 +335,21 @@ void fileSelected(File selection) {
     println("User selected " + gollyFilePath);
     loadGollyFile(gollyFilePath);
    }
- }
+}
 
 void generateGridFrom(GollyRleConfiguration config)
 {
-  PVector origin = new PVector(xO,yO); // default origin todo: center it
+  PVector origin = new PVector(); // default origin todo: center it
+  
   int cols = config.getMatrixWidth();
   int rows = config.getMatrixHeight();
 
   float cellWidth = cellDim;
   float cellHeight = cellDim;
+
+  /** Centering grid */
+  origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
+  origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
 
   Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
   /** Adding grid to history */
@@ -278,9 +376,11 @@ void drawGollyPattern(PGraphics ctx,
   /** Setting up shape */
   PShape cellShape = null;
   // fill and stroke colors
-  fill(colorFill);
-  stroke(colorStroke);
-  //noStroke();
+  if (ctx.getStyle().stroke)
+    ctx.stroke(colorStroke);
+  if (ctx.getStyle().fill)
+    ctx.fill(colorFill);
+  
   switch(settings.getCellShape())
   {
   case SQUARE:
@@ -314,6 +414,19 @@ void drawShape(PGraphics ctx, PShape s, Grid2D grid, GollyRleConfiguration confi
   }  
 }
 
+void checkConfigHistory()
+{
+  /** Config history handling */
+  if (manager.hasPrevConfig())
+    setLock(mainG.getController("rewindConfigHistory"),false);
+  else
+    setLock(mainG.getController("rewindConfigHistory"),true);
+  if (manager.hasNextConfig())
+    setLock(mainG.getController("forwardConfigHistory"),false);
+  else
+    setLock(mainG.getController("forwardConfigHistory"),true);
+}
+
 void draw()
 {
   /** Refreshing bg */
@@ -324,10 +437,10 @@ void draw()
   currentSettings = manager.getCurrentSettings();
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
+    //checkConfigHistory();
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
-    buildSliders();
+    buildSettingsControls();
   }
-  
   //Test if the cursor is over the pattern grid
   if (currentGrid != null)
   {
@@ -369,6 +482,8 @@ void loadGollyFile(String gollyFile)
     manager.addConfiguration(newConfig);
     /** Generating grid from it (then adding it to history) */
     generateGridFrom(newConfig);
+    /** Can we enable nextConfig button? */
+    checkConfigHistory();
     /** Adding default settings to history */
     manager.addSettings(new GollyPatternSettings()); // start pattern with defaults
   }
