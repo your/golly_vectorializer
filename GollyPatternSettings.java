@@ -4,15 +4,19 @@ public class GollyPatternSettings
   private int fillRActive = 0;
   private int fillGActive = 0;
   private int fillBActive = 0;
+  private int fillAActive = 255;
   private int fillRInactive = 255;
   private int fillGInactive = 255;
   private int fillBInactive = 255;
+  private int fillAInactive = 255;
   private int strokeRActive = 100;
   private int strokeGActive = 100;
   private int strokeBActive = 100;
+  private int strokeAActive = 255;
   private int strokeRInactive = 255;
   private int strokeGInactive = 255;
   private int strokeBInactive = 255;
+  private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
   private CellShape cellShape = CellShape.SQUARE;
@@ -37,6 +41,11 @@ public class GollyPatternSettings
     return fillBActive;
   }
 
+  public int getFillAActive()
+  {
+    return fillAActive;
+  }
+  
   public int getFillRInactive()
   {
     return fillRInactive;
@@ -50,6 +59,11 @@ public class GollyPatternSettings
   public int getFillBInactive()
   {
     return fillBInactive;
+  }
+
+  public int getFillAInactive()
+  {
+    return fillAInactive;
   }
 
   public int getStrokeRActive()
@@ -67,6 +81,11 @@ public class GollyPatternSettings
     return strokeBActive;
   }
 
+  public int getStrokeAActive()
+  {
+    return strokeAActive;
+  }
+  
   public int getStrokeRInactive()
   {
     return strokeRInactive;
@@ -80,6 +99,11 @@ public class GollyPatternSettings
   public int getStrokeBInactive()
   {
     return strokeBInactive;
+  }
+
+  public int getStrokeAInactive()
+  {
+    return strokeAInactive;
   }
 
   public int getStrokeWeightActive()
@@ -118,6 +142,11 @@ public class GollyPatternSettings
     fillBActive = val;
   }
 
+  public void setFillAActive(int val)
+  {
+    fillAActive = val;
+  }
+  
   public void setFillRInactive(int val)
   {
     fillRInactive = val;
@@ -133,6 +162,11 @@ public class GollyPatternSettings
     fillBInactive = val;
   }
 
+  public void setFillAInactive(int val)
+  {
+    fillAInactive = val;
+  }
+  
   public void setStrokeRActive(int val)
   {
     strokeRActive = val;
@@ -147,7 +181,12 @@ public class GollyPatternSettings
   {
     strokeBActive = val;
   }
-
+  
+  public void setStrokeAActive(int val)
+  {
+    strokeAActive = val;
+  }
+  
   public void setStrokeRInactive(int val)
   {
     strokeRInactive = val;
@@ -163,6 +202,11 @@ public class GollyPatternSettings
     strokeBInactive = val;
   }
 
+  public void setStrokeAInactive(int val)
+  {
+    strokeAInactive = val;
+  }
+  
   public void setStrokeWeightActive(int val)
   {
     strokeWeightActive = val;
