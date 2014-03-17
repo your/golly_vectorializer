@@ -80,5 +80,20 @@ public class GollyHistoryManager {
     if (gridHistoryIndex > 0)
       gridHistoryIndex--;
   }
-  
+
+  /** Other utilities */
+  public boolean hasNextConfig()
+  {
+    boolean result = false;
+    if (configHistoryIndex + 1 < configHistory.size())
+      result = true;
+    return result;
+  }
+  public boolean hasPrevConfig()
+  {
+    boolean result = false;
+    if (configHistoryIndex - 1 != -1)
+      result = true;
+    return result;
+  }  
 }
