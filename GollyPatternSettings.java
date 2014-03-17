@@ -1,59 +1,27 @@
 public class GollyPatternSettings
 {
   /** Members */
-  private int fillRActive;
-  private int fillGActive;
-  private int fillBActive;
-  private int fillRInactive;
-  private int fillGInactive;
-  private int fillBInactive;
-  private int strokeRActive;
-  private int strokeGActive;
-  private int strokeBActive;
-  private int strokeRInactive;
-  private int strokeGInactive;
-  private int strokeBInactive;
-  private int strokeWeightActive;
-  private int strokeWeightInactive;
-  private int cellWidth;
-  private int cellHeight;
+  private int fillRActive = 0;
+  private int fillGActive = 0;
+  private int fillBActive = 0;
+  private int fillRInactive = 255;
+  private int fillGInactive = 255;
+  private int fillBInactive = 255;
+  private int strokeRActive = 100;
+  private int strokeGActive = 100;
+  private int strokeBActive = 100;
+  private int strokeRInactive = 255;
+  private int strokeGInactive = 255;
+  private int strokeBInactive = 255;
+  private int strokeWeightActive = 1;
+  private int strokeWeightInactive = 0;
+  private CellShape cellShape = CellShape.SQUARE;
+  private String SVGPath = null;
 
   /** Constructor */
-  GollyPatternSettings(int backgroundR, int backgroundG, int backgroundB,
-		       int cellWidth, int cellHeight)
-  {
-    fillRActive = invertColor(backgroundR);
-    fillGActive = invertColor(backgroundG);
-    fillBActive = invertColor(backgroundB);
-    fillRInactive = backgroundR;
-    fillGInactive = backgroundG;
-    fillBInactive = backgroundB;
-    strokeRActive = fillRActive;
-    strokeGActive = fillGActive;
-    strokeBActive = fillBActive;
-    strokeRInactive = fillRInactive;
-    strokeGInactive = fillGInactive;
-    strokeBInactive = fillBInactive;
-    strokeWeightActive = 1;
-    strokeWeightInactive = 0;
-    this.cellWidth = cellWidth;
-    this.cellHeight = cellHeight;
-  }
-
+  GollyPatternSettings() {}
   
-  /** Utilities:
-   */
-  
-  private int invertColor(int val)
-  {
-    int inverted = (val - 255) == 0 ? 0 : (val - 255) * (-1);
-    return inverted;
-  }
-
-  
-  /** Getters:
-   */
-
+  /** Getters: */
   public int getFillRActive()
   {
     return fillRActive;
@@ -124,18 +92,17 @@ public class GollyPatternSettings
     return strokeWeightInactive;
   }
 
-  public int getCellWidth()
+  public CellShape getCellShape()
   {
-    return cellWidth;
+    return cellShape;
   }
 
-  public int getCellHeight()
+  public String getSVGPath()
   {
-    return cellHeight;
+    return SVGPath;
   }
   
-  /** Setters:
-   */
+  /** Setters */
   public void setFillRActive(int val)
   {
     fillRActive = val;
@@ -206,14 +173,13 @@ public class GollyPatternSettings
     strokeWeightInactive = val;
   }
 
-  public void setCellWidth(int val)
+  public void setCellShape(CellShape cellShape)
   {
-    cellWidth = val;
+    this.cellShape = cellShape;
   }
 
-  public void setCellHeight(int val)
+  public void setSVGPath(String path)
   {
-    cellHeight = val;
+    SVGPath = path;
   }
-  
 }
