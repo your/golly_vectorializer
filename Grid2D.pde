@@ -62,7 +62,7 @@
 
   PVector getPoint(int x, int y)
   {
-    return points[x][y];
+    return this.points[x][y];
   }
   
   // PVector [][] getPoints()
@@ -99,6 +99,16 @@
   {
     return this.rowPoints;
   }
+
+  float getX0()
+  {
+    return this.origin.x;
+  }
+
+  float getY0()
+  {
+    return this.origin.y;
+  }
   
   void setCellHeight(float newHeight)
   {
@@ -127,7 +137,23 @@
     PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
     this.points = initGridPoints(newPoints);
   }
-  
+
+  void setX0(float x0)
+  {
+    this.origin.x = x0;
+    // reallocate grid
+    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
+    this.points = initGridPoints(newPoints);
+  }
+
+  void setY0(float y0)
+  {
+    this.origin.y = y0;
+    // reallocate grid
+    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
+    this.points = initGridPoints(newPoints);
+  }
+
   /* Modifying the grid *****************************************************/
   
   PVector [][] initGridPoints(PVector [][] points)
