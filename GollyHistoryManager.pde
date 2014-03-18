@@ -28,6 +28,10 @@ public class GollyHistoryManager {
     gridHistory.add(newGrid);
     gridHistoryIndex++;
   }
+
+  public void updateSettings(GollyPatternSettings updatedSettings) {
+    settingsHistory.set(settingsHistoryIndex, updatedSettings);
+  }
   
   /* Getters */
   public GollyRleConfiguration getCurrentConfiguration() {

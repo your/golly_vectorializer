@@ -265,14 +265,12 @@ void cellHeight(int val)
 }
 void forwardConfigHistory(int status)
 {
-  manager.forwardConfigHistory();
-  manager.forwardGridHistory();
+  manager.forwardHistory();
   checkConfigHistory();
 }
 void rewindConfigHistory(int status)
 {
-  manager.rewindConfigHistory();
-  manager.rewindGridHistory();
+  manager.rewindHistory();
   checkConfigHistory();
 }
 void loadRleConfig(int status)
@@ -311,7 +309,7 @@ void pickerFillActive(int val)
   currentSettings.setFillAActive((int)alpha(val));
 
   /* Adding settings to history */
-  manager.addSettings(currentSettings); // todo: handle settings history
+  manager.updateSettings(currentSettings); // todo: handle settings history
 }
 void pickerStrokeActive(int val)
 {
@@ -321,7 +319,7 @@ void pickerStrokeActive(int val)
   currentSettings.setStrokeAActive((int)alpha(val));
 
   /* Adding settings to history */
-  manager.addSettings(currentSettings); // todo: handle settings history
+  manager.updateSettings(currentSettings); // todo: handle settings history
 }
 
 /* Processing file selection callback */
