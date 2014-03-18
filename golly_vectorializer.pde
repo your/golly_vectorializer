@@ -16,8 +16,6 @@ int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
-float xO = 10;
-float yO = 10;
 color bg = color(255);
 color cp = color(10,20,10,200);
 color cq = color(10,10,10,100);
@@ -449,9 +447,9 @@ void draw()
     float gridWidth = currentGrid.getCellWidth() * currentGrid.getRows();
     float gridHeight = currentGrid.getCellHeight() * currentGrid.getColumns();
 
-    if (mouseX > xO - gridWidth && mouseX < xO + gridWidth &&
+    if (mouseX > xO && mouseX < xO + gridWidth &&
         mouseX < x - sizeCP5Group && // make sure we are not on CP5 controllers
-        mouseY > yO - gridHeight && mouseY < yO + gridHeight)
+        mouseY > yO && mouseY < yO + gridHeight)
     {
       overGrid = true;
       if(!lockedGrid)
