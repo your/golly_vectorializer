@@ -150,7 +150,7 @@ void buildSettingsControls()
       ;
     cp5.addToggle("toggleNoFill")
       .setLabel("No Fill")
-      .setPosition(135,100)
+      .setPosition(135,70)
       .setSize(42,15)
       .setValue(false)
       .setMode(ControlP5.SWITCH)
