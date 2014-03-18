@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import controlP5.*;
 
-/** Management global variables */
+/* Global variables */
 GollyRleReader reader;
 GollyHistoryManager manager;
 GollyRleConfiguration currentConfig;
@@ -11,7 +11,7 @@ Grid2D currentGrid;
 ControlP5 cp5;
 Group mainG, lockG;
 
-/** Default window/drawing settings */
+/* Default window/drawing settings */
 int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
@@ -22,7 +22,7 @@ color cq = color(10,10,10,100);
 boolean builtSettingsControls = false;
 boolean keepRatio = true;
 
-/** Pattern drag'n'drop vars */
+/* Pattern drag'n'drop vars */
 float xOffset = 0.0;
 float yOffset = 0.0;
 boolean overGrid = false;
@@ -30,7 +30,7 @@ boolean lockedGrid = false;
 
 void setup()
 {
-  /** Setting up main display settings */
+  /* Setting up main display settings */
   smooth();
   frameRate(30);
   
@@ -39,7 +39,7 @@ void setup()
   noStroke();
   noFill();
 
-  /** Building CP5 objects */
+  /* Building CP5 objects */
   cp5 = new ControlP5(this);
   mainG = cp5.addGroup("mainControls")
     .setPosition(width-sizeCP5Group,0)
@@ -76,7 +76,7 @@ void setup()
   setLock(mainG.getController("rewindConfigHistory"),true);
   setLock(mainG.getController("forwardConfigHistory"),true);
   
-  /** Global objects init */
+  /* Global objects init */
   manager = new GollyHistoryManager();
   reader = new GollyRleReader();
   currentSettings = new GollyPatternSettings();
@@ -217,7 +217,7 @@ void buildPopup() {
   lockG.show();
 }
 
-/** CP5 class extends */
+/* CP5 class extends */
 class ResizableColorPicker extends ColorPicker
 {
   ResizableColorPicker(ControlP5 cp5, String theName)
@@ -250,7 +250,7 @@ void setLock(Controller theController, boolean theValue)
   }
 }
   
-/** CP5 objects callbacks */
+/* CP5 objects callbacks */
 void cellWidth(int val)
 {
   currentGrid.setCellWidth(val);
@@ -310,7 +310,7 @@ void pickerFillActive(int val)
   currentSettings.setFillBActive((int)blue(val));
   currentSettings.setFillAActive((int)alpha(val));
 
-  /** Adding settings to history */
+  /* Adding settings to history */
   manager.addSettings(currentSettings); // todo: handle settings history
 }
 void pickerStrokeActive(int val)
@@ -320,11 +320,11 @@ void pickerStrokeActive(int val)
   currentSettings.setStrokeBActive((int)blue(val));
   currentSettings.setStrokeAActive((int)alpha(val));
 
-  /** Adding settings to history */
+  /* Adding settings to history */
   manager.addSettings(currentSettings); // todo: handle settings history
 }
 
-/** Processing file selection callback */
+/* Processing file selection callback */
 void fileSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
@@ -345,17 +345,17 @@ void generateGridFrom(GollyRleConfiguration config)
   float cellWidth = cellDim;
   float cellHeight = cellDim;
 
-  /** Centering grid */
+  /* Centering grid */
   origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
   origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
 
   Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
-  /** Adding grid to history */
+  /* Adding grid to history */
   manager.addGrid(genGrid);
   
 }
 
-/** Drawing methods */
+/* Drawing methods */
 void drawGollyPattern(PGraphics ctx,
                       Grid2D grid,
                       GollyRleConfiguration config,
@@ -371,7 +371,7 @@ void drawGollyPattern(PGraphics ctx,
                             settings.getStrokeGActive(),
                             settings.getStrokeBActive());
   
-  /** Setting up shape */
+  /* Setting up shape */
   PShape cellShape = null;
   // fill and stroke colors
   if (ctx.getStyle().stroke)
@@ -392,7 +392,7 @@ void drawGollyPattern(PGraphics ctx,
     cellShape = loadShape(svg); // todo: resize svg
     break;
   }
-  /** Drawing shapes */
+  /* Drawing shapes */
   drawShape(ctx, cellShape, grid, config);
 }
 
@@ -414,7 +414,7 @@ void drawShape(PGraphics ctx, PShape s, Grid2D grid, GollyRleConfiguration confi
 
 void checkConfigHistory()
 {
-  /** Config history handling */
+  /* Config history handling */
   if (manager.hasPrevConfig())
     setLock(mainG.getController("rewindConfigHistory"),false);
   else
@@ -427,9 +427,9 @@ void checkConfigHistory()
 
 void draw()
 {
-  /** Refreshing bg */
+  /* Refreshing bg */
   background(bg);
-  /** Getting current history snapshot */
+  /* Getting current history snapshot */
   currentConfig = manager.getCurrentConfiguration();
   currentGrid = manager.getCurrentGrid();
   currentSettings = manager.getCurrentSettings();
@@ -469,20 +469,20 @@ void draw()
   //
 }
 
-/** Golly file loader */
+/* Golly file loader */
 void loadGollyFile(String gollyFile)
 {
-  /** Trying to get configuration from parser */
+  /* Trying to get configuration from parser */
   try
   {
     GollyRleConfiguration newConfig = reader.parseFile(gollyFile);
-    /** Adding it to history */
+    /* Adding it to history */
     manager.addConfiguration(newConfig);
-    /** Generating grid from it (then adding it to history) */
+    /* Generating grid from it (then adding it to history) */
     generateGridFrom(newConfig);
-    /** Can we enable nextConfig button? */
+    /* Can we enable nextConfig button? */
     checkConfigHistory();
-    /** Adding default settings to history */
+    /* Adding default settings to history */
     manager.addSettings(new GollyPatternSettings()); // start pattern with defaults
   }
   catch (RuntimeException e)
@@ -496,7 +496,7 @@ void loadGollyFile(String gollyFile)
   }
 }
 
-/** Mouse events */
+/* Mouse events */
 void mousePressed()
 {
   if (currentGrid != null)

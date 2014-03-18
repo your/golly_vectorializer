@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class GollyHistoryManager {
 
-  /** Members */
+  /* Members */
   private ArrayList<GollyRleConfiguration> configHistory =
     new ArrayList<GollyRleConfiguration>();
   private ArrayList<GollyPatternSettings> settingsHistory =
@@ -13,10 +13,7 @@ public class GollyHistoryManager {
   private int settingsHistoryIndex = -1;
   private int gridHistoryIndex = -1;
 
-  /** Constr */
-  GollyHistoryManager() {}
-
-  /** Methods */
+  /* Methods */
   public void addConfiguration(GollyRleConfiguration newConfig) {
     configHistory.add(newConfig);
     configHistoryIndex++;
@@ -32,7 +29,7 @@ public class GollyHistoryManager {
     gridHistoryIndex++;
   }
   
-  /** Getters */
+  /* Getters */
   public GollyRleConfiguration getCurrentConfiguration() {
     GollyRleConfiguration currentConfig = null;
     if (configHistoryIndex > -1 ) {
@@ -55,7 +52,7 @@ public class GollyHistoryManager {
     return currentGrid;
   }
   
-  /** Going back-and-forth */
+  /* Going back-and-forth */
   public void forwardConfigHistory() {
     if (configHistoryIndex < configHistory.size() - 1)
       configHistoryIndex++;
@@ -81,7 +78,7 @@ public class GollyHistoryManager {
       gridHistoryIndex--;
   }
 
-  /** Other utilities */
+  /* Other utilities */
   public boolean hasNextConfig()
   {
     boolean result = false;

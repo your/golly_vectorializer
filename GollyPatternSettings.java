@@ -1,6 +1,6 @@
 public class GollyPatternSettings
 {
-  /** Members */
+  /* Members */
   private int fillRActive = 0;
   private int fillGActive = 0;
   private int fillBActive = 0;
@@ -21,11 +21,8 @@ public class GollyPatternSettings
   private int strokeWeightInactive = 0;
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
-
-  /** Constructor */
-  GollyPatternSettings() {}
   
-  /** Getters: */
+  /* Getters: */
   public int getFillRActive()
   {
     return fillRActive;
@@ -126,7 +123,7 @@ public class GollyPatternSettings
     return SVGPath;
   }
   
-  /** Setters */
+  /* Setters */
   public void setFillRActive(int val)
   {
     fillRActive = val;
