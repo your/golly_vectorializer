@@ -53,29 +53,41 @@ public class GollyHistoryManager {
   }
   
   /* Going back-and-forth */
-  public void forwardConfigHistory() {
+  private void forwardConfigHistory() {
     if (configHistoryIndex < configHistory.size() - 1)
       configHistoryIndex++;
   }
-  public void rewindConfigHistory() {
+  private void rewindConfigHistory() {
     if (configHistoryIndex > 0)
       configHistoryIndex--;
   }
-  public void forwardSettingsHistory() {
+  private void forwardSettingsHistory() {
     if (settingsHistoryIndex < settingsHistory.size() - 1)
       settingsHistoryIndex++;
   }
-  public void rewindSettingsHistory() {
+  private void rewindSettingsHistory() {
     if (settingsHistoryIndex > 0)
       settingsHistoryIndex--;
   }
-  public void forwardGridHistory() {
+  private void forwardGridHistory() {
     if (gridHistoryIndex < gridHistory.size() - 1)
       gridHistoryIndex++;
   }
-  public void rewindGridHistory() {
+  private void rewindGridHistory() {
     if (gridHistoryIndex > 0)
       gridHistoryIndex--;
+  }
+
+  public void forwardHistory() {
+    forwardConfigHistory();
+    forwardGridHistory();
+    forwardSettingsHistory();
+  }
+
+  public void rewindHistory() {
+    rewindConfigHistory();
+    rewindGridHistory();
+    rewindSettingsHistory();
   }
 
   /* Other utilities */
