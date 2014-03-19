@@ -7,6 +7,7 @@ GollyRleReader reader;
 GollyHistoryManager manager;
 GollyRleConfiguration currentConfig;
 GollyPatternSettings currentSettings;
+SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
 Group mainG, lockG;
@@ -23,9 +24,9 @@ boolean builtSettingsControls = false;
 boolean keepRatio = true;
 
 /* Pattern drag'n'drop vars */
-float xOffset = 0.0;
-float yOffset = 0.0;
-boolean overGrid = false;
+// float xOffset = 0.0;
+// float yOffset = 0.0;
+// boolean overGrid = false;
 boolean lockedGrid = false;
 
 void setup()
@@ -35,6 +36,9 @@ void setup()
   frameRate(30);
   
   size(x,y,P2D);
+
+  transformer = new SketchTransformer(width/2, height/2, 1.0);
+  
   background(bg);
   // noStroke();
   // noFill();
@@ -278,25 +282,25 @@ void setLock(Controller theController, boolean theValue)
 }
   
 /* CP5 objects callbacks */
-void cellWidth(int val)
+void cellWidth(float val)
 {
   currentGrid.setCellWidth(val);
   if (keepRatio)
     currentGrid.setCellHeight(val);
 }
-void cellHeight(int val)
+void cellHeight(float val)
 {
   currentGrid.setCellHeight(val);
   if (keepRatio)
     currentGrid.setCellWidth(val);
 }
-void shapeWidth(int val)
+void shapeWidth(float val)
 {
   currentSettings.setShapeWidth(val);
   if (keepRatio)
     currentSettings.setShapeHeight(val);
 }
-void shapeHeight(int val)
+void shapeHeight(float val)
 {
   currentSettings.setShapeHeight(val);
   if (keepRatio)
@@ -496,6 +500,7 @@ void checkConfigHistory()
 
 void draw()
 {
+  transformer.startDrawing();
   /* Refreshing bg */
   background(bg);
   /* Getting current history snapshot */
@@ -509,33 +514,34 @@ void draw()
     buildSettingsControls();
   }
   //Test if the cursor is over the pattern grid
-  if (currentGrid != null)
-  {
-    float xO = currentGrid.getX0();
-    float yO = currentGrid.getY0();
-    float gridWidth = currentGrid.getCellWidth() * currentGrid.getRows();
-    float gridHeight = currentGrid.getCellHeight() * currentGrid.getColumns();
+  // if (currentGrid != null)
+  // {
+  //   float xO = currentGrid.getX0();
+  //   float yO = currentGrid.getY0();
+  //   float gridWidth = currentGrid.getCellWidth() * currentGrid.getRows();
+  //   float gridHeight = currentGrid.getCellHeight() * currentGrid.getColumns();
 
-    if (mouseX > xO && mouseX < xO + gridWidth &&
-        mouseX < x - sizeCP5Group && // make sure we are not on CP5 controllers
-        mouseY > yO && mouseY < yO + gridHeight)
-    {
-      overGrid = true;
-      if(!lockedGrid)
-      {
-        //stroke(255);
-        //fill(153);
-      }
-    }
-    else
-    {
-      //stroke(153);
-      //fill(153);
-      overGrid = false;
-    }
-  }
+  //   if (mouseX > xO && mouseX < xO + gridWidth &&
+  //       mouseX < x - sizeCP5Group && // make sure we are not on CP5 controllers
+  //       mouseY > yO && mouseY < yO + gridHeight)
+  //   {
+  //     overGrid = true;
+  //     if(!lockedGrid)
+  //     {
+  //       //stroke(255);
+  //       //fill(153);
+  //     }
+  //   }
+  //   else
+  //   {
+  //     //stroke(153);
+  //     //fill(153);
+  //     overGrid = false;
+  //   }
+  // }
   //drawGuiElements
   //
+  transformer.endDrawing();
 }
 
 /* Golly file loader */
@@ -565,39 +571,66 @@ void loadGollyFile(String gollyFile)
   }
 }
 
-/* Mouse events */
+void center(int value)
+{
+  transformer.setTraslationOffsets(width/2, height/2);
+}
+
 void mousePressed()
 {
-  if (currentGrid != null)
-  {
-    if(overGrid)
-    { 
-      lockedGrid = true; 
-      //fill(255, 255, 255);
-    }
-    else
-    {
-      lockedGrid = false;
-    }
-    xOffset = mouseX - currentGrid.getX0();
-    yOffset = mouseY - currentGrid.getY0();
-  }
+  transformer.saveMousePosition(mouseX, mouseY);
 }
-void mouseDragged()
-{
-  if (currentGrid != null)
-  {
-    if(lockedGrid)
-    {
-      currentGrid.setX0(mouseX-xOffset); 
-      currentGrid.setY0(mouseY-yOffset); 
-    }
-  }
-}
+
 void mouseReleased()
 {
-  if (currentGrid != null)
-  {
-    lockedGrid = false;
-  }
 }
+
+void mouseDragged()
+{
+  transformer.updateTranslationOffset(mouseX, mouseY);
+}
+
+void keyPressed()
+{
+}
+
+void keyReleased()
+{
+}
+
+/* Mouse events */
+// void mousePressed()
+// {
+//   if (currentGrid != null)
+//   {
+//     if(overGrid)
+//     { 
+//       lockedGrid = true; 
+//       //fill(255, 255, 255);
+//     }
+//     else
+//     {
+//       lockedGrid = false;
+//     }
+//     xOffset = mouseX - currentGrid.getX0();
+//     yOffset = mouseY - currentGrid.getY0();
+//   }
+// }
+// void mouseDragged()
+// {
+//   if (currentGrid != null)
+//   {
+//     if(lockedGrid)
+//     {
+//       currentGrid.setX0(mouseX-xOffset); 
+//       currentGrid.setY0(mouseY-yOffset); 
+//     }
+//   }
+// }
+// void mouseReleased()
+// {
+//   if (currentGrid != null)
+//   {
+//     lockedGrid = false;
+//   }
+// }
