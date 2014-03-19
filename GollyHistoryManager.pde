@@ -29,8 +29,9 @@ public class GollyHistoryManager {
     gridHistoryIndex++;
   }
 
-  public void updateSettings(GollyPatternSettings updatedSettings) {
-    settingsHistory.set(settingsHistoryIndex, updatedSettings);
+  public void updateSettingsHistory(GollyPatternSettings updatedSettings) {
+    if (settingsHistoryIndex > -1)
+      settingsHistory.set(settingsHistoryIndex, updatedSettings);
   }
   
   /* Getters */
