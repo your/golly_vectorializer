@@ -33,6 +33,12 @@
   
   
   /* Constructors **********************************************************/
+
+  public Grid2D()
+  {
+    cellWidth = 0;
+    cellHeight = 0;
+  }
   
   public Grid2D(PVector origin, int cols, int rows, float cellWidth)
   {
