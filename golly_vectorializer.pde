@@ -10,7 +10,8 @@ GollyPatternSettings currentSettings;
 SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
-Group mainG, lockG;
+// ResizableColorPicker cp5e;
+Group mainG, settG, lockG, winG;
 
 /* Default window/drawing settings */
 int x = 1024;
@@ -19,15 +20,44 @@ int sizeCP5Group = 200;
 int cellDim = 10;
 color bg = color(255);
 color cp = color(10,20,10,200);
-color cq = color(10,10,10,100);
-boolean builtSettingsControls = false;
+color cq = color(200,180,200,100);
 boolean keepRatio = true;
-
-/* Pattern drag'n'drop vars */
-// float xOffset = 0.0;
-// float yOffset = 0.0;
-// boolean overGrid = false;
+boolean initControls = false;
 boolean lockedGrid = false;
+
+void manageControls(boolean lock)
+{
+  /* Locking/unlocking controls */
+  // gridG
+  setLock(cp5.getController("cellWidth"),lock);
+  setLock(cp5.getController("cellHeight"),lock);
+  setLock(cp5.getController("toggleKeepRatioCells"),lock);
+  // settG
+  setLock(cp5.getController("shapeWidth"),lock);
+  setLock(cp5.getController("shapeHeight"),lock);
+  setLock(cp5.getController("pickRFillActive"),lock);
+  setLock(cp5.getController("pickGFillActive"),lock);
+  setLock(cp5.getController("pickBFillActive"),lock);
+  setLock(cp5.getController("pickAFillActive"),lock);
+  setLock(cp5.getController("toggleFillActive"),lock);
+  setLock(cp5.getController("pickRStrokeActive"),lock);
+  setLock(cp5.getController("pickGStrokeActive"),lock);
+  setLock(cp5.getController("pickBStrokeActive"),lock);
+  setLock(cp5.getController("pickAStrokeActive"),lock);
+  setLock(cp5.getController("toggleStrokeActive"),lock);
+  if (!lock)
+  {
+    /* Colouring sliders if unlocked */
+    cp5.getController("pickRFillActive").setColorBackground(color(200,20,40));
+    cp5.getController("pickRStrokeActive").setColorBackground(color(200,20,40));
+    cp5.getController("pickGFillActive").setColorBackground(color(20,200,40));
+    cp5.getController("pickGStrokeActive").setColorBackground(color(20,200,40));
+    cp5.getController("pickBFillActive").setColorBackground(color(40,20,200));
+    cp5.getController("pickBStrokeActive").setColorBackground(color(40,20,200));
+    cp5.getController("pickAFillActive").setColorBackground(color(100,100,100));
+    cp5.getController("pickAStrokeActive").setColorBackground(color(100,100,100));
+  }
+}
 
 void setup()
 {
@@ -40,22 +70,206 @@ void setup()
   transformer = new SketchTransformer(width/2, height/2, 1.0);
   
   background(bg);
-  // noStroke();
-  // noFill();
+
+  /* Global objects init */
+  manager = new GollyHistoryManager();
+  reader = new GollyRleReader();
+  currentSettings = new GollyPatternSettings();
+  currentGrid = new Grid2D();
 
   /* Building CP5 objects */
   cp5 = new ControlP5(this);
+  // MAIN CONTROLS
+  // MAIN GROUP AREA
   mainG = cp5.addGroup("mainControls")
     .setPosition(width-sizeCP5Group,0)
     .setSize(sizeCP5Group,height)
-    .setBackgroundColor(color(0,0,0,50))
+    //.setBackgroundColor(color(0,0,0,0))
     ;
+  // GRID SUBGROUP AREA
+  Group gridG = cp5.addGroup("gridControls")
+    .setPosition(10,100)
+    .setSize(180,95)
+    //.setBackgroundColor(color(20,0,20,150))
+    .setBackgroundColor(color(175,190,175,220))
+    .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
+    .moveTo(mainG)
+    ;
+  cp5.addTextlabel("resizeCells")
+    .setPosition(2,10)
+    .setText("DIMENSIONE CELLE")
+    .moveTo(gridG)
+    ;
+  cp5.addSlider("cellWidth")
+    .setLabel("L")
+    .setPosition(2,25)
+    .setSize(165,10)
+    .setValue(currentGrid.getCellWidth())
+    .setRange(0,200)
+    .moveTo(gridG)
+    ;
+  cp5.addSlider("cellHeight")
+    .setLabel("A")
+    .setPosition(2,40)
+    .setSize(165,10)
+    .setValue(currentGrid.getCellHeight())
+    .setRange(0,200)
+    .moveTo(gridG)
+    ;
+  cp5.addToggle("toggleKeepRatioCells")
+    .setLabel("Keep Ratio")
+    .setPosition(5,60)
+    .setSize(42,15)
+    .setValue(true)
+    .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
+    ;
+  // SETTINGS SUBGROUP AREA
+  settG = cp5.addGroup("settControls")
+    .setPosition(10,250)
+    .setSize(180,350)
+    .setBackgroundColor(color(175,190,175,220))
+    //.setBackgroundColor(color(20,0,20,150))
+    //.setBackgroundColor(color(0,0,0,220))
+    .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
+    .moveTo(mainG)
+    ;
+  // SHAPES AREA
+  cp5.addTextlabel("resizeShapes")
+    .setPosition(2,10)
+    .setText("DIMENSIONE FORME")
+    .moveTo(settG)
+    ;
+  cp5.addSlider("shapeWidth")
+    .setLabel("L")
+    .setPosition(2,25)
+    .setSize(165,10)
+    .setValue(currentSettings.getShapeWidth())
+    .setRange(0,200)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("shapeHeight")
+    .setLabel("A")
+    .setPosition(2,40)
+    .setSize(165,10)
+    .setValue(currentSettings.getShapeHeight())
+    .setRange(0,200)
+    .moveTo(settG)
+    ;
+  cp5.addTextlabel("pickerFillLabel")
+    .setPosition(3,105)
+    .setText("RIEMPIMENTO FORME ATTIVE")
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickRFillActive")
+    .setLabel("R")
+    .setPosition(3,120)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getFillRActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickGFillActive")
+    .setLabel("G")
+    .setPosition(3,131)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getFillGActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickBFillActive")
+    .setLabel("B")
+    .setPosition(3,142)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getFillBActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickAFillActive")
+    .setLabel("A")
+    .setPosition(3,153)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getFillAActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addToggle("toggleFillActive")
+    .setLabel("Fill ON")
+    .setPosition(125,165)
+    .setSize(42,15)
+    .setValue(currentSettings.isFillOnActive())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
+  cp5.addTextlabel("pickerStrokeLabel")
+    .setPosition(3,205)
+    .setText("CONTORNO FORME ATTIVE")
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickRStrokeActive")
+    .setLabel("R")
+    .setPosition(3,220)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getStrokeRActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickGStrokeActive")
+    .setLabel("G")
+    .setPosition(3,231)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getStrokeGActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickBStrokeActive")
+    .setLabel("B")
+    .setPosition(3,242)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getStrokeBActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickAStrokeActive")
+    .setLabel("A")
+    .setPosition(3,253)
+    .setSize(165,10)
+    .setColorValue(currentSettings.getStrokeAActive())
+    .setRange(0,255)
+    .moveTo(settG)
+    ;
+  cp5.addToggle("toggleStrokeActive")
+    .setLabel("Stroke ON")
+    .setPosition(125,265)
+    .setSize(42,15)
+    .setValue(currentSettings.isStrokeOnActive())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
+  
+  // cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
+  // cp5e.setPosition(2,120)
+  //   .setColorValue(color(0))
+  //   .moveTo(settG)
+  //   ;
+  // //cp5e.setItemSize(175,10)
+  //   // ;
+  // cp5e = new ResizableColorPicker(cp5,"pickerStrokeActive");
+  // cp5e.setPosition(2,225)
+  //   .setColorValue(0)
+  //   .moveTo(settG)
+  //   ;
+  // cp5e.setItemSize(175,10)
+  //   ;
+
+  // LOCK GROUP
   lockG = cp5.addGroup("lockBox")
     .setSize(width,height)
     .setPosition(0,0)
     .setBackgroundColor(color(10,0,10,200))
     .hide()
     ;
+  // LOAD RLE AREA
   cp5.addButton("loadRleConfig")
     .setLabel("Aggiungi File RLE di Golly")
     .setPosition(40,20)
@@ -63,176 +277,34 @@ void setup()
     .setColorBackground(cp)
     .moveTo(mainG)
     ;
+  // HISTORY AREA
   cp5.addButton("rewindConfigHistory")
     .setLabel("< prev")
     .setPosition((width-sizeCP5Group)/2-20,height-50)
-    .setColorBackground(cp)
+    .setColorBackground(cq)
     .setSize(35,25)
     ;
   cp5.addButton("forwardConfigHistory")
     .setLabel("next >")
     .setPosition((width-sizeCP5Group)/2+20,height-50)
-    .setColorBackground(cp)
+    .setColorBackground(cq)
     .setSize(35,25)
     ;
-
-  // starting locks
+  
+  /* History starting locks */
   setLock(mainG.getController("rewindConfigHistory"),true);
   setLock(mainG.getController("forwardConfigHistory"),true);
-  
-  /* Global objects init */
-  manager = new GollyHistoryManager();
-  reader = new GollyRleReader();
-  currentSettings = new GollyPatternSettings();
-}
 
-void buildSettingsControls()
-{
-  if (!builtSettingsControls)
-  {
-    ResizableColorPicker cp5e;
-    Group gridG = cp5.addGroup("gridControls")
-      .setPosition(10,100)
-      .setSize(180,95)
-      .setBackgroundColor(color(20,0,20,150))
-      .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
-      .moveTo(mainG)
-      ;
-    cp5.addTextlabel("resizeCells")
-      .setPosition(2,10)
-      .setText("DIMENSIONE CELLE")
-      .moveTo(gridG)
-      ;
-    cp5.addSlider("cellWidth")
-      .setValue(currentGrid.getCellWidth())
-      .setLabel("L")
-      .setPosition(2,25)
-      .setSize(165,10)
-      .setRange(0,200)
-      .moveTo(gridG)
-      ;
-    cp5.addSlider("cellHeight")
-      .setValue(currentGrid.getCellHeight())
-      .setLabel("A")
-      .setPosition(2,40)
-      .setSize(165,10)
-      .setRange(0,200)
-      .moveTo(gridG)
-      ;
-    cp5.addToggle("toggleKeepRatioCells")
-      .setLabel("Keep Ratio")
-      .setPosition(5,60)
-      .setSize(42,15)
-      .setValue(true)
-      .setMode(ControlP5.SWITCH)
-      .moveTo(gridG)
-      ;
-    Group settG = cp5.addGroup("settControls")
-      .setPosition(10,250)
-      .setSize(180,350)
-      .setBackgroundColor(color(20,0,20,150))
-      .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
-      .moveTo(mainG)
-      ;
-    cp5.addTextlabel("resizeShapes")
-      .setPosition(2,10)
-      .setText("DIMENSIONE FORME")
-      .moveTo(settG)
-      ;
-    cp5.addSlider("shapeWidth")
-      .setValue(currentSettings.getShapeWidth())
-      .setLabel("L")
-      .setPosition(2,25)
-      .setSize(165,10)
-      .setRange(0,200)
-      .moveTo(settG)
-      ;
-    cp5.addSlider("shapeHeight")
-      .setValue(currentSettings.getShapeHeight())
-      .setLabel("A")
-      .setPosition(2,40)
-      .setSize(165,10)
-      .setRange(0,200)
-      .moveTo(settG)
-      ;
-    cp5.addToggle("toggleKeepRatioShapes")
-      .setLabel("Keep Ratio")
-      .setPosition(5,60)
-      .setSize(42,15)
-      .setValue(true)
-      .setMode(ControlP5.SWITCH)
-      .moveTo(settG)
-      ;
-    cp5.addTextlabel("pickerFillLabel")
-      .setPosition(2,105)
-      .setText("RIEMPIMENTO CELLE ATTIVE")
-      .moveTo(settG)
-      ;
-    // color pickers (resizable)
-    cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
-    cp5e.setPosition(2,120)
-      .setColorValue(color(currentSettings.getFillRActive(),
-                           currentSettings.getFillGActive(),
-                           currentSettings.getFillBActive(),
-                           currentSettings.getFillAActive()))
-      .moveTo(settG)
-      ;
-    cp5e.setItemSize(175,10)
-      ;
-    cp5.addToggle("toggleFillActive")
-      .setLabel("Fill ON")
-      .setPosition(135,165)
-      .setSize(42,15)
-      .setValue(currentSettings.isFillOnActive())
-      .setMode(ControlP5.SWITCH)
-      .moveTo(settG)
-      ;
-    cp5.addTextlabel("pickerStrokeLabel")
-      .setPosition(2,210)
-      .setText("BORDO CELLE ATTIVE")
-      .moveTo(settG)
-      ;
-    cp5e = new ResizableColorPicker(cp5,"pickerStrokeActive");
-    cp5e.setPosition(2,225)
-      .setColorValue(color(currentSettings.getStrokeRActive(),
-                           currentSettings.getStrokeGActive(),
-                           currentSettings.getStrokeBActive(),
-                           currentSettings.getStrokeAActive()))
-      .moveTo(settG)
-      ;
-    cp5e.setItemSize(175,10)
-      ;
-    cp5.addToggle("toggleStrokeActive")
-      .setLabel("Stroke ON")
-      .setPosition(135,270)
-      .setSize(42,15)
-      .setValue(currentSettings.isStrokeOnActive())
-      .setMode(ControlP5.SWITCH)
-      .moveTo(settG)
-      ;
-    
-    builtSettingsControls = true;
-  }
-}
-
-void buildPopup() {
-  Group winG =
+  // MESSAGE BOX AREA
+  winG =
     cp5.addGroup("messageBox")
-    .setLabel("ERRORE")
     .setPosition(width/2-150,height/2-150)
     .setSize(300,300)
     .setBackgroundHeight(120)
     .setBackgroundColor(color(0,100))
     .moveTo(lockG)
     //.hideBar()
-    ;
-
-  cp5.addTextlabel("messageBoxLabel",
-                   "Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n"+
-                   "(In alternativa provate a dropparli o copia-incollarli)",30,30)
-    .moveTo(winG)
-    ;
-  
+    ;  
   cp5.addButton("buttonOk")
     .setPosition(80,80)
     .setSize(18,25)
@@ -244,30 +316,45 @@ void buildPopup() {
     .setBroadcast(true)
     .setLabel("Ok")
     ;
+  
+  /* Message box is shown only upon request */
+  winG.hide();
 
+  /* Lock controls @startup */
+  manageControls(true);
+}
+
+void showPopup() {
   lockG.show();
+  cp5.addTextlabel("messageBoxLabel",
+                   "Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n"+
+                   "(In alternativa provate a dropparli o copia-incollarli)",30,30)
+    .moveTo(winG)
+    ;
+  winG.show();
 }
 
 /* CP5 class extends */
-class ResizableColorPicker extends ColorPicker
-{
-  ResizableColorPicker(ControlP5 cp5, String theName)
-  {
-    super(cp5, cp5.getTab("default"), theName, 0, 0, 100, 10);
-  }
-  void setItemSize(int w, int h)
-  {
-    sliderRed.setSize(w, h);
-    sliderGreen.setSize(w, h);
-    sliderBlue.setSize(w, h);
-    sliderAlpha.setSize(w, h);
+// class ResizableColorPicker extends ColorPicker
+// {
+//   ResizableColorPicker(ControlP5 cp5, String theName)
+//   {
+//     super(cp5, cp5.getTab("default"), theName, 0, 0, 100, 10);
+//   }
+//   void setItemSize(int w, int h)
+//   {
+//     sliderRed.setSize(w, h);
+//     sliderGreen.setSize(w, h);
+//     sliderBlue.setSize(w, h);
+//     sliderAlpha.setSize(w, h);
    
-    // you gotta move the sliders as well or they will overlap
-    sliderGreen.setPosition(PVector.add(sliderGreen.getPosition(), new PVector(0, h-10)));
-    sliderBlue.setPosition(PVector.add(sliderBlue.getPosition(), new PVector(0, 2*(h-10))));
-    sliderAlpha.setPosition(PVector.add(sliderAlpha.getPosition(), new PVector(0, 3*(h-10))));
-  }
-}
+//     // you gotta move the sliders as well or they will overlap
+//     // sliderGreen.setPosition(PVector.add(sliderGreen.getPosition(), new PVector(0, h-10)));
+//     // sliderBlue.setPosition(PVector.add(sliderBlue.getPosition(), new PVector(0, 2*(h-10))));
+//     // sliderAlpha.setPosition(PVector.add(sliderAlpha.getPosition(), new PVector(0, 3*(h-10))));
+//   }
+// }
+
 void setLock(Controller theController, boolean theValue)
 {
   theController.setLock(theValue);
@@ -287,6 +374,7 @@ void cellWidth(float val)
   currentGrid.setCellWidth(val);
   if (keepRatio)
     currentGrid.setCellHeight(val);
+    
 }
 void cellHeight(float val)
 {
@@ -327,7 +415,7 @@ void toggleKeepRatioCells(boolean flag)
      keepRatio = true;
    else
      keepRatio = false;
- }
+}
 // void toggleNoStroke(boolean flag)
 // {
 //   if (g.getStyle().stroke)
@@ -347,38 +435,80 @@ void toggleStrokeActive(boolean flag)
   String status = flag? "ON" : "OFF";
   mainG.getController("toggleStrokeActive").setLabel("Stroke " + status);
   currentSettings.setIsStrokeOnActive(flag);
-  manager.updateSettings(currentSettings);
+  manager.updateSettingsHistory(currentSettings);
 }
 void toggleFillActive(boolean flag)
 {
   String status = flag? "ON" : "OFF";
   mainG.getController("toggleFillActive").setLabel("Fill " + status);
   currentSettings.setIsFillOnActive(flag);
-  manager.updateSettings(currentSettings);
+  manager.updateSettingsHistory(currentSettings);
 }
 void buttonOk(int theValue) {
+  winG.getController("messageBoxLabel").remove();
+  winG.hide();
   lockG.hide();
 }
-void pickerFillActive(int val)
+void pickRFillActive(int val)
 {
-  currentSettings.setFillRActive((int)red(val));
-  currentSettings.setFillGActive((int)green(val));
-  currentSettings.setFillBActive((int)blue(val));
-  currentSettings.setFillAActive((int)alpha(val));
-
-  /* Adding settings to history */
-  manager.updateSettings(currentSettings);
+  currentSettings.setFillRActive(val);
+  manager.updateSettingsHistory(currentSettings);
 }
-void pickerStrokeActive(int val)
+void pickGFillActive(int val)
 {
-  currentSettings.setStrokeRActive((int)red(val));
-  currentSettings.setStrokeGActive((int)green(val));
-  currentSettings.setStrokeBActive((int)blue(val));
-  currentSettings.setStrokeAActive((int)alpha(val));
-
-  /* Adding settings to history */
-  manager.updateSettings(currentSettings);
+  currentSettings.setFillGActive(val);
+  manager.updateSettingsHistory(currentSettings);
 }
+void pickBFillActive(int val)
+{
+  currentSettings.setFillBActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+void pickAFillActive(int val)
+{
+  currentSettings.setFillAActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+void pickRStrokeActive(int val)
+{
+  currentSettings.setStrokeRActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+void pickGStrokeActive(int val)
+{
+  currentSettings.setStrokeGActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+void pickBStrokeActive(int val)
+{
+  currentSettings.setStrokeBActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+void pickAStrokeActive(int val)
+{
+  currentSettings.setStrokeAActive(val);
+  manager.updateSettingsHistory(currentSettings);
+}
+// void pickerFillActive(int val)
+// {
+//   currentSettings.setFillRActive((int)red(val));
+//   currentSettings.setFillGActive((int)green(val));
+//   currentSettings.setFillBActive((int)blue(val));
+//   currentSettings.setFillAActive((int)alpha(val));
+
+//   /* Adding settings to history */
+//   manager.updateSettingsHistory(currentSettings);
+// }
+// void pickerStrokeActive(int val)
+// {
+//   currentSettings.setStrokeRActive((int)red(val));
+//   currentSettings.setStrokeGActive((int)green(val));
+//   currentSettings.setStrokeBActive((int)blue(val));
+//   currentSettings.setStrokeAActive((int)alpha(val));
+
+//   /* Adding settings to history */
+//   manager.updateSettingsHistory(currentSettings);
+// }
 
 /* Processing file selection callback */
 void fileSelected(File selection) {
@@ -511,7 +641,6 @@ void draw()
   {
     //checkConfigHistory();
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
-    buildSettingsControls();
   }
   //Test if the cursor is over the pattern grid
   // if (currentGrid != null)
@@ -559,11 +688,13 @@ void loadGollyFile(String gollyFile)
     checkConfigHistory();
     /* Adding default settings to history */
     manager.addSettings(new GollyPatternSettings()); // start pattern with defaults
+    /* Init controls */
+    manageControls(false);
   }
   catch (RuntimeException e)
   {
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
-    buildPopup();
+    showPopup();
   }
   catch (IOException e)
   {
