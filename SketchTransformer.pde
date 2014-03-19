@@ -9,7 +9,7 @@ public class SketchTransformer
   
   private PGraphics graphicContext;
   private boolean isAnimating;
-  
+  private boolean dragging = false;
 
   public SketchTransformer(float xOffset, float yOffset, float scaleFactor, PGraphics pg)
   {
@@ -96,15 +96,25 @@ public class SketchTransformer
   {
     this.mouseXPosition = mouseXPos;
     this.mouseYPosition = mouseYPos;
+    dragging = true;
   }
   
   public void updateTranslationOffset(float mouseXPos, float mouseYPos)
   {
-    this.xOffset -= this.mouseXPosition - mouseXPos;
-    this.yOffset -= this.mouseYPosition - mouseYPos;
+    if(dragging)
+    {
+      this.xOffset -= this.mouseXPosition - mouseXPos;
+      this.yOffset -= this.mouseYPosition - mouseYPos;
     
-    this.mouseXPosition = mouseXPos;
-    this.mouseYPosition = mouseYPos;
+      this.mouseXPosition = mouseXPos;
+      this.mouseYPosition = mouseYPos;
+    }
+  }
+  
+  public void resetMousePosition()
+  {
+    dragging = false;
+    /* maybe resetting the mouse position too would not be bad */
   }
   
   

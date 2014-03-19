@@ -706,12 +706,13 @@ void mousePressed()
 
 void mouseReleased()
 {
+  transformer.resetMousePosition();
 }
 
 void mouseDragged()
 {
-  if (mouseX < x - sizeCP5Group) // avoid sliders conflict
-    transformer.updateTranslationOffset(mouseX, mouseY);
+  //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+  transformer.updateTranslationOffset(mouseX, mouseY);
 }
 
 void keyPressed()
