@@ -94,14 +94,6 @@ void buildSettingsControls()
       .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
       .moveTo(mainG)
       ;
-    Group settG = cp5.addGroup("settControls")
-      .setPosition(10,250)
-      .setSize(180,220)
-      .setBackgroundColor(color(20,0,20,150))
-      .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
-      .moveTo(mainG)
-      ;
-    
     cp5.addTextlabel("resizeCells")
       .setPosition(2,10)
       .setText("DIMENSIONE CELLE")
@@ -123,7 +115,7 @@ void buildSettingsControls()
       .setRange(0,200)
       .moveTo(gridG)
       ;
-    cp5.addToggle("toggleKeepRatio")
+    cp5.addToggle("toggleKeepRatioCells")
       .setLabel("Keep Ratio")
       .setPosition(5,60)
       .setSize(42,15)
@@ -131,15 +123,50 @@ void buildSettingsControls()
       .setMode(ControlP5.SWITCH)
       .moveTo(gridG)
       ;
-
-    cp5.addTextlabel("pickerFillLabel")
+    Group settG = cp5.addGroup("settControls")
+      .setPosition(10,250)
+      .setSize(180,350)
+      .setBackgroundColor(color(20,0,20,150))
+      .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
+      .moveTo(mainG)
+      ;
+    cp5.addTextlabel("resizeShapes")
       .setPosition(2,10)
+      .setText("DIMENSIONE FORME")
+      .moveTo(settG)
+      ;
+    cp5.addSlider("shapeWidth")
+      .setValue(currentSettings.getShapeWidth())
+      .setLabel("L")
+      .setPosition(2,25)
+      .setSize(165,10)
+      .setRange(0,200)
+      .moveTo(settG)
+      ;
+    cp5.addSlider("shapeHeight")
+      .setValue(currentSettings.getShapeHeight())
+      .setLabel("A")
+      .setPosition(2,40)
+      .setSize(165,10)
+      .setRange(0,200)
+      .moveTo(settG)
+      ;
+    cp5.addToggle("toggleKeepRatioShapes")
+      .setLabel("Keep Ratio")
+      .setPosition(5,60)
+      .setSize(42,15)
+      .setValue(true)
+      .setMode(ControlP5.SWITCH)
+      .moveTo(settG)
+      ;
+    cp5.addTextlabel("pickerFillLabel")
+      .setPosition(2,105)
       .setText("RIEMPIMENTO CELLE ATTIVE")
       .moveTo(settG)
       ;
     // color pickers (resizable)
     cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
-    cp5e.setPosition(2,25)
+    cp5e.setPosition(2,120)
       .setColorValue(color(currentSettings.getFillRActive(),
                            currentSettings.getFillGActive(),
                            currentSettings.getFillBActive(),
@@ -150,19 +177,19 @@ void buildSettingsControls()
       ;
     cp5.addToggle("toggleFillActive")
       .setLabel("Fill ON")
-      .setPosition(135,70)
+      .setPosition(135,165)
       .setSize(42,15)
       .setValue(currentSettings.isFillOnActive())
       .setMode(ControlP5.SWITCH)
       .moveTo(settG)
       ;
     cp5.addTextlabel("pickerStrokeLabel")
-      .setPosition(2,115)
+      .setPosition(2,210)
       .setText("BORDO CELLE ATTIVE")
       .moveTo(settG)
       ;
     cp5e = new ResizableColorPicker(cp5,"pickerStrokeActive");
-    cp5e.setPosition(2,130)
+    cp5e.setPosition(2,225)
       .setColorValue(color(currentSettings.getStrokeRActive(),
                            currentSettings.getStrokeGActive(),
                            currentSettings.getStrokeBActive(),
@@ -173,7 +200,7 @@ void buildSettingsControls()
       ;
     cp5.addToggle("toggleStrokeActive")
       .setLabel("Stroke ON")
-      .setPosition(135,175)
+      .setPosition(135,270)
       .setSize(42,15)
       .setValue(currentSettings.isStrokeOnActive())
       .setMode(ControlP5.SWITCH)
@@ -263,6 +290,19 @@ void cellHeight(int val)
   if (keepRatio)
     currentGrid.setCellWidth(val);
 }
+void shapeWidth(int val)
+{
+  currentSettings.setShapeWidth(val);
+  if (keepRatio)
+    currentSettings.setShapeHeight(val);
+}
+void shapeHeight(int val)
+{
+  currentSettings.setShapeHeight(val);
+  if (keepRatio)
+    currentSettings.setShapeWidth(val);
+}
+
 void forwardConfigHistory(int status)
 {
   manager.forwardHistory();
@@ -277,7 +317,7 @@ void loadRleConfig(int status)
 {
   selectInput("Selezionare un file RLE di Golly:", "fileSelected");
 }
-void toggleKeepRatio(boolean flag)
+void toggleKeepRatioCells(boolean flag)
 {
    if (flag == true)
      keepRatio = true;
@@ -372,24 +412,20 @@ void drawGollyPattern(PGraphics ctx,
                       Grid2D grid,
                       GollyRleConfiguration config,
                       GollyPatternSettings settings)
-{
-  float cellWidth = grid.getCellWidth();
-  float cellHeight = grid.getCellHeight();
-
-  float shapeWidth = cellWidth - 3;
-  float shapeHeight = cellHeight - 3;
+{  
+  /* Setting up shape */
+  PShape cellShape = generateShape(settings.getShapeWidth(),
+                                   settings.getShapeHeight(),
+                                   settings.getCellShape(),
+                                   settings.getSVGPath());
 
   color colorFillActive = color(settings.getFillRActive(),
                                 settings.getFillGActive(),
                                 settings.getFillBActive());
+  
   color colorStrokeActive = color(settings.getStrokeRActive(),
                                   settings.getStrokeGActive(),
                                   settings.getStrokeBActive());
-  
-  /* Setting up shape */
-  PShape cellShape = generateShape(shapeWidth, shapeHeight,
-                                   settings.getCellShape(),
-                                   settings.getSVGPath());
   
   for (int i = 0; i < grid.getRows(); i++)
   {
