@@ -19,6 +19,8 @@ public class GollyPatternSettings
   private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
+  private float shapeWidth = 7;
+  private float shapeHeight = 7;
   private boolean isStrokeOnActive = true;
   private boolean isStrokeOnInactive = false;
   private boolean isFillOnActive = true;
@@ -115,6 +117,16 @@ public class GollyPatternSettings
   public int getStrokeWeightInactive()
   {
     return strokeWeightInactive;
+  }
+
+  public float getShapeWidth()
+  {
+    return shapeWidth;
+  }
+
+  public float getShapeHeight()
+  {
+    return shapeHeight;
   }
 
   public boolean isStrokeOnActive()
@@ -238,6 +250,16 @@ public class GollyPatternSettings
     strokeWeightInactive = val;
   }
 
+  public void setShapeWidth(float val)
+  {
+    shapeWidth = val;
+  }
+
+  public void setShapeHeight(float val)
+  {
+    shapeHeight = val;
+  }
+  
   public void setIsStrokeOnActive(boolean flag)
   {
     isStrokeOnActive = flag;
