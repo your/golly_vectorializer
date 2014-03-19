@@ -604,6 +604,81 @@ void drawGollyPattern(PGraphics ctx,
   
 }
 
+void drawGollyPattern2(PGraphics ctx,
+                      Grid2D grid,
+                      GollyRleConfiguration config,
+                      GollyPatternSettings settings)
+{  
+  /* retrieving sizes */
+  int gridRows = grid.getRows();
+  int gridCols = grid.getColumns();
+  int matrixRows = config.getMatrixHeight();
+  int matrixCols = config.getMatrixWidth();
+  
+  /* computing offsets */
+  int xOffset = ceil(abs(gridRows - matrixRows) / 2);
+  int yOffset = ceil(abs(gridCols - matrixCols) / 2);
+  
+  //println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
+  
+  /* getting grid sub indices */
+  int startX = (matrixRows < gridCols) ? xOffset : 0;
+  int endX = min(matrixRows, gridCols);
+  int startY = (matrixCols < gridCols) ? yOffset : 0;
+  int endY = min(matrixCols, gridCols);
+  
+  //println("STEND ", startX, endX, startY, endY);
+  
+  /* Setting up shape */
+  PShape cellShape = generateShape(settings.getShapeWidth(),
+                                   settings.getShapeHeight(),
+                                   settings.getCellShape(),
+                                   settings.getSVGPath());
+
+  color colorFillActive = color(settings.getFillRActive(),
+                                settings.getFillGActive(),
+                                settings.getFillBActive());
+  
+  color colorStrokeActive = color(settings.getStrokeRActive(),
+                                  settings.getStrokeGActive(),
+                                  settings.getStrokeBActive());
+  
+  for (int i = startX; i < endX; i++)
+  {
+    for (int j = startY; j < endY; j++)
+    {
+      /* get matrix indices */
+      int mi = i + xOffset;
+      int mj = j + yOffset;
+
+      int currentState = config.getCellState(mi, mj);
+      PVector currentPoint = grid.getPoint(i,j);
+
+      if (currentState > 0) /* each state > 0 is considered active */
+      {
+        // Setting PShape fill&stroke up
+        if (settings.isFillOnActive())
+          cellShape.setFill(colorFillActive);
+        else
+          cellShape.setFill(false);
+        if (settings.isStrokeOnActive())
+          cellShape.setStroke(colorStrokeActive);
+        else
+          cellShape.setStroke(false);
+
+        // Drawind shapes
+        ctx.shape(cellShape, currentPoint.x, currentPoint.y);
+      }
+      else /* inactive state */
+      {
+      
+      }
+    }
+  }
+  
+}
+
+
 PShape generateShape(float w, float h,
                      CellShape shapeType, String SVGPath)
 {
@@ -656,7 +731,7 @@ void draw()
   currentSettings = manager.getCurrentSettings();
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
-    drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
+    drawGollyPattern2(g, currentGrid, currentConfig, currentSettings);
   }
 
   //drawGuiElements
