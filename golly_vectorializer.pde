@@ -36,8 +36,8 @@ void setup()
   
   size(x,y,P2D);
   background(bg);
-  noStroke();
-  noFill();
+  // noStroke();
+  // noFill();
 
   /* Building CP5 objects */
   cp5 = new ControlP5(this);
@@ -148,11 +148,11 @@ void buildSettingsControls()
       ;
     cp5e.setItemSize(175,10)
       ;
-    cp5.addToggle("toggleNoFill")
-      .setLabel("No Fill")
+    cp5.addToggle("toggleFillActive")
+      .setLabel("Fill ON")
       .setPosition(135,70)
       .setSize(42,15)
-      .setValue(false)
+      .setValue(currentSettings.isFillOnActive())
       .setMode(ControlP5.SWITCH)
       .moveTo(settG)
       ;
@@ -171,11 +171,11 @@ void buildSettingsControls()
       ;
     cp5e.setItemSize(175,10)
       ;
-    cp5.addToggle("toggleNoStroke")
-      .setLabel("No Stroke")
+    cp5.addToggle("toggleStrokeActive")
+      .setLabel("Stroke ON")
       .setPosition(135,175)
       .setSize(42,15)
-      .setValue(false)
+      .setValue(currentSettings.isStrokeOnActive())
       .setMode(ControlP5.SWITCH)
       .moveTo(settG)
       ;
@@ -279,24 +279,38 @@ void loadRleConfig(int status)
 }
 void toggleKeepRatio(boolean flag)
 {
-  if (flag == true)
-    keepRatio = true;
-  else
-    keepRatio = false;
-}
-void toggleNoStroke(boolean flag)
+   if (flag == true)
+     keepRatio = true;
+   else
+     keepRatio = false;
+ }
+// void toggleNoStroke(boolean flag)
+// {
+//   if (g.getStyle().stroke)
+//     g.noStroke();
+//   else
+//     g.stroke(g.getStyle().strokeColor); 
+// }
+// void toggleNoFill(boolean flag)
+// {
+//   if (g.getStyle().fill)
+//     g.noFill();
+//   else
+//     g.fill(g.getStyle().fillColor); 
+// }
+void toggleStrokeActive(boolean flag)
 {
-  if (g.getStyle().stroke)
-    g.noStroke();
-  else
-    g.stroke(g.getStyle().strokeColor); 
+  String status = flag? "ON" : "OFF";
+  mainG.getController("toggleStrokeActive").setLabel("Stroke " + status);
+  currentSettings.setIsStrokeOnActive(flag);
+  manager.updateSettings(currentSettings);
 }
-void toggleNoFill(boolean flag)
+void toggleFillActive(boolean flag)
 {
-  if (g.getStyle().fill)
-    g.noFill();
-  else
-    g.fill(g.getStyle().fillColor); 
+  String status = flag? "ON" : "OFF";
+  mainG.getController("toggleFillActive").setLabel("Fill " + status);
+  currentSettings.setIsFillOnActive(flag);
+  manager.updateSettings(currentSettings);
 }
 void buttonOk(int theValue) {
   lockG.hide();
@@ -309,7 +323,7 @@ void pickerFillActive(int val)
   currentSettings.setFillAActive((int)alpha(val));
 
   /* Adding settings to history */
-  manager.updateSettings(currentSettings); // todo: handle settings history
+  manager.updateSettings(currentSettings);
 }
 void pickerStrokeActive(int val)
 {
@@ -319,7 +333,7 @@ void pickerStrokeActive(int val)
   currentSettings.setStrokeAActive((int)alpha(val));
 
   /* Adding settings to history */
-  manager.updateSettings(currentSettings); // todo: handle settings history
+  manager.updateSettings(currentSettings);
 }
 
 /* Processing file selection callback */
@@ -335,7 +349,7 @@ void fileSelected(File selection) {
 
 void generateGridFrom(GollyRleConfiguration config)
 {
-  PVector origin = new PVector(); // default origin todo: center it
+  PVector origin = new PVector();
   
   int cols = config.getMatrixWidth();
   int rows = config.getMatrixHeight();
@@ -361,41 +375,22 @@ void drawGollyPattern(PGraphics ctx,
 {
   float cellWidth = grid.getCellWidth();
   float cellHeight = grid.getCellHeight();
-  
-  color colorFill = color(settings.getFillRActive(),
-                          settings.getFillGActive(),
-                          settings.getFillBActive());
-  color colorStroke = color(settings.getStrokeRActive(),
-                            settings.getStrokeGActive(),
-                            settings.getStrokeBActive());
+
+  float shapeWidth = cellWidth - 3;
+  float shapeHeight = cellHeight - 3;
+
+  color colorFillActive = color(settings.getFillRActive(),
+                                settings.getFillGActive(),
+                                settings.getFillBActive());
+  color colorStrokeActive = color(settings.getStrokeRActive(),
+                                  settings.getStrokeGActive(),
+                                  settings.getStrokeBActive());
   
   /* Setting up shape */
-  PShape cellShape = null;
-  // fill and stroke colors
-  if (ctx.getStyle().stroke)
-    ctx.stroke(colorStroke);
-  if (ctx.getStyle().fill)
-    ctx.fill(colorFill);
+  PShape cellShape = generateShape(shapeWidth, shapeHeight,
+                                   settings.getCellShape(),
+                                   settings.getSVGPath());
   
-  switch(settings.getCellShape())
-  {
-  case SQUARE:
-    cellShape = createShape(RECT,0,0,cellWidth,cellHeight);
-    break;
-  case CIRCLE:
-    cellShape = createShape(ELLIPSE,0,0,cellWidth,cellHeight);
-    break;
-  case CUSTOM:
-    String svg = settings.getSVGPath();
-    cellShape = loadShape(svg); // todo: resize svg
-    break;
-  }
-  /* Drawing shapes */
-  drawShape(ctx, cellShape, grid, config);
-}
-
-void drawShape(PGraphics ctx, PShape s, Grid2D grid, GollyRleConfiguration config)
-{
   for (int i = 0; i < grid.getRows(); i++)
   {
     for (int j = 0; j < grid.getColumns(); j++)
@@ -403,11 +398,51 @@ void drawShape(PGraphics ctx, PShape s, Grid2D grid, GollyRleConfiguration confi
       int currentState = config.getCellState(i,j);
       if (currentState == 1) // draw shapes only into active cells
       {
+        // Setting PShape fill&stroke up
+        if (settings.isFillOnActive())
+          cellShape.setFill(colorFillActive);
+        else
+          cellShape.setFill(false);
+        if (settings.isStrokeOnActive())
+          cellShape.setStroke(colorStrokeActive);
+        else
+          cellShape.setStroke(false);
+
+        // Drawind shapes
         PVector currentPoint = grid.getPoint(i,j);
-        ctx.shape(s, currentPoint.x, currentPoint.y);
+        ctx.shape(cellShape, currentPoint.x, currentPoint.y);
       }
     }
-  }  
+  }
+  
+}
+
+PShape generateShape(float w, float h,
+                     CellShape shapeType, String SVGPath)
+{
+  PShape patternShape = createShape();
+  switch(shapeType)
+  {
+  case SQUARE:
+    patternShape.beginShape();
+    patternShape.vertex(0,0);
+    patternShape.vertex(0,w);
+    patternShape.vertex(w,h);
+    patternShape.vertex(h,0);
+    patternShape.vertex(0,0);
+    patternShape.endShape();
+    // patternShape = createShape(RECT,0,0,w,h);
+    break;
+  case CIRCLE:
+    patternShape = createShape(ELLIPSE,0,0,w,h);
+    // circles are not so easy to draw using curveVertex()..
+    // ..but we can build very complex shapes in the future
+    break;
+  case CUSTOM:
+    patternShape = loadShape(SVGPath); // todo: resize svg
+    break;
+  }
+  return patternShape;
 }
 
 void checkConfigHistory()
