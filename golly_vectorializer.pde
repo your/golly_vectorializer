@@ -35,6 +35,7 @@ void manageControls(boolean lock)
   // settG
   setLock(cp5.getController("shapeWidth"),lock);
   setLock(cp5.getController("shapeHeight"),lock);
+  setLock(cp5.getController("toggleKeepRatioShapes"),lock);
   setLock(cp5.getController("pickRFillActive"),lock);
   setLock(cp5.getController("pickGFillActive"),lock);
   setLock(cp5.getController("pickBFillActive"),lock);
@@ -67,7 +68,7 @@ void setup()
   
   size(x,y,P2D);
 
-  transformer = new SketchTransformer(width/2, height/2, 1.0);
+  transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
   
   background(bg);
 
@@ -154,6 +155,14 @@ void setup()
     .setSize(165,10)
     .setValue(currentSettings.getShapeHeight())
     .setRange(0,200)
+    .moveTo(settG)
+    ;
+  cp5.addToggle("toggleKeepRatioShapes")
+    .setLabel("Keep Ratio")
+    .setPosition(5,60)
+    .setSize(42,15)
+    .setValue(currentSettings.getKeepRatio())
+    .setMode(ControlP5.SWITCH)
     .moveTo(settG)
     ;
   cp5.addTextlabel("pickerFillLabel")
@@ -385,14 +394,16 @@ void cellHeight(float val)
 void shapeWidth(float val)
 {
   currentSettings.setShapeWidth(val);
-  if (keepRatio)
+  if (currentSettings.getKeepRatio())
     currentSettings.setShapeHeight(val);
+  manager.updateSettingsHistory(currentSettings);
 }
 void shapeHeight(float val)
 {
   currentSettings.setShapeHeight(val);
-  if (keepRatio)
+  if (currentSettings.getKeepRatio())
     currentSettings.setShapeWidth(val);
+  manager.updateSettingsHistory(currentSettings);
 }
 
 void forwardConfigHistory(int status)
@@ -416,6 +427,12 @@ void toggleKeepRatioCells(boolean flag)
    else
      keepRatio = false;
 }
+void toggleKeepRatioShapes(boolean flag)
+{
+  currentSettings.setKeepRatio(flag);
+  manager.updateSettingsHistory(currentSettings);
+}
+
 // void toggleNoStroke(boolean flag)
 // {
 //   if (g.getStyle().stroke)
@@ -531,9 +548,9 @@ void generateGridFrom(GollyRleConfiguration config)
   float cellWidth = cellDim;
   float cellHeight = cellDim;
 
-  /* Centering grid */
-  origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
-  origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
+  // /* Centering grid */
+  // origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
+  // origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
 
   Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
   /* Adding grid to history */
@@ -593,7 +610,7 @@ PShape generateShape(float w, float h,
   PShape patternShape = createShape();
   switch(shapeType)
   {
-  case SQUARE:
+  case SQUARE: // to be correct, this is a generic rect
     patternShape.beginShape();
     patternShape.vertex(0,0);
     patternShape.vertex(0,w);
@@ -639,35 +656,9 @@ void draw()
   currentSettings = manager.getCurrentSettings();
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
-    //checkConfigHistory();
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
   }
-  //Test if the cursor is over the pattern grid
-  // if (currentGrid != null)
-  // {
-  //   float xO = currentGrid.getX0();
-  //   float yO = currentGrid.getY0();
-  //   float gridWidth = currentGrid.getCellWidth() * currentGrid.getRows();
-  //   float gridHeight = currentGrid.getCellHeight() * currentGrid.getColumns();
 
-  //   if (mouseX > xO && mouseX < xO + gridWidth &&
-  //       mouseX < x - sizeCP5Group && // make sure we are not on CP5 controllers
-  //       mouseY > yO && mouseY < yO + gridHeight)
-  //   {
-  //     overGrid = true;
-  //     if(!lockedGrid)
-  //     {
-  //       //stroke(255);
-  //       //fill(153);
-  //     }
-  //   }
-  //   else
-  //   {
-  //     //stroke(153);
-  //     //fill(153);
-  //     overGrid = false;
-  //   }
-  // }
   //drawGuiElements
   //
   transformer.endDrawing();
@@ -709,7 +700,8 @@ void center(int value)
 
 void mousePressed()
 {
-  transformer.saveMousePosition(mouseX, mouseY);
+  if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+    transformer.saveMousePosition(mouseX, mouseY);
 }
 
 void mouseReleased()
@@ -718,7 +710,8 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  transformer.updateTranslationOffset(mouseX, mouseY);
+  if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+    transformer.updateTranslationOffset(mouseX, mouseY);
 }
 
 void keyPressed()
