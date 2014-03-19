@@ -21,6 +21,7 @@ public class GollyPatternSettings
   private int strokeWeightInactive = 0;
   private float shapeWidth = 7;
   private float shapeHeight = 7;
+  private boolean keepRatio = true;
   private boolean isStrokeOnActive = true;
   private boolean isStrokeOnInactive = false;
   private boolean isFillOnActive = true;
@@ -129,6 +130,11 @@ public class GollyPatternSettings
     return shapeHeight;
   }
 
+  public boolean getKeepRatio()
+  {
+    return keepRatio;
+  }
+  
   public boolean isStrokeOnActive()
   {
     return isStrokeOnActive;
@@ -258,6 +264,11 @@ public class GollyPatternSettings
   public void setShapeHeight(float val)
   {
     shapeHeight = val;
+  }
+
+  public void setKeepRatio(boolean flag)
+  {
+    keepRatio = flag;
   }
   
   public void setIsStrokeOnActive(boolean flag)
