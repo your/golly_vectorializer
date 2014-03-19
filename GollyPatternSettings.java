@@ -19,6 +19,10 @@ public class GollyPatternSettings
   private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
+  private boolean isStrokeOnActive = true;
+  private boolean isStrokeOnInactive = false;
+  private boolean isFillOnActive = true;
+  private boolean isFillOnInactive = false;
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
   
@@ -111,6 +115,26 @@ public class GollyPatternSettings
   public int getStrokeWeightInactive()
   {
     return strokeWeightInactive;
+  }
+
+  public boolean isStrokeOnActive()
+  {
+    return isStrokeOnActive;
+  }
+
+  public boolean isStrokeOnInactive()
+  {
+    return isStrokeOnInactive;
+  }
+
+  public boolean isFillOnActive()
+  {
+    return isFillOnActive;
+  }
+
+  public boolean isFillOnInactive()
+  {
+    return isFillOnInactive;
   }
 
   public CellShape getCellShape()
@@ -212,6 +236,26 @@ public class GollyPatternSettings
   public void setStrokeWeightInactive(int val)
   {
     strokeWeightInactive = val;
+  }
+
+  public void setIsStrokeOnActive(boolean flag)
+  {
+    isStrokeOnActive = flag;
+  }
+
+  public void setIsStrokeOnInactive(boolean flag)
+  {
+    isStrokeOnInactive = flag;
+  }
+
+  public void setIsFillOnActive(boolean flag)
+  {
+    isFillOnActive = flag;
+  }
+
+  public void setIsFillOnInactive(boolean flag)
+  {
+    isFillOnInactive = flag;
   }
 
   public void setCellShape(CellShape cellShape)
