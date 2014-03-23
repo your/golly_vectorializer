@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import controlP5.*;
+import processing.pdf.*;
 
 /* Global variables */
 GollyRleReader reader;
@@ -11,7 +12,7 @@ SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
 // ResizableColorPicker cp5e;
-Group mainG, settG, lockG, winG;
+Group mainG, lockG, winG;
 
 /* Default window/drawing settings */
 int x = 1024;
@@ -90,20 +91,41 @@ void setup()
   // GRID SUBGROUP AREA
   Group gridG = cp5.addGroup("gridControls")
     .setPosition(10,100)
-    .setSize(180,95)
+    .setSize(180,145)
     //.setBackgroundColor(color(20,0,20,150))
     .setBackgroundColor(color(175,190,175,220))
     .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
     .moveTo(mainG)
     ;
-  cp5.addTextlabel("resizeCells")
+  cp5.addTextlabel("resizeGrid")
     .setPosition(2,10)
+    .setText("DIMENSIONE GRIGLIA")
+    .moveTo(gridG)
+    ;
+  cp5.addSlider("rowsNum")
+    .setLabel("ROWS")
+    .setPosition(2,25)
+    .setSize(150,10)
+    .setValue(currentGrid.getRows())
+    .setRange(0,200)
+    .moveTo(gridG)
+    ;
+  cp5.addSlider("colsNum")
+    .setLabel("COLS")
+    .setPosition(2,40)
+    .setSize(150,10)
+    .setValue(currentGrid.getColumns())
+    .setRange(0,200)
+    .moveTo(gridG)
+    ;
+  cp5.addTextlabel("resizeCells")
+    .setPosition(2,60)
     .setText("DIMENSIONE CELLE")
     .moveTo(gridG)
     ;
   cp5.addSlider("cellWidth")
     .setLabel("L")
-    .setPosition(2,25)
+    .setPosition(2,75)
     .setSize(165,10)
     .setValue(currentGrid.getCellWidth())
     .setRange(0,200)
@@ -111,7 +133,7 @@ void setup()
     ;
   cp5.addSlider("cellHeight")
     .setLabel("A")
-    .setPosition(2,40)
+    .setPosition(2,90)
     .setSize(165,10)
     .setValue(currentGrid.getCellHeight())
     .setRange(0,200)
@@ -119,15 +141,15 @@ void setup()
     ;
   cp5.addToggle("toggleKeepRatioCells")
     .setLabel("Keep Ratio")
-    .setPosition(5,60)
+    .setPosition(5,110)
     .setSize(42,15)
     .setValue(true)
     .setMode(ControlP5.SWITCH)
     .moveTo(gridG)
     ;
   // SETTINGS SUBGROUP AREA
-  settG = cp5.addGroup("settControls")
-    .setPosition(10,250)
+  Group settG = cp5.addGroup("settControls")
+    .setPosition(10,300)
     .setSize(180,350)
     .setBackgroundColor(color(175,190,175,220))
     //.setBackgroundColor(color(20,0,20,150))
@@ -378,6 +400,14 @@ void setLock(Controller theController, boolean theValue)
 }
   
 /* CP5 objects callbacks */
+void rowsNum(int val)
+{
+  currentGrid.setRows(val);
+}
+void colsNum(int val)
+{
+  currentGrid.setColumns(val);
+}
 void cellWidth(float val)
 {
   currentGrid.setCellWidth(val);
@@ -622,8 +652,8 @@ void drawGollyPattern2(PGraphics ctx,
   //println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
   
   /* getting grid sub indices */
-  int startX = (matrixRows < gridCols) ? xOffset : 0;
-  int endX = min(matrixRows, gridCols);
+  int startX = (matrixRows < gridRows) ? xOffset : 0;
+  int endX = min(matrixRows, gridRows);
   int startY = (matrixCols < gridCols) ? yOffset : 0;
   int endY = min(matrixCols, gridCols);
   
@@ -648,9 +678,14 @@ void drawGollyPattern2(PGraphics ctx,
     for (int j = startY; j < endY; j++)
     {
       /* get matrix indices */
-      int mi = i + xOffset;
-      int mj = j + yOffset;
+      int mi = (matrixRows > gridRows)? i + xOffset : i - xOffset; // you cannot increment array index indefinitely
+      int mj = (matrixCols > gridCols)? j + yOffset : j - yOffset; // ..maybe this is what you meant?
 
+      // c'è ancora qualcosa che non va
+
+      // if (i==startX && j==startY) println(mi,mj);
+      // if (i==endX-1 && j==endY-1) println(mi,mj);
+      
       int currentState = config.getCellState(mi, mj);
       PVector currentPoint = grid.getPoint(i,j);
 
@@ -731,7 +766,9 @@ void draw()
   currentSettings = manager.getCurrentSettings();
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
+    //beginRaw(PDF,"lol.pdf");
     drawGollyPattern2(g, currentGrid, currentConfig, currentSettings);
+    //endRaw();
   }
 
   //drawGuiElements
