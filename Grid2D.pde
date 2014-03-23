@@ -38,6 +38,8 @@
   {
     cellWidth = 0;
     cellHeight = 0;
+    colPoints = 0;
+    rowPoints = 0;
   }
   
   public Grid2D(PVector origin, int cols, int rows, float cellWidth)
@@ -105,16 +107,6 @@
   {
     return this.rowPoints;
   }
-
-  float getX0()
-  {
-    return this.origin.x;
-  }
-
-  float getY0()
-  {
-    return this.origin.y;
-  }
   
   void setCellHeight(float newHeight)
   {
@@ -132,32 +124,22 @@
 
   void setRows(int rows)
   {
-    this.rowPoints = rows + 1;
-    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
-    this.points = initGridPoints(newPoints);
+    if (rowPoints > 0)
+    {
+      this.rowPoints = rows + 1;
+      PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
+      this.points = initGridPoints(newPoints);
+    }
   }
   
   void setColumns(int cols)
   {
-    this.colPoints = cols + 1;
-    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
-    this.points = initGridPoints(newPoints);
-  }
-
-  void setX0(float x0)
-  {
-    this.origin.x = x0;
-    // reallocate grid
-    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
-    this.points = initGridPoints(newPoints);
-  }
-
-  void setY0(float y0)
-  {
-    this.origin.y = y0;
-    // reallocate grid
-    PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
-    this.points = initGridPoints(newPoints);
+    if (colPoints > 0)
+    {
+      this.colPoints = cols + 1;
+      PVector [][] newPoints = new PVector [this.rowPoints][this.colPoints];
+      this.points = initGridPoints(newPoints);
+    }
   }
 
   /* Modifying the grid *****************************************************/
