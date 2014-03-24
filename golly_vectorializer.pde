@@ -71,7 +71,7 @@ void setup()
   smooth();
   frameRate(30);
   
-  size(x,y,P2D);
+  size(x,y);
 
   transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
   
@@ -702,10 +702,10 @@ void drawGollyPattern2(PGraphics ctx,
   //println("STEND ", startX, endX, startY, endY);
   
   /* Setting up shape */
-  PShape cellShape = generateShape(settings.getShapeWidth(),
-                                   settings.getShapeHeight(),
-                                   settings.getCellShape(),
-                                   settings.getSVGPath());
+  // PShape cellShape = generateShape(settings.getShapeWidth(),
+  //                                  settings.getShapeHeight(),
+  //                                  settings.getCellShape(),
+  //                                  settings.getSVGPath());
 
   color colorFillActive = color(settings.getFillRActive(),
                                 settings.getFillGActive(),
@@ -735,16 +735,21 @@ void drawGollyPattern2(PGraphics ctx,
       {
         // Setting PShape fill&stroke up
         if (settings.isFillOnActive())
-          cellShape.setFill(colorFillActive);
+          ctx.fill(colorFillActive);
+          //cellShape.setFill(colorFillActive);
         else
-          cellShape.setFill(false);
+          ctx.noFill();
+          //cellShape.setFill(false);
         if (settings.isStrokeOnActive())
-          cellShape.setStroke(colorStrokeActive);
+          ctx.stroke(colorStrokeActive);
+        //cellShape.setStroke(colorStrokeActive);
         else
-          cellShape.setStroke(false);
+          ctx.noStroke();
+          //cellShape.setStroke(false);
 
         // Drawind shapes
-        ctx.shape(cellShape, currentPoint.x, currentPoint.y);
+        //ctx.shape(cellShape, currentPoint.x, currentPoint.y); fuck you
+        ctx.rect(currentPoint.x, currentPoint.y, settings.getShapeWidth(), settings.getShapeHeight());
       }
       else /* inactive state */
       {
@@ -763,14 +768,14 @@ PShape generateShape(float w, float h,
   switch(shapeType)
   {
   case SQUARE: // to be correct, this is a generic rect
-    patternShape.beginShape();
-    patternShape.vertex(0,0);
-    patternShape.vertex(0,w);
-    patternShape.vertex(w,h);
-    patternShape.vertex(h,0);
-    patternShape.vertex(0,0);
-    patternShape.endShape();
-    // patternShape = createShape(RECT,0,0,w,h);
+    // patternShape.beginShape();
+    // patternShape.vertex(0,0);
+    // patternShape.vertex(0,w);
+    // patternShape.vertex(w,h);
+    // patternShape.vertex(h,0);
+    // patternShape.vertex(0,0);
+    // patternShape.endShape();
+     patternShape = createShape(RECT,0,0,w,h);
     break;
   case CIRCLE:
     patternShape = createShape(ELLIPSE,0,0,w,h);
@@ -798,9 +803,17 @@ void checkConfigHistory()
 }
 void exportNow(String pdfFile)
 {
-  beginRaw(PDF,pdfFile+".pdf");
-  drawGollyPattern2(g, currentGrid, currentConfig, currentSettings);
-  endRaw();
+  float w = currentGrid.getColumns() * currentSettings.getShapeWidth();
+  float h = currentGrid.getRows() * currentSettings.getShapeHeight();
+  PGraphics pdf = createGraphics((int)w, (int)h, PDF, pdfFile+".pdf");
+  pdf.beginDraw();
+  //beginRecord(PDF,pdfFile+".pdf");
+  //beginRaw(PDF,pdfFile+".pdf");
+  drawGollyPattern2(pdf, currentGrid, currentConfig, currentSettings);
+  //endRaw();
+  //endRecord();
+  pdf.dispose();
+  pdf.endDraw();
 }
 void draw()
 {
