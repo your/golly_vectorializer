@@ -29,11 +29,15 @@ boolean lockedGrid = false;
 void manageControls(boolean lock)
 {
   /* Locking/unlocking controls */
+  // mainG
+  setLock(cp5.getController("exportToPDF"),lock);
   // gridG
   setLock(cp5.getController("cellWidth"),lock);
   setLock(cp5.getController("cellHeight"),lock);
   setLock(cp5.getController("toggleKeepRatioCells"),lock);
   // settG
+  setLock(cp5.getController("rowsNum"),lock);
+  setLock(cp5.getController("colsNum"),lock);
   setLock(cp5.getController("shapeWidth"),lock);
   setLock(cp5.getController("shapeHeight"),lock);
   setLock(cp5.getController("toggleKeepRatioShapes"),lock);
@@ -197,6 +201,7 @@ void setup()
     .setPosition(3,120)
     .setSize(165,10)
     .setColorValue(currentSettings.getFillRActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -205,6 +210,7 @@ void setup()
     .setPosition(3,131)
     .setSize(165,10)
     .setColorValue(currentSettings.getFillGActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -213,6 +219,7 @@ void setup()
     .setPosition(3,142)
     .setSize(165,10)
     .setColorValue(currentSettings.getFillBActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -221,6 +228,7 @@ void setup()
     .setPosition(3,153)
     .setSize(165,10)
     .setColorValue(currentSettings.getFillAActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -242,6 +250,7 @@ void setup()
     .setPosition(3,220)
     .setSize(165,10)
     .setColorValue(currentSettings.getStrokeRActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -250,6 +259,7 @@ void setup()
     .setPosition(3,231)
     .setSize(165,10)
     .setColorValue(currentSettings.getStrokeGActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -258,6 +268,7 @@ void setup()
     .setPosition(3,242)
     .setSize(165,10)
     .setColorValue(currentSettings.getStrokeBActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -266,6 +277,7 @@ void setup()
     .setPosition(3,253)
     .setSize(165,10)
     .setColorValue(currentSettings.getStrokeAActive())
+    .setColorForeground(color(255, 255, 255))
     .setRange(0,255)
     .moveTo(settG)
     ;
@@ -304,6 +316,13 @@ void setup()
   cp5.addButton("loadRleConfig")
     .setLabel("Aggiungi File RLE di Golly")
     .setPosition(40,20)
+    .setSize(110,19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
+  cp5.addButton("exportToPDF")
+    .setLabel("Esporta in PDF")
+    .setPosition(40,43)
     .setSize(110,19)
     .setColorBackground(cp)
     .moveTo(mainG)
@@ -450,6 +469,10 @@ void loadRleConfig(int status)
 {
   selectInput("Selezionare un file RLE di Golly:", "fileSelected");
 }
+void exportToPDF(int status)
+{
+  selectOutput("Selezionare destinazione PDF:", "pdfSelected");
+}
 void toggleKeepRatioCells(boolean flag)
 {
    if (flag == true)
@@ -567,6 +590,15 @@ void fileSelected(File selection) {
     loadGollyFile(gollyFilePath);
    }
 }
+void pdfSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    String pdfPath = selection.getAbsolutePath();
+    println("User selected " + pdfPath);
+    exportNow(pdfPath);
+  }
+}
 
 void generateGridFrom(GollyRleConfiguration config)
 {
@@ -585,6 +617,8 @@ void generateGridFrom(GollyRleConfiguration config)
   Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
   /* Adding grid to history */
   manager.addGrid(genGrid);
+
+  currentGrid = genGrid;
   
 }
 
@@ -754,16 +788,21 @@ void checkConfigHistory()
   else
     setLock(mainG.getController("forwardConfigHistory"),true);
 }
-
+void exportNow(String pdfFile)
+{
+  beginRaw(PDF,pdfFile+".pdf");
+  drawGollyPattern2(g, currentGrid, currentConfig, currentSettings);
+  endRaw();
+}
 void draw()
 {
   transformer.startDrawing();
   /* Refreshing bg */
   background(bg);
   /* Getting current history snapshot */
-  currentConfig = manager.getCurrentConfiguration();
-  currentGrid = manager.getCurrentGrid();
-  currentSettings = manager.getCurrentSettings();
+//  currentConfig = manager.getCurrentConfiguration();
+//  currentGrid = manager.getCurrentGrid();
+//  currentSettings = manager.getCurrentSettings();
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
     //beginRaw(PDF,"lol.pdf");
@@ -782,15 +821,16 @@ void loadGollyFile(String gollyFile)
   /* Trying to get configuration from parser */
   try
   {
-    GollyRleConfiguration newConfig = reader.parseFile(gollyFile);
+    currentConfig = reader.parseFile(gollyFile);
     /* Adding it to history */
-    manager.addConfiguration(newConfig);
+    manager.addConfiguration(currentConfig);
     /* Generating grid from it (then adding it to history) */
-    generateGridFrom(newConfig);
+    generateGridFrom(currentConfig);
     /* Can we enable nextConfig button? */
     checkConfigHistory();
     /* Adding default settings to history */
-    manager.addSettings(new GollyPatternSettings()); // start pattern with defaults
+    currentSettings = new GollyPatternSettings();
+    manager.addSettings(currentSettings); // start pattern with defaults
     /* Init controls */
     manageControls(false);
   }
