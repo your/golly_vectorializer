@@ -19,6 +19,8 @@ int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
+float scaleFactor = 1.0;
+float scaleUnit = 0.5;
 color bg = color(255);
 color cp = color(10,20,10,200);
 color cq = color(200,180,200,100);
@@ -35,9 +37,11 @@ void manageControls(boolean lock)
   setLock(cp5.getController("cellWidth"),lock);
   setLock(cp5.getController("cellHeight"),lock);
   setLock(cp5.getController("toggleKeepRatioCells"),lock);
+  setLock(cp5.getController("zoomIn"),lock);
+  setLock(cp5.getController("zoomOut"),lock);
   // settG
-  setLock(cp5.getController("rowsNum"),lock);
-  setLock(cp5.getController("colsNum"),lock);
+  setLock(cp5.getController("rowsNum"),true); // temp disabled
+  setLock(cp5.getController("colsNum"),true); // temp disabled
   setLock(cp5.getController("shapeWidth"),lock);
   setLock(cp5.getController("shapeHeight"),lock);
   setLock(cp5.getController("toggleKeepRatioShapes"),lock);
@@ -94,7 +98,7 @@ void setup()
     ;
   // GRID SUBGROUP AREA
   Group gridG = cp5.addGroup("gridControls")
-    .setPosition(10,100)
+    .setPosition(10,130)
     .setSize(180,145)
     //.setBackgroundColor(color(20,0,20,150))
     .setBackgroundColor(color(175,190,175,220))
@@ -149,6 +153,20 @@ void setup()
     .setSize(42,15)
     .setValue(true)
     .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
+    ;
+  cp5.addButton("zoomIn")
+    .setLabel("Zoom +")
+    .setPosition(80,110)
+    .setSize(35,15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addButton("zoomOut")
+    .setLabel("Zoom -")
+    .setPosition(120,110)
+    .setSize(35,15)
+    .setColorBackground(cp)
     .moveTo(gridG)
     ;
   // SETTINGS SUBGROUP AREA
@@ -445,33 +463,30 @@ void shapeWidth(float val)
   currentSettings.setShapeWidth(val);
   if (currentSettings.getKeepRatio())
     currentSettings.setShapeHeight(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void shapeHeight(float val)
 {
   currentSettings.setShapeHeight(val);
   if (currentSettings.getKeepRatio())
     currentSettings.setShapeWidth(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 
 void forwardConfigHistory(int status)
 {
   manager.forwardHistory();
   updateHistory();
-  checkConfigHistory();
 }
 void rewindConfigHistory(int status)
 {
   manager.rewindHistory();
   updateHistory();
-  checkConfigHistory();
 }
 void updateHistory()
 {
   currentGrid = manager.getCurrentGrid();
   currentConfig = manager.getCurrentConfiguration();
   currentSettings = manager.getCurrentSettings();
+  checkConfigHistory();
 }
 void loadRleConfig(int status)
 {
@@ -491,7 +506,6 @@ void toggleKeepRatioCells(boolean flag)
 void toggleKeepRatioShapes(boolean flag)
 {
   currentSettings.setKeepRatio(flag);
-  manager.updateSettingsHistory(currentSettings);
 }
 
 // void toggleNoStroke(boolean flag)
@@ -513,14 +527,12 @@ void toggleStrokeActive(boolean flag)
   String status = flag? "ON" : "OFF";
   mainG.getController("toggleStrokeActive").setLabel("Stroke " + status);
   currentSettings.setIsStrokeOnActive(flag);
-  manager.updateSettingsHistory(currentSettings);
 }
 void toggleFillActive(boolean flag)
 {
   String status = flag? "ON" : "OFF";
   mainG.getController("toggleFillActive").setLabel("Fill " + status);
   currentSettings.setIsFillOnActive(flag);
-  manager.updateSettingsHistory(currentSettings);
 }
 void buttonOk(int theValue) {
   winG.getController("messageBoxLabel").remove();
@@ -530,42 +542,34 @@ void buttonOk(int theValue) {
 void pickRFillActive(int val)
 {
   currentSettings.setFillRActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickGFillActive(int val)
 {
   currentSettings.setFillGActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickBFillActive(int val)
 {
   currentSettings.setFillBActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickAFillActive(int val)
 {
   currentSettings.setFillAActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickRStrokeActive(int val)
 {
   currentSettings.setStrokeRActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickGStrokeActive(int val)
 {
   currentSettings.setStrokeGActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickBStrokeActive(int val)
 {
   currentSettings.setStrokeBActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 void pickAStrokeActive(int val)
 {
   currentSettings.setStrokeAActive(val);
-  manager.updateSettingsHistory(currentSettings);
 }
 // void pickerFillActive(int val)
 // {
@@ -587,6 +591,20 @@ void pickAStrokeActive(int val)
 //   /* Adding settings to history */
 //   manager.updateSettingsHistory(currentSettings);
 // }
+
+void zoomIn(int status)
+{
+  if (scaleFactor >= scaleUnit)
+    setLock(mainG.getController("zoomOut"),false);
+  scaleFactor += scaleUnit;
+}
+void zoomOut(int status)
+{
+  if (scaleFactor > scaleUnit) 
+    scaleFactor -= scaleUnit;
+  else
+    setLock(mainG.getController("zoomOut"),true);
+}
 
 /* Processing file selection callback */
 void fileSelected(File selection) {
@@ -760,7 +778,6 @@ void drawGollyPattern2(PGraphics ctx,
   
 }
 
-
 PShape generateShape(float w, float h,
                      CellShape shapeType, String SVGPath)
 {
@@ -803,9 +820,17 @@ void checkConfigHistory()
 }
 void exportNow(String pdfFile)
 {
-  float w = currentGrid.getColumns() * currentSettings.getShapeWidth();
-  float h = currentGrid.getRows() * currentSettings.getShapeHeight();
-  PGraphics pdf = createGraphics((int)w, (int)h, PDF, pdfFile+".pdf");
+  int cols = currentGrid.getColumns();
+  int rows = currentGrid.getRows();
+  float cellWidth = currentGrid.getCellWidth();
+  float cellHeight = currentGrid.getCellHeight();
+  float shapeWidth = currentSettings.getShapeWidth();
+  float shapeHeight = currentSettings.getShapeHeight();
+  
+  int pdfWidth = ceil(cols * cellWidth) + ceil(abs(shapeWidth-cellWidth)); // add surplus once
+  int pdfHeight = ceil(rows * cellHeight) + ceil(abs(shapeHeight-cellHeight)); // idem
+
+  PGraphics pdf = createGraphics(pdfWidth, pdfHeight, PDF, pdfFile+".pdf");
   pdf.beginDraw();
   //beginRecord(PDF,pdfFile+".pdf");
   //beginRaw(PDF,pdfFile+".pdf");
@@ -817,6 +842,7 @@ void exportNow(String pdfFile)
 }
 void draw()
 {
+  transformer.setScaleFactor(scaleFactor);
   transformer.startDrawing();
   /* Refreshing bg */
   background(bg);
