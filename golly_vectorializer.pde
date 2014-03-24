@@ -458,12 +458,20 @@ void shapeHeight(float val)
 void forwardConfigHistory(int status)
 {
   manager.forwardHistory();
+  updateHistory();
   checkConfigHistory();
 }
 void rewindConfigHistory(int status)
 {
   manager.rewindHistory();
+  updateHistory();
   checkConfigHistory();
+}
+void updateHistory()
+{
+  currentGrid = manager.getCurrentGrid();
+  currentConfig = manager.getCurrentConfiguration();
+  currentSettings = manager.getCurrentSettings();
 }
 void loadRleConfig(int status)
 {
