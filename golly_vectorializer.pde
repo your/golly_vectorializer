@@ -949,6 +949,8 @@ void loadGollyRle()
     manager.addSettings(currentSettings); // start pattern with defaults
     /* Init controls */
     manageControls(false);
+    resetZoom();
+    centerSketch();
   }
   catch (RuntimeException e)
   {
@@ -965,6 +967,11 @@ void loadGollyRle()
   }
 }
 
+void resetZoom()
+{
+  scaleFactor = 1.0;
+  updateZoomPercentage();
+}
 void centerSketch()
 {
   /* gathering info */
