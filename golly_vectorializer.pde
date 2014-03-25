@@ -2,6 +2,11 @@ import java.io.*;
 import java.util.*;
 import controlP5.*;
 import processing.pdf.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
 
 /* Global variables */
 GollyRleReader reader;
@@ -12,7 +17,10 @@ SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
 // ResizableColorPicker cp5e;
-Group mainG, lockG, winG;
+Group mainG, gridG, lockG, winG;
+String gollyFilePath;
+String pastedMessage;
+boolean[] keys = new boolean[526];
 
 /* Default window/drawing settings */
 int x = 1024;
@@ -20,7 +28,8 @@ int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
 float scaleFactor = 1.0;
-float scaleUnit = 0.5;
+float scaleUnit = 0.05;
+float pdfBorder = 5.0;
 color bg = color(255);
 color cp = color(10,20,10,200);
 color cq = color(200,180,200,100);
@@ -39,6 +48,7 @@ void manageControls(boolean lock)
   setLock(cp5.getController("toggleKeepRatioCells"),lock);
   setLock(cp5.getController("zoomIn"),lock);
   setLock(cp5.getController("zoomOut"),lock);
+  setLock(cp5.getController("center"),lock);
   // settG
   setLock(cp5.getController("rowsNum"),true); // temp disabled
   setLock(cp5.getController("colsNum"),true); // temp disabled
@@ -77,6 +87,7 @@ void setup()
   
   size(x,y);
 
+  /* setting up transformer */
   transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
   
   background(bg);
@@ -97,9 +108,9 @@ void setup()
     //.setBackgroundColor(color(0,0,0,0))
     ;
   // GRID SUBGROUP AREA
-  Group gridG = cp5.addGroup("gridControls")
+  gridG = cp5.addGroup("gridControls")
     .setPosition(10,130)
-    .setSize(180,145)
+    .setSize(180,155)
     //.setBackgroundColor(color(20,0,20,150))
     .setBackgroundColor(color(175,190,175,220))
     .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
@@ -107,7 +118,7 @@ void setup()
     ;
   cp5.addTextlabel("resizeGrid")
     .setPosition(2,10)
-    .setText("DIMENSIONE GRIGLIA")
+    .setText("DIMENSIONE GRIGLIA (beta disabled)")
     .moveTo(gridG)
     ;
   cp5.addSlider("rowsNum")
@@ -157,15 +168,28 @@ void setup()
     ;
   cp5.addButton("zoomIn")
     .setLabel("Zoom +")
-    .setPosition(80,110)
+    .setPosition(70,110)
     .setSize(35,15)
     .setColorBackground(cp)
     .moveTo(gridG)
     ;
   cp5.addButton("zoomOut")
     .setLabel("Zoom -")
-    .setPosition(120,110)
+    .setPosition(110,110)
     .setSize(35,15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addTextlabel("zoomPercentage")
+    .setText("100%")
+    .setPosition(150,113)
+    .setSize(35,15)
+    .moveTo(gridG)
+    ;
+  cp5.addButton("center")
+    .setLabel("Centrami!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(70,130)
+    .setSize(75,15)
     .setColorBackground(cp)
     .moveTo(gridG)
     ;
@@ -371,7 +395,7 @@ void setup()
     .setBackgroundHeight(120)
     .setBackgroundColor(color(0,100))
     .moveTo(lockG)
-    //.hideBar()
+    .hideBar()
     ;  
   cp5.addButton("buttonOk")
     .setPosition(80,80)
@@ -392,14 +416,23 @@ void setup()
   manageControls(true);
 }
 
-void showPopup() {
+void showPopup(String message)
+{
   lockG.show();
-  cp5.addTextlabel("messageBoxLabel",
-                   "Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n"+
-                   "(In alternativa provate a dropparli o copia-incollarli)",30,30)
+  cp5.addTextlabel("messageBoxLabel",message,30,30)
     .moveTo(winG)
     ;
   winG.show();
+}
+
+boolean fileExists(String filename) {
+
+  File file = new File(filename);
+
+  if(!file.exists())
+    return false;
+   
+  return true;
 }
 
 /* CP5 class extends */
@@ -592,11 +625,28 @@ void pickAStrokeActive(int val)
 //   manager.updateSettingsHistory(currentSettings);
 // }
 
+void updateZoomPercentage()
+{
+  int percentage = ceil(100 * scaleFactor);
+  cp5.remove("zoomPercentage");
+  cp5.addTextlabel("zoomPercentage")
+    .setText(percentage+"%")
+    .setPosition(150,113)
+    .setSize(35,15)
+    .moveTo(gridG)
+    ;
+  if (percentage != 100)
+    setLock(cp5.getController("center"),true);
+  else
+    setLock(cp5.getController("center"),false);
+}
+
 void zoomIn(int status)
 {
   if (scaleFactor >= scaleUnit)
     setLock(mainG.getController("zoomOut"),false);
   scaleFactor += scaleUnit;
+  updateZoomPercentage();
 }
 void zoomOut(int status)
 {
@@ -604,6 +654,7 @@ void zoomOut(int status)
     scaleFactor -= scaleUnit;
   else
     setLock(mainG.getController("zoomOut"),true);
+  updateZoomPercentage();
 }
 
 /* Processing file selection callback */
@@ -611,9 +662,9 @@ void fileSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    String gollyFilePath = selection.getAbsolutePath();
+    gollyFilePath = selection.getAbsolutePath();
     println("User selected " + gollyFilePath);
-    loadGollyFile(gollyFilePath);
+    loadGollyRle();
    }
 }
 void pdfSelected(File selection) {
@@ -649,52 +700,52 @@ void generateGridFrom(GollyRleConfiguration config)
 }
 
 /* Drawing methods */
+// void drawGollyPattern(PGraphics ctx,
+//                       Grid2D grid,
+//                       GollyRleConfiguration config,
+//                       GollyPatternSettings settings)
+// {  
+//   /* Setting up shape */
+//   PShape cellShape = generateShape(settings.getShapeWidth(),
+//                                    settings.getShapeHeight(),
+//                                    settings.getCellShape(),
+//                                    settings.getSVGPath());
+
+//   color colorFillActive = color(settings.getFillRActive(),
+//                                 settings.getFillGActive(),
+//                                 settings.getFillBActive());
+  
+//   color colorStrokeActive = color(settings.getStrokeRActive(),
+//                                   settings.getStrokeGActive(),
+//                                   settings.getStrokeBActive());
+  
+//   for (int i = 0; i < grid.getRows(); i++)
+//   {
+//     for (int j = 0; j < grid.getColumns(); j++)
+//     {
+//       int currentState = config.getCellState(i,j);
+//       if (currentState == 1) // draw shapes only into active cells
+//       {
+//         // Setting PShape fill&stroke up
+//         if (settings.isFillOnActive())
+//           cellShape.setFill(colorFillActive);
+//         else
+//           cellShape.setFill(false);
+//         if (settings.isStrokeOnActive())
+//           cellShape.setStroke(colorStrokeActive);
+//         else
+//           cellShape.setStroke(false);
+
+//         // Drawind shapes
+//         PVector currentPoint = grid.getPoint(i,j);
+//         ctx.shape(cellShape, currentPoint.x, currentPoint.y);
+//       }
+//     }
+//   }
+  
+// }
+
 void drawGollyPattern(PGraphics ctx,
-                      Grid2D grid,
-                      GollyRleConfiguration config,
-                      GollyPatternSettings settings)
-{  
-  /* Setting up shape */
-  PShape cellShape = generateShape(settings.getShapeWidth(),
-                                   settings.getShapeHeight(),
-                                   settings.getCellShape(),
-                                   settings.getSVGPath());
-
-  color colorFillActive = color(settings.getFillRActive(),
-                                settings.getFillGActive(),
-                                settings.getFillBActive());
-  
-  color colorStrokeActive = color(settings.getStrokeRActive(),
-                                  settings.getStrokeGActive(),
-                                  settings.getStrokeBActive());
-  
-  for (int i = 0; i < grid.getRows(); i++)
-  {
-    for (int j = 0; j < grid.getColumns(); j++)
-    {
-      int currentState = config.getCellState(i,j);
-      if (currentState == 1) // draw shapes only into active cells
-      {
-        // Setting PShape fill&stroke up
-        if (settings.isFillOnActive())
-          cellShape.setFill(colorFillActive);
-        else
-          cellShape.setFill(false);
-        if (settings.isStrokeOnActive())
-          cellShape.setStroke(colorStrokeActive);
-        else
-          cellShape.setStroke(false);
-
-        // Drawind shapes
-        PVector currentPoint = grid.getPoint(i,j);
-        ctx.shape(cellShape, currentPoint.x, currentPoint.y);
-      }
-    }
-  }
-  
-}
-
-void drawGollyPattern2(PGraphics ctx,
                       Grid2D grid,
                       GollyRleConfiguration config,
                       GollyPatternSettings settings)
@@ -778,33 +829,33 @@ void drawGollyPattern2(PGraphics ctx,
   
 }
 
-PShape generateShape(float w, float h,
-                     CellShape shapeType, String SVGPath)
-{
-  PShape patternShape = createShape();
-  switch(shapeType)
-  {
-  case SQUARE: // to be correct, this is a generic rect
-    // patternShape.beginShape();
-    // patternShape.vertex(0,0);
-    // patternShape.vertex(0,w);
-    // patternShape.vertex(w,h);
-    // patternShape.vertex(h,0);
-    // patternShape.vertex(0,0);
-    // patternShape.endShape();
-     patternShape = createShape(RECT,0,0,w,h);
-    break;
-  case CIRCLE:
-    patternShape = createShape(ELLIPSE,0,0,w,h);
-    // circles are not so easy to draw using curveVertex()..
-    // ..but we can build very complex shapes in the future
-    break;
-  case CUSTOM:
-    patternShape = loadShape(SVGPath); // todo: resize svg
-    break;
-  }
-  return patternShape;
-}
+// PShape generateShape(float w, float h,
+//                      CellShape shapeType, String SVGPath)
+// {
+//   PShape patternShape = createShape();
+//   switch(shapeType)
+//   {
+//   case SQUARE: // to be correct, this is a generic rect
+//     // patternShape.beginShape();
+//     // patternShape.vertex(0,0);
+//     // patternShape.vertex(0,w);
+//     // patternShape.vertex(w,h);
+//     // patternShape.vertex(h,0);
+//     // patternShape.vertex(0,0);
+//     // patternShape.endShape();
+//      patternShape = createShape(RECT,0,0,w,h);
+//     break;
+//   case CIRCLE:
+//     patternShape = createShape(ELLIPSE,0,0,w,h);
+//     // circles are not so easy to draw using curveVertex()..
+//     // ..but we can build very complex shapes in the future
+//     break;
+//   case CUSTOM:
+//     patternShape = loadShape(SVGPath); // todo: resize svg
+//     break;
+//   }
+//   return patternShape;
+// }
 
 void checkConfigHistory()
 {
@@ -820,55 +871,73 @@ void checkConfigHistory()
 }
 void exportNow(String pdfFile)
 {
+  /* gathering info */
   int cols = currentGrid.getColumns();
   int rows = currentGrid.getRows();
   float cellWidth = currentGrid.getCellWidth();
   float cellHeight = currentGrid.getCellHeight();
   float shapeWidth = currentSettings.getShapeWidth();
   float shapeHeight = currentSettings.getShapeHeight();
-  
-  int pdfWidth = ceil(cols * cellWidth) + ceil(abs(shapeWidth-cellWidth)); // add surplus once
-  int pdfHeight = ceil(rows * cellHeight) + ceil(abs(shapeHeight-cellHeight)); // idem
 
+  /* Compute pdf size */
+  int pdfWidth = (ceil(cols * cellWidth) + ceil(shapeWidth-cellWidth)) + (int)(2 * pdfBorder);
+  int pdfHeight = (ceil(rows * cellHeight) + ceil(shapeHeight-cellHeight)) + (int)(2 * pdfBorder);
+  
+  /* setting up pdf */
   PGraphics pdf = createGraphics(pdfWidth, pdfHeight, PDF, pdfFile+".pdf");
+  
+  /* rendering */
   pdf.beginDraw();
-  //beginRecord(PDF,pdfFile+".pdf");
-  //beginRaw(PDF,pdfFile+".pdf");
-  drawGollyPattern2(pdf, currentGrid, currentConfig, currentSettings);
-  //endRaw();
-  //endRecord();
+
+  /* displacing by borders */
+  pdf.translate(pdfBorder,pdfBorder);
+
+  /* drawing */
+  drawGollyPattern(pdf, currentGrid, currentConfig, currentSettings);
+  
   pdf.dispose();
+
+  /* goodbye */
   pdf.endDraw();
+  
 }
+
 void draw()
 {
+  /* Scaling drawing area */
   transformer.setScaleFactor(scaleFactor);
+
+  /* getting ready for drawing */
   transformer.startDrawing();
+
   /* Refreshing bg */
   background(bg);
-  /* Getting current history snapshot */
-//  currentConfig = manager.getCurrentConfiguration();
-//  currentGrid = manager.getCurrentGrid();
-//  currentSettings = manager.getCurrentSettings();
+
+  /* are we ready to draw? */
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
-    //beginRaw(PDF,"lol.pdf");
-    drawGollyPattern2(g, currentGrid, currentConfig, currentSettings);
-    //endRaw();
+    drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
   }
 
-  //drawGuiElements
-  //
+  /* bybye darawing */
   transformer.endDrawing();
+  
 }
 
 /* Golly file loader */
-void loadGollyFile(String gollyFile)
+void loadGollyRle()
 {
   /* Trying to get configuration from parser */
   try
   {
-    currentConfig = reader.parseFile(gollyFile);
+    /* Load clipboard content if any otherwise go with file */
+    if (pastedMessage != null)
+    {
+      currentConfig = reader.parseString(pastedMessage);
+    }
+    else
+      currentConfig = reader.parseFile(gollyFilePath);
+    
     /* Adding it to history */
     manager.addConfiguration(currentConfig);
     /* Generating grid from it (then adding it to history) */
@@ -884,17 +953,69 @@ void loadGollyFile(String gollyFile)
   catch (RuntimeException e)
   {
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
-    showPopup();
+    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n");
   }
   catch (IOException e)
   {
     System.err.println("ERROR: " + e.getMessage());
   }
+  finally
+  {
+    pastedMessage = null; // reset
+  }
 }
+
+void centerSketch()
+{
+  /* gathering info */
+  int cols = currentGrid.getColumns();
+  int rows = currentGrid.getRows();
+  float cellWidth = currentGrid.getCellWidth();
+  float cellHeight = currentGrid.getCellHeight();
+  float shapeWidth = currentSettings.getShapeWidth();
+  float shapeHeight = currentSettings.getShapeHeight();
+  /* computing pattern size */
+  float patternWidth = cols * cellWidth + (shapeWidth-cellWidth);
+  float patternHeight = rows * cellHeight + (shapeHeight-cellHeight);
+  /* centering sketch */
+  transformer.centerSketch(width,sizeCP5Group,height,0,patternWidth,patternHeight);
+}
+
+String GetTextFromClipboard()
+{
+  String text = (String) GetFromClipboard(DataFlavor.stringFlavor);
+  return text;
+}
+
+Object GetFromClipboard(DataFlavor flavor)
+{
+  Clipboard clipboard = getToolkit().getSystemClipboard();
+  Transferable contents = clipboard.getContents(null);
+  Object obj = null;
+  if (contents != null && contents.isDataFlavorSupported(flavor))
+  {
+    try
+    {
+      obj = contents.getTransferData(flavor);
+    }
+    catch (UnsupportedFlavorException exu) // Unlikely but we must catch it
+    {
+      println("Unsupported flavor: " + exu);
+//~ exu.printStackTrace();
+    }
+    catch (java.io.IOException exi)
+    {
+      println("Unavailable data: " + exi);
+//~ exi.printStackTrace();
+    }
+  }
+  return obj;
+} 
+
 
 void center(int value)
 {
-  transformer.setTraslationOffsets(width/2, height/2);
+  centerSketch();
 }
 
 void mousePressed()
@@ -914,47 +1035,40 @@ void mouseDragged()
   transformer.updateTranslationOffset(mouseX, mouseY);
 }
 
+
+boolean checkKey(int k)
+{
+  if (keys.length >= k) {
+    return keys[k];  
+  }
+  return false;
+}
+ 
 void keyPressed()
-{
+{ 
+  keys[keyCode] = true;
+  //println(KeyEvent.getKeyText(keyCode));
+  if(checkKey(KeyEvent.VK_META) && checkKey(KeyEvent.VK_W))
+  {
+    pastedMessage = GetTextFromClipboard();
+    loadGollyRle();
+  }
 }
-
+ 
 void keyReleased()
-{
+{ 
+  keys[keyCode] = false; 
 }
 
-/* Mouse events */
-// void mousePressed()
+// void keyPressed()
 // {
-//   if (currentGrid != null)
+//   if (key == 0x16) // Ctrl+v
 //   {
-//     if(overGrid)
-//     { 
-//       lockedGrid = true; 
-//       //fill(255, 255, 255);
-//     }
-//     else
-//     {
-//       lockedGrid = false;
-//     }
-//     xOffset = mouseX - currentGrid.getX0();
-//     yOffset = mouseY - currentGrid.getY0();
+//     pastedMessage = GetTextFromClipboard();
+//     println(pastedMessage);
 //   }
 // }
-// void mouseDragged()
+
+// void keyReleased()
 // {
-//   if (currentGrid != null)
-//   {
-//     if(lockedGrid)
-//     {
-//       currentGrid.setX0(mouseX-xOffset); 
-//       currentGrid.setY0(mouseY-yOffset); 
-//     }
-//   }
-// }
-// void mouseReleased()
-// {
-//   if (currentGrid != null)
-//   {
-//     lockedGrid = false;
-//   }
 // }
