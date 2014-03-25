@@ -19,15 +19,27 @@ public class GollyRleReader
       throw new RuntimeException(e); // Bail out
     }
   }
-
-  /** Parse a given file and return its configuration */
+  
+  public GollyRleConfiguration parseString(String data) throws RuntimeException, IOException
+  {
+    ANTLRInputStream input = new ANTLRInputStream(data);
+    return parseData(input);
+  }
+  
   public GollyRleConfiguration parseFile(String file) throws RuntimeException, IOException
   {
-    GollyRleConfiguration config = null;
     FileInputStream fis = new FileInputStream(file);
+    ANTLRInputStream input = new ANTLRInputStream(fis);
+    return parseData(input);
+  }
+  
+  /** Parse a given file and return its configuration */
+  private GollyRleConfiguration parseData(ANTLRInputStream input) throws RuntimeException, IOException
+  {
+    GollyRleConfiguration config = null;
     
     /** Setting up ANTLR */
-    ANTLRInputStream input = new ANTLRInputStream(fis);
+    
     BailGollyRleLexer lexer = new BailGollyRleLexer(input);
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     GollyRleParser parser = new GollyRleParser(tokens);
