@@ -139,6 +139,14 @@ public class SketchTransformer
   {
     xOffset = yOffset = 0;
   }
+
+  public void centerSketch(float drawAreaWidth, float voidDrawAreaWidth,
+                           float drawAreaHeight, float voidDrawAreaHeight,
+                           float patternWidth, float patternHeight)
+  {
+      xOffset = (drawAreaWidth - voidDrawAreaWidth)/2 - patternWidth/2;
+      yOffset = (drawAreaHeight - voidDrawAreaHeight)/2 - patternHeight/2;
+  }
   
   private void animateCentering()
   {
