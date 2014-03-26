@@ -35,7 +35,6 @@ color cq = color(200,180,200,100);
 boolean keepRatio = true;
 boolean initControls = false;
 boolean lockedGrid = false;
-boolean initedDrawing = false;
 
 void manageControls(boolean lock)
 {
@@ -895,7 +894,7 @@ void exportNow(String pdfFile)
 
 void draw()
 {
-  if (initedDrawing)
+  if (currentConfig != null)
   {
     /* Loading current transformer */
     transformer = currentSettings.getTransformer();
@@ -970,9 +969,6 @@ void initConfiguration(GollyRleConfiguration configuration)
   
   /* Centering sketch */
   centerSketch();
-  
-  /* Enabling drawing */
-  initedDrawing = true;
 }
 
 /* Golly file loader */
@@ -1066,7 +1062,7 @@ void center(int value)
 
 void mousePressed()
 {
-  if (initedDrawing)
+  if (currentSettings.getTransformer() != null)
   {
     if (mouseX < x - sizeCP5Group) // avoid sliders conflict
       transformer.saveMousePosition(mouseX, mouseY);
@@ -1075,7 +1071,7 @@ void mousePressed()
 
 void mouseReleased()
 {
-  if (initedDrawing)
+  if (currentSettings.getTransformer() != null)
   {
     transformer.resetMousePosition();
   }
@@ -1083,7 +1079,7 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (initedDrawing)
+  if (currentSettings.getTransformer() != null)
   {
     //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
     transformer.updateTranslationOffset(mouseX, mouseY);
