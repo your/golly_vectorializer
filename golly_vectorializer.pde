@@ -33,6 +33,7 @@ color bg = color(255);
 color cp = color(10,20,10,200);
 color cq = color(200,180,200,100);
 boolean keepRatio = true;
+boolean showGrid = true;
 boolean initControls = false;
 boolean lockedGrid = false;
 
@@ -45,6 +46,7 @@ void manageControls(boolean lock)
   setLock(cp5.getController("cellWidth"),lock);
   setLock(cp5.getController("cellHeight"),lock);
   setLock(cp5.getController("toggleKeepRatioCells"),lock);
+  setLock(cp5.getController("toggleShowGrid"),lock);
   setLock(cp5.getController("zoomIn"),lock);
   setLock(cp5.getController("zoomOut"),lock);
   setLock(cp5.getController("center"),lock);
@@ -109,7 +111,7 @@ void setup()
   // GRID SUBGROUP AREA
   gridG = cp5.addGroup("gridControls")
     .setPosition(10,130)
-    .setSize(180,155)
+    .setSize(180,185)
     //.setBackgroundColor(color(20,0,20,150))
     .setBackgroundColor(color(175,190,175,220))
     .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
@@ -165,6 +167,14 @@ void setup()
     .setMode(ControlP5.SWITCH)
     .moveTo(gridG)
     ;
+  cp5.addToggle("toggleShowGrid")
+    .setLabel("Show Grid")
+    .setPosition(5,145)
+    .setSize(42,15)
+    .setValue(true)
+    .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
+    ;
   cp5.addButton("zoomIn")
     .setLabel("Zoom +")
     .setPosition(70,110)
@@ -194,8 +204,8 @@ void setup()
     ;
   // SETTINGS SUBGROUP AREA
   Group settG = cp5.addGroup("settControls")
-    .setPosition(10,300)
-    .setSize(180,350)
+    .setPosition(10,335)
+    .setSize(180,320)
     .setBackgroundColor(color(175,190,175,220))
     //.setBackgroundColor(color(20,0,20,150))
     //.setBackgroundColor(color(0,0,0,220))
@@ -534,6 +544,13 @@ void toggleKeepRatioCells(boolean flag)
      keepRatio = true;
    else
      keepRatio = false;
+}
+void toggleShowGrid(boolean flag)
+{
+  if (flag == true)
+    showGrid = true;
+  else
+    showGrid = false;
 }
 void toggleKeepRatioShapes(boolean flag)
 {
@@ -906,7 +923,7 @@ void draw()
     background(bg);
   
     /* are we ready to draw? */
-    drawGrid(g, currentGrid);
+    if (showGrid) drawGrid(g, currentGrid);
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
     /* ended drawing */
