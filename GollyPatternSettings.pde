@@ -21,6 +21,7 @@ public class GollyPatternSettings
   private int strokeWeightInactive = 0;
   private float shapeWidth = 7;
   private float shapeHeight = 7;
+  //private float scaleFactor = 1.0f;
   private boolean keepRatio = true;
   private boolean isStrokeOnActive = true;
   private boolean isStrokeOnInactive = false;
@@ -28,6 +29,13 @@ public class GollyPatternSettings
   private boolean isFillOnInactive = false;
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
+  private SketchTransformer transformer;
+
+  /* Utilities */
+  public void initTransformer(float xOffset, float yOffset,
+			      float scaleFactor) {
+    transformer = new SketchTransformer(xOffset, yOffset, scaleFactor);
+  }
   
   /* Getters: */
   public int getFillRActive()
@@ -129,6 +137,16 @@ public class GollyPatternSettings
   {
     return shapeHeight;
   }
+
+  public SketchTransformer getTransformer()
+  {
+    return transformer;
+  }
+
+  // public float getScaleFactor()
+  // {
+  //   return scaleFactor;
+  // }
 
   public boolean getKeepRatio()
   {
@@ -265,6 +283,11 @@ public class GollyPatternSettings
   {
     shapeHeight = val;
   }
+
+  // public void setScaleFactor(float val)
+  // {
+  //   scaleFactor = val;
+  // }
 
   public void setKeepRatio(boolean flag)
   {
