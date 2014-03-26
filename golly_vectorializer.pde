@@ -27,7 +27,6 @@ int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
-//float scaleFactor = 1.0;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
 color bg = color(255);
@@ -36,7 +35,7 @@ color cq = color(200,180,200,100);
 boolean keepRatio = true;
 boolean initControls = false;
 boolean lockedGrid = false;
-boolean canDraw = false;
+boolean initedDrawing = false;
 
 void manageControls(boolean lock)
 {
@@ -677,27 +676,6 @@ void pdfSelected(File selection) {
   }
 }
 
-void generateGridFrom(GollyRleConfiguration config)
-{
-  PVector origin = new PVector();
-  
-  int cols = config.getMatrixWidth();
-  int rows = config.getMatrixHeight();
-
-  float cellWidth = cellDim;
-  float cellHeight = cellDim;
-
-  // /* Centering grid */
-  // origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
-  // origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
-
-  currentGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
-  /* Adding grid to history */
-  manager.addGrid(currentGrid);
-
-  
-}
-
 /* Drawing methods */
 // void drawGollyPattern(PGraphics ctx,
 //                       Grid2D grid,
@@ -751,33 +729,27 @@ void drawGrid(PGraphics ctx, Grid2D grid)
   int colPoints = grid.getColumnPoints();
   
   // Building rows
-  for (i=0; i<rowPoints; ++i)
+  for (i = 0; i < rowPoints; ++i)
   {
-    for (j=0; j<colPoints-1; ++j)
+    for (j = 0; j < colPoints - 1; ++j)
     {
-
-      PVector startingPoint = grid.getPoint(i,j);
-      PVector endingPoint = grid.getPoint(i,j+1);
+      PVector startingPoint = grid.getPoint(i, j);
+      PVector endingPoint = grid.getPoint(i, j + 1);
       
-      ctx.stroke(204,204,204);
-
+      ctx.stroke(204, 204, 204);
       ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
-
-
     }
   }
 
   // Building cols
-  for (i=0; i<colPoints; ++i)
+  for (i = 0; i < colPoints; ++i)
   {
-    for (j=0; j<rowPoints-1; ++j)
+    for (j = 0; j < rowPoints - 1; ++j)
     {
-
-      PVector startingPoint = grid.getPoint(j,i);
-      PVector endingPoint = grid.getPoint(j+1,i);
+      PVector startingPoint = grid.getPoint(j, i);
+      PVector endingPoint = grid.getPoint(j + 1, i);
 
       ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
-
     }
   }
 }
@@ -807,12 +779,6 @@ void drawGollyPattern(PGraphics ctx,
   
   //println("STEND ", startX, endX, startY, endY);
   
-  /* Setting up shape */
-  // PShape cellShape = generateShape(settings.getShapeWidth(),
-  //                                  settings.getShapeHeight(),
-  //                                  settings.getCellShape(),
-  //                                  settings.getSVGPath());
-
   color colorFillActive = color(settings.getFillRActive(),
                                 settings.getFillGActive(),
                                 settings.getFillBActive());
@@ -894,18 +860,6 @@ void drawGollyPattern(PGraphics ctx,
 //   return patternShape;
 // }
 
-void checkConfigHistory()
-{
-  /* Config history handling */
-  if (manager.hasPrevConfig())
-    setLock(mainG.getController("rewindConfigHistory"),false);
-  else
-    setLock(mainG.getController("rewindConfigHistory"),true);
-  if (manager.hasNextConfig())
-    setLock(mainG.getController("forwardConfigHistory"),false);
-  else
-    setLock(mainG.getController("forwardConfigHistory"),true);
-}
 void exportNow(String pdfFile)
 {
   /* gathering info */
@@ -941,13 +895,10 @@ void exportNow(String pdfFile)
 
 void draw()
 {
-  if (canDraw)
+  if (initedDrawing)
   {
     /* Loading current transformer */
     transformer = currentSettings.getTransformer();
-    
-    /* Scaling drawing area */
-    //transformer.setScaleFactor(scaleFactor);
 
     /* getting ready for drawing */
     transformer.startDrawing();
@@ -956,15 +907,72 @@ void draw()
     background(bg);
   
     /* are we ready to draw? */
-    // if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
-    // {
-      drawGrid(g, currentGrid);
-      drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
-    // }
+    drawGrid(g, currentGrid);
+    drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
-    /* bybye darawing */
+    /* ended drawing */
     transformer.endDrawing();
   }
+}
+
+void checkConfigHistory()
+{
+  /* Config history handling */
+  if (manager.hasPrevConfig())
+    setLock(mainG.getController("rewindConfigHistory"),false);
+  else
+    setLock(mainG.getController("rewindConfigHistory"),true);
+  if (manager.hasNextConfig())
+    setLock(mainG.getController("forwardConfigHistory"),false);
+  else
+    setLock(mainG.getController("forwardConfigHistory"),true);
+}
+
+void generateGridFrom(GollyRleConfiguration config)
+{
+  PVector origin = new PVector();
+  
+  int cols = config.getMatrixWidth();
+  int rows = config.getMatrixHeight();
+
+  float cellWidth = cellDim;
+  float cellHeight = cellDim;
+
+  currentGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight);
+  
+  /* Adding grid to history */
+  manager.addGrid(currentGrid);
+}
+
+void initConfiguration(GollyRleConfiguration configuration)
+{
+  /* Adding config history */
+  manager.addConfiguration(configuration);
+  
+  /* Generating grid from it (then adding it to history) */
+  generateGridFrom(configuration);
+  
+  /* Can we enable nextConfig button? */
+  checkConfigHistory();
+  
+  /* Associating default settings to config */
+  currentSettings = new GollyPatternSettings();
+  manager.addSettings(currentSettings); // start pattern with defaults
+  
+  /* Init GUI controls */
+  manageControls(false);
+  
+  /* Init SketchTransformer */
+  currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
+  
+  /* Loading current transformer */
+  transformer = currentSettings.getTransformer();
+  
+  /* Centering sketch */
+  centerSketch();
+  
+  /* Enabling drawing */
+  initedDrawing = true;
 }
 
 /* Golly file loader */
@@ -980,26 +988,10 @@ void loadGollyRle()
     }
     else
       currentConfig = reader.parseFile(gollyFilePath);
+
+    /* Init current configuration */
+    initConfiguration(currentConfig);
     
-    /* Adding it to history */
-    manager.addConfiguration(currentConfig);
-    /* Generating grid from it (then adding it to history) */
-    generateGridFrom(currentConfig);
-    /* Can we enable nextConfig button? */
-    checkConfigHistory();
-    /* Adding default settings to history */
-    currentSettings = new GollyPatternSettings();
-    manager.addSettings(currentSettings); // start pattern with defaults
-    /* Init controls */
-    manageControls(false);
-    /* Init transformer */
-    currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
-    /* Loading current transformer */
-    transformer = currentSettings.getTransformer();
-    /* Centering sketch */
-    centerSketch();
-    /* Enabling drawing */
-    canDraw = true;
   }
   catch (RuntimeException e)
   {
@@ -1026,9 +1018,11 @@ void centerSketch()
   float cellHeight = currentGrid.getCellHeight();
   float shapeWidth = currentSettings.getShapeWidth();
   float shapeHeight = currentSettings.getShapeHeight();
+  
   /* computing pattern size */
   float patternWidth = cols * cellWidth + (shapeWidth-cellWidth);
   float patternHeight = rows * cellHeight + (shapeHeight-cellHeight);
+  
   /* centering sketch */
   transformer.centerSketch(width,sizeCP5Group,height,0,patternWidth,patternHeight);
 }
@@ -1072,7 +1066,7 @@ void center(int value)
 
 void mousePressed()
 {
-  if (canDraw)
+  if (initedDrawing)
   {
     if (mouseX < x - sizeCP5Group) // avoid sliders conflict
       transformer.saveMousePosition(mouseX, mouseY);
@@ -1081,7 +1075,7 @@ void mousePressed()
 
 void mouseReleased()
 {
-  if (canDraw)
+  if (initedDrawing)
   {
     transformer.resetMousePosition();
   }
@@ -1089,7 +1083,7 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (canDraw)
+  if (initedDrawing)
   {
     //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
     transformer.updateTranslationOffset(mouseX, mouseY);
