@@ -27,7 +27,7 @@ int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
-float scaleFactor = 1.0;
+//float scaleFactor = 1.0;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
 color bg = color(255);
@@ -36,6 +36,7 @@ color cq = color(200,180,200,100);
 boolean keepRatio = true;
 boolean initControls = false;
 boolean lockedGrid = false;
+boolean canDraw = false;
 
 void manageControls(boolean lock)
 {
@@ -87,8 +88,8 @@ void setup()
   
   size(x,y);
 
-  /* setting up transformer */
-  transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
+  // /* setting up transformer */
+  // transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
   
   background(bg);
 
@@ -627,6 +628,7 @@ void pickAStrokeActive(int val)
 
 void updateZoomPercentage()
 {
+  float scaleFactor = transformer.getScaleFactor();
   int percentage = ceil(100 * scaleFactor);
   cp5.remove("zoomPercentage");
   cp5.addTextlabel("zoomPercentage")
@@ -639,17 +641,19 @@ void updateZoomPercentage()
 
 void zoomIn(int status)
 {
-  if (scaleFactor >= scaleUnit)
-    setLock(mainG.getController("zoomOut"),false);
+  float scaleFactor = transformer.getScaleFactor();
   scaleFactor += scaleUnit;
+  transformer.setScaleFactor(scaleFactor);
+  centerSketch();
   updateZoomPercentage();
 }
 void zoomOut(int status)
 {
+  float scaleFactor = transformer.getScaleFactor();
   if (scaleFactor > scaleUnit) 
     scaleFactor -= scaleUnit;
-  else
-    setLock(mainG.getController("zoomOut"),true);
+  transformer.setScaleFactor(scaleFactor);
+  centerSketch();
   updateZoomPercentage();
 }
 
@@ -937,25 +941,30 @@ void exportNow(String pdfFile)
 
 void draw()
 {
-  /* Scaling drawing area */
-  transformer.setScaleFactor(scaleFactor);
-
-  /* getting ready for drawing */
-  transformer.startDrawing();
-
-  /* Refreshing bg */
-  background(bg);
-  
-  /* are we ready to draw? */
-  if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
+  if (canDraw)
   {
-    drawGrid(g, currentGrid);
-    drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
-  }
+    /* Loading current transformer */
+    transformer = currentSettings.getTransformer();
+    
+    /* Scaling drawing area */
+    //transformer.setScaleFactor(scaleFactor);
 
-  /* bybye darawing */
-  transformer.endDrawing();
+    /* getting ready for drawing */
+    transformer.startDrawing();
+
+    /* Refreshing bg */
+    background(bg);
   
+    /* are we ready to draw? */
+    // if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
+    // {
+      drawGrid(g, currentGrid);
+      drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
+    // }
+
+    /* bybye darawing */
+    transformer.endDrawing();
+  }
 }
 
 /* Golly file loader */
@@ -983,11 +992,18 @@ void loadGollyRle()
     manager.addSettings(currentSettings); // start pattern with defaults
     /* Init controls */
     manageControls(false);
-    resetZoom();
+    /* Init transformer */
+    currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
+    /* Loading current transformer */
+    transformer = currentSettings.getTransformer();
+    /* Centering sketch */
     centerSketch();
+    /* Enabling drawing */
+    canDraw = true;
   }
   catch (RuntimeException e)
   {
+    e.printStackTrace();
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
     showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n");
   }
@@ -1001,11 +1017,6 @@ void loadGollyRle()
   }
 }
 
-void resetZoom()
-{
-  scaleFactor = 1.0;
-  updateZoomPercentage();
-}
 void centerSketch()
 {
   /* gathering info */
@@ -1061,19 +1072,28 @@ void center(int value)
 
 void mousePressed()
 {
-  if (mouseX < x - sizeCP5Group) // avoid sliders conflict
-    transformer.saveMousePosition(mouseX, mouseY);
+  if (canDraw)
+  {
+    if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+      transformer.saveMousePosition(mouseX, mouseY);
+  }
 }
 
 void mouseReleased()
 {
-  transformer.resetMousePosition();
+  if (canDraw)
+  {
+    transformer.resetMousePosition();
+  }
 }
 
 void mouseDragged()
 {
-  //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
-  transformer.updateTranslationOffset(mouseX, mouseY);
+  if (canDraw)
+  {
+    //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+    transformer.updateTranslationOffset(mouseX, mouseY);
+  }
 }
 
 
