@@ -635,10 +635,6 @@ void updateZoomPercentage()
     .setSize(35,15)
     .moveTo(gridG)
     ;
-  if (percentage != 100)
-    setLock(cp5.getController("center"),true);
-  else
-    setLock(cp5.getController("center"),false);
 }
 
 void zoomIn(int status)
@@ -691,11 +687,10 @@ void generateGridFrom(GollyRleConfiguration config)
   // origin.x = (x-sizeCP5Group)/2 - cols*cellWidth/2;
   // origin.y = (y-sizeCP5Group)/2 - rows*cellHeight/2;
 
-  Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
+  currentGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight); 
   /* Adding grid to history */
-  manager.addGrid(genGrid);
+  manager.addGrid(currentGrid);
 
-  currentGrid = genGrid;
   
 }
 
@@ -744,6 +739,44 @@ void generateGridFrom(GollyRleConfiguration config)
 //   }
   
 // }
+
+void drawGrid(PGraphics ctx, Grid2D grid)
+{
+  int i, j;
+  int rowPoints = grid.getRowPoints();
+  int colPoints = grid.getColumnPoints();
+  
+  // Building rows
+  for (i=0; i<rowPoints; ++i)
+  {
+    for (j=0; j<colPoints-1; ++j)
+    {
+
+      PVector startingPoint = grid.getPoint(i,j);
+      PVector endingPoint = grid.getPoint(i,j+1);
+      
+      ctx.stroke(204,204,204);
+
+      ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
+
+
+    }
+  }
+
+  // Building cols
+  for (i=0; i<colPoints; ++i)
+  {
+    for (j=0; j<rowPoints-1; ++j)
+    {
+
+      PVector startingPoint = grid.getPoint(j,i);
+      PVector endingPoint = grid.getPoint(j+1,i);
+
+      ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
+
+    }
+  }
+}
 
 void drawGollyPattern(PGraphics ctx,
                       Grid2D grid,
@@ -912,10 +945,11 @@ void draw()
 
   /* Refreshing bg */
   background(bg);
-
+  
   /* are we ready to draw? */
   if (currentConfig != null && currentGrid != null) // cannot ever be null if loadGollyFile() has been called
   {
+    drawGrid(g, currentGrid);
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
   }
 
