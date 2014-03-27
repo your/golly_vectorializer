@@ -32,8 +32,8 @@ int cellDim = 10;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
 color bg = color(255);
-color cp = color(10,20,10,200);
-color cq = color(200,180,200,100);
+color cp = color(10, 20, 10, 200);
+color cq = color(200, 180, 200, 100);
 // boolean keepRatio = true;
 // boolean showGrid = true;
 boolean initControls = false;
@@ -43,51 +43,51 @@ void manageControls(boolean lock)
 {
   /* Locking/unlocking controls */
   // mainG
-  setLock(cp5.getController("exportToPDF"),lock);
+  setLock(cp5.getController("exportToPDF"), lock);
   // gridG
-  setLock(cp5.getController("cellWidth"),lock);
-  setLock(cp5.getController("cellHeight"),lock);
-  setLock(cp5.getController("inputCellWidth"),lock);
-  setLock(cp5.getController("inputCellHeight"),lock);
-  setLock(cp5.getController("toggleKeepCellRatio"),lock);
-  setLock(cp5.getController("toggleShowGrid"),lock);
-  setLock(cp5.getController("zoomIn"),lock);
-  setLock(cp5.getController("zoomOut"),lock);
-  setLock(cp5.getController("center"),lock);
+  setLock(cp5.getController("cellWidth"), lock);
+  setLock(cp5.getController("cellHeight"), lock);
+  setLock(cp5.getController("inputCellWidth"), lock);
+  setLock(cp5.getController("inputCellHeight"), lock);
+  setLock(cp5.getController("toggleKeepCellRatio"), lock);
+  setLock(cp5.getController("toggleShowGrid"), lock);
+  setLock(cp5.getController("zoomIn"), lock);
+  setLock(cp5.getController("zoomOut"), lock);
+  setLock(cp5.getController("center"), lock);
   // settG
-  setLock(cp5.getController("rowsNum"),true); // temp disabled
-  setLock(cp5.getController("colsNum"),true); // temp disabled
-  setLock(cp5.getController("shapeWidth"),lock);
-  setLock(cp5.getController("shapeHeight"),lock);
-  setLock(cp5.getController("inputShapeWidth"),lock);
-  setLock(cp5.getController("inputShapeHeight"),lock);
-  setLock(cp5.getController("toggleKeepShapeRatio"),lock);
-  setLock(cp5.getController("toggleShapesLikeCells"),lock);
-  setLock(cp5.getController("pickRFillActive"),lock);
-  setLock(cp5.getController("pickGFillActive"),lock);
-  setLock(cp5.getController("pickBFillActive"),lock);
-  setLock(cp5.getController("pickAFillActive"),lock);
-  setLock(cp5.getController("inputRFillActive"),lock);
-  setLock(cp5.getController("inputGFillActive"),lock);
-  setLock(cp5.getController("inputBFillActive"),lock);
-  setLock(cp5.getController("inputAFillActive"),lock);
-  setLock(cp5.getController("toggleFillActive"),lock);
-  setLock(cp5.getController("pickRStrokeActive"),lock);
-  setLock(cp5.getController("pickGStrokeActive"),lock);
-  setLock(cp5.getController("pickBStrokeActive"),lock);
-  setLock(cp5.getController("pickAStrokeActive"),lock);
-  setLock(cp5.getController("toggleStrokeActive"),lock);
+  setLock(cp5.getController("rowsNum"), lock); // temp disabled
+  setLock(cp5.getController("colsNum"), lock); // temp disabled
+  setLock(cp5.getController("shapeWidth"), lock);
+  setLock(cp5.getController("shapeHeight"), lock);
+  setLock(cp5.getController("inputShapeWidth"), lock);
+  setLock(cp5.getController("inputShapeHeight"), lock);
+  setLock(cp5.getController("toggleKeepShapeRatio"), lock);
+  setLock(cp5.getController("toggleShapesLikeCells"), lock);
+  setLock(cp5.getController("pickRFillActive"), lock);
+  setLock(cp5.getController("pickGFillActive"), lock);
+  setLock(cp5.getController("pickBFillActive"), lock);
+  setLock(cp5.getController("pickAFillActive"), lock);
+  setLock(cp5.getController("inputRFillActive"), lock);
+  setLock(cp5.getController("inputGFillActive"), lock);
+  setLock(cp5.getController("inputBFillActive"), lock);
+  setLock(cp5.getController("inputAFillActive"), lock);
+  setLock(cp5.getController("toggleFillActive"), lock);
+  setLock(cp5.getController("pickRStrokeActive"), lock);
+  setLock(cp5.getController("pickGStrokeActive"), lock);
+  setLock(cp5.getController("pickBStrokeActive"), lock);
+  setLock(cp5.getController("pickAStrokeActive"), lock);
+  setLock(cp5.getController("toggleStrokeActive"), lock);
   if (!lock)
   {
     /* Colouring sliders if unlocked */
-    cp5.getController("pickRFillActive").setColorBackground(color(200,20,40));
-    cp5.getController("pickRStrokeActive").setColorBackground(color(200,20,40));
-    cp5.getController("pickGFillActive").setColorBackground(color(20,200,40));
-    cp5.getController("pickGStrokeActive").setColorBackground(color(20,200,40));
-    cp5.getController("pickBFillActive").setColorBackground(color(40,20,200));
-    cp5.getController("pickBStrokeActive").setColorBackground(color(40,20,200));
-    cp5.getController("pickAFillActive").setColorBackground(color(100,100,100));
-    cp5.getController("pickAStrokeActive").setColorBackground(color(100,100,100));
+    cp5.getController("pickRFillActive").setColorBackground(color(200, 20, 40));
+    cp5.getController("pickRStrokeActive").setColorBackground(color(200, 20, 40));
+    cp5.getController("pickGFillActive").setColorBackground(color(20, 200, 40));
+    cp5.getController("pickGStrokeActive").setColorBackground(color(20, 200, 40));
+    cp5.getController("pickBFillActive").setColorBackground(color(40, 20, 200));
+    cp5.getController("pickBStrokeActive").setColorBackground(color(40, 20, 200));
+    cp5.getController("pickAFillActive").setColorBackground(color(100, 100, 100));
+    cp5.getController("pickAStrokeActive").setColorBackground(color(100, 100, 100));
   }
 }
 
@@ -96,12 +96,12 @@ void setup()
   /* Setting up main display settings */
   smooth();
   frameRate(30);
-  
-  size(x,y);
+
+  size(x, y);
 
   // /* setting up transformer */
   // transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
-  
+
   background(bg);
 
   /* Global objects init */
@@ -115,46 +115,46 @@ void setup()
   // MAIN CONTROLS
   // MAIN GROUP AREA
   mainG = cp5.addGroup("mainControls")
-    .setPosition(width-sizeCP5Group,0)
-    .setSize(sizeCP5Group,height)
-    //.setBackgroundColor(color(0,0,0,0))
-    ;
+    .setPosition(width-sizeCP5Group, 0)
+      .setSize(sizeCP5Group, height)
+        //.setBackgroundColor(color(0,0,0,0))
+        ;
   // GRID SUBGROUP AREA
   gridG = cp5.addGroup("gridControls")
-    .setPosition(10,130)
-    .setSize(180,185)
-    .setBackgroundColor(color(1,108,158))
-    //.setBackgroundColor(color(20,0,20,150))
-    //.setBackgroundColor(color(175,190,175,220))
-    .setLabel("Impostazioni Griglia").setColorBackground(color(10,0,10,200))
-    .moveTo(mainG)
-    ;
+    .setPosition(10, 130)
+      .setSize(180, 185)
+        .setBackgroundColor(color(1, 108, 158))
+          //.setBackgroundColor(color(20,0,20,150))
+          //.setBackgroundColor(color(175,190,175,220))
+          .setLabel("Impostazioni Griglia").setColorBackground(color(10, 0, 10, 200))
+            .moveTo(mainG)
+              ;
   cp5.addTextlabel("resizeGrid")
-    .setPosition(5,10)
-    .setText("DIMENSIONE GRIGLIA (beta disabled)")
-    .moveTo(gridG)
-    ;
+    .setPosition(5, 10)
+      .setText("DIMENSIONE GRIGLIA (beta disabled)")
+        .moveTo(gridG)
+          ;
   cp5.addSlider("rowsNum")
     .setLabel("ROWS")
-    .setPosition(5,25)
-    .setSize(145,10)
-    .setValue(currentGrid.getRows())
-    .setRange(0,200)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 25)
+        .setSize(145, 10)
+          .setValue(currentGrid.getRows())
+            .setRange(0, 200)
+              .moveTo(gridG)
+                ;
   cp5.addSlider("colsNum")
     .setLabel("COLS")
-    .setPosition(5,36)
-    .setSize(145,10)
-    .setValue(currentGrid.getColumns())
-    .setRange(0,200)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 36)
+        .setSize(145, 10)
+          .setValue(currentGrid.getColumns())
+            .setRange(0, 200)
+              .moveTo(gridG)
+                ;
   cp5.addTextlabel("resizeCells")
-    .setPosition(5,60)
-    .setText("DIMENSIONE CELLE")
-    .moveTo(gridG)
-    ;
+    .setPosition(5, 60)
+      .setText("DIMENSIONE CELLE")
+        .moveTo(gridG)
+          ;
   cp5.addTextfield("inputCellWidth")
     .setLabel("")
     .setPosition(140,75)
@@ -169,12 +169,12 @@ void setup()
     ;
   cp5.addSlider("cellWidth")
     .setLabel("L")
-    .setPosition(5,75)
-    .setSize(123,10)
-    .setValue(currentGrid.getCellWidth())
-    .setRange(0,200)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 75)
+        .setSize(123, 10)
+          .setValue(currentGrid.getCellWidth())
+            .setRange(0, 200)
+              .moveTo(gridG)
+                ;
   cp5.addTextfield("inputCellHeight")
     .setLabel("")
     .setPosition(140,86)
@@ -189,72 +189,72 @@ void setup()
     ;
   cp5.addSlider("cellHeight")
     .setLabel("A")
-    .setPosition(5,86)
-    .setSize(123,10)
-    .setValue(currentGrid.getCellHeight())
-    .setRange(0,200)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 86)
+        .setSize(123, 10)
+          .setValue(currentGrid.getCellHeight())
+            .setRange(0, 200)
+              .moveTo(gridG)
+                ;
   cp5.addToggle("toggleKeepCellRatio")
     .setLabel("Keep Ratio")
-    .setPosition(5,98)
-    .setSize(42,15)
-    .setValue(currentSettings.getKeepCellRatio())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 98)
+        .setSize(42, 15)
+          .setValue(currentSettings.getKeepCellRatio())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(gridG)
+                ;
   cp5.addToggle("toggleShowGrid")
     .setLabel("Show Grid")
-    .setPosition(5,145)
-    .setSize(42,15)
-    .setValue(currentSettings.getShowGrid())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(gridG)
-    ;
+      .setPosition(5, 145)
+        .setSize(42, 15)
+          .setValue(currentSettings.getShowGrid())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(gridG)
+                ;
   cp5.addButton("zoomIn")
     .setLabel("Zoom +")
-    .setPosition(70,110)
-    .setSize(35,15)
-    .setColorBackground(cp)
-    .moveTo(gridG)
-    ;
+      .setPosition(70, 110)
+        .setSize(35, 15)
+          .setColorBackground(cp)
+            .moveTo(gridG)
+              ;
   cp5.addButton("zoomOut")
     .setLabel("Zoom -")
-    .setPosition(110,110)
-    .setSize(35,15)
-    .setColorBackground(cp)
-    .moveTo(gridG)
-    ;
+      .setPosition(110, 110)
+        .setSize(35, 15)
+          .setColorBackground(cp)
+            .moveTo(gridG)
+              ;
   cp5.addTextlabel("zoomPercentage")
     .setText("100%")
-    .setPosition(150,113)
-    .setSize(35,15)
-    .moveTo(gridG)
-    ;
+      .setPosition(150, 113)
+        .setSize(35, 15)
+          .moveTo(gridG)
+            ;
   cp5.addButton("center")
-    .setLabel("Centrami!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setPosition(70,130)
-    .setSize(75,15)
-    .setColorBackground(cp)
-    .moveTo(gridG)
-    ;
+    .setLabel("Centrami!").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
+      .setPosition(70, 130)
+        .setSize(75, 15)
+          .setColorBackground(cp)
+            .moveTo(gridG)
+              ;
   // SETTINGS SUBGROUP AREA
   settG = cp5.addGroup("settControls")
-    .setPosition(10,335)
-    .setSize(180,320)
-    .setBackgroundColor(color(1,108,158))
-    //.setBackgroundColor(color(175,190,175,220))
-    //.setBackgroundColor(color(20,0,20,150))
-    //.setBackgroundColor(color(0,0,0,220))
-    .setLabel("Impostazioni Pattern").setColorBackground(color(10,0,10,200))
-    .moveTo(mainG)
-    ;
+    .setPosition(10, 335)
+      .setSize(180, 320)
+        .setBackgroundColor(color(1, 108, 158))
+          //.setBackgroundColor(color(175,190,175,220))
+          //.setBackgroundColor(color(20,0,20,150))
+          //.setBackgroundColor(color(0,0,0,220))
+          .setLabel("Impostazioni Pattern").setColorBackground(color(10, 0, 10, 200))
+            .moveTo(mainG)
+              ;
   // SHAPES AREA
   cp5.addTextlabel("resizeShapes")
-    .setPosition(5,10)
-    .setText("DIMENSIONE FORME ATTIVE")
-    .moveTo(settG)
-    ;
+    .setPosition(5, 10)
+      .setText("DIMENSIONE FORME ATTIVE")
+        .moveTo(settG)
+          ;
   cp5.addTextfield("inputShapeWidth")
     .setLabel("")
     .setPosition(140,25)
@@ -269,12 +269,12 @@ void setup()
     ;
   cp5.addSlider("shapeWidth")
     .setLabel("L")
-    .setPosition(5,25)
-    .setSize(123,10)
-    .setValue(currentSettings.getShapeWidth())
-    .setRange(0,200)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 25)
+        .setSize(123, 10)
+          .setValue(currentSettings.getShapeWidth())
+            .setRange(0, 200)
+              .moveTo(settG)
+                ;
   cp5.addTextfield("inputShapeHeight")
     .setLabel("")
     .setPosition(140,36)
@@ -289,33 +289,33 @@ void setup()
     ;
   cp5.addSlider("shapeHeight")
     .setLabel("A")
-    .setPosition(5,36)
-    .setSize(123,10)
-    .setValue(currentSettings.getShapeHeight())
-    .setRange(0,200)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 36)
+        .setSize(123, 10)
+          .setValue(currentSettings.getShapeHeight())
+            .setRange(0, 200)
+              .moveTo(settG)
+                ;
   cp5.addToggle("toggleKeepShapeRatio")
     .setLabel("Keep Ratio")
-    .setPosition(5,48)
-    .setSize(42,15)
-    .setValue(currentSettings.getKeepShapeRatio())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 48)
+        .setSize(42, 15)
+          .setValue(currentSettings.getKeepShapeRatio())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(settG)
+                ;
   cp5.addToggle("toggleShapesLikeCells")
     .setLabel("Copia Dim Celle")
-    .setPosition(65,48)
-    .setSize(63,15)
-    .setValue(currentSettings.getShapesLikeCells())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(settG)
-    ;
+      .setPosition(65, 48)
+        .setSize(63, 15)
+          .setValue(currentSettings.getShapesLikeCells())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(settG)
+                ;
   cp5.addTextlabel("pickerFillLabel")
-    .setPosition(5,90)
-    .setText("RIEMPIMENTO FORME ATTIVE")
-    .moveTo(settG)
-    ;
+    .setPosition(5, 90)
+      .setText("RIEMPIMENTO FORME ATTIVE")
+        .moveTo(settG)
+          ;
   cp5.addTextfield("inputRFillActive")
     .setLabel("")
     .setPosition(150,105)
@@ -330,13 +330,13 @@ void setup()
     ;
   cp5.addSlider("pickRFillActive")
     .setLabel("R")
-    .setPosition(5,105)
-    .setSize(132,10)
-    .setColorValue(currentSettings.getFillRActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 105)
+        .setSize(132, 10)
+          .setColorValue(currentSettings.getFillRActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addTextfield("inputGFillActive")
     .setLabel("")
     .setPosition(150,116)
@@ -351,13 +351,13 @@ void setup()
     ;
   cp5.addSlider("pickGFillActive")
     .setLabel("G")
-    .setPosition(5,116)
-    .setSize(132,10)
-    .setColorValue(currentSettings.getFillGActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 116)
+        .setSize(132, 10)
+          .setColorValue(currentSettings.getFillGActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addTextfield("inputBFillActive")
     .setLabel("")
     .setPosition(150,127)
@@ -372,13 +372,13 @@ void setup()
     ;
   cp5.addSlider("pickBFillActive")
     .setLabel("B")
-    .setPosition(5,127)
-    .setSize(132,10)
-    .setColorValue(currentSettings.getFillBActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 127)
+        .setSize(132, 10)
+          .setColorValue(currentSettings.getFillBActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addTextfield("inputAFillActive")
     .setLabel("")
     .setPosition(150,138)
@@ -393,71 +393,71 @@ void setup()
     ;
   cp5.addSlider("pickAFillActive")
     .setLabel("A")
-    .setPosition(5,138)
-    .setSize(132,10)
-    .setColorValue(currentSettings.getFillAActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 138)
+        .setSize(132, 10)
+          .setColorValue(currentSettings.getFillAActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addToggle("toggleFillActive")
     .setLabel("Fill ON")
-    .setPosition(5,150)
-    .setSize(42,15)
-    .setValue(currentSettings.isFillOnActive())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 150)
+        .setSize(42, 15)
+          .setValue(currentSettings.isFillOnActive())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(settG)
+                ;
   cp5.addTextlabel("pickerStrokeLabel")
-    .setPosition(5,195)
-    .setText("CONTORNO FORME ATTIVE")
-    .moveTo(settG)
-    ;
+    .setPosition(5, 195)
+      .setText("CONTORNO FORME ATTIVE")
+        .moveTo(settG)
+          ;
   cp5.addSlider("pickRStrokeActive")
     .setLabel("R")
-    .setPosition(5,210)
-    .setSize(160,10)
-    .setColorValue(currentSettings.getStrokeRActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 210)
+        .setSize(160, 10)
+          .setColorValue(currentSettings.getStrokeRActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addSlider("pickGStrokeActive")
     .setLabel("G")
-    .setPosition(5,221)
-    .setSize(160,10)
-    .setColorValue(currentSettings.getStrokeGActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 221)
+        .setSize(160, 10)
+          .setColorValue(currentSettings.getStrokeGActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addSlider("pickBStrokeActive")
     .setLabel("B")
-    .setPosition(5,232)
-    .setSize(160,10)
-    .setColorValue(currentSettings.getStrokeBActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 232)
+        .setSize(160, 10)
+          .setColorValue(currentSettings.getStrokeBActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addSlider("pickAStrokeActive")
     .setLabel("A")
-    .setPosition(5,243)
-    .setSize(160,10)
-    .setColorValue(currentSettings.getStrokeAActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0,255)
-    .moveTo(settG)
-    ;
+      .setPosition(5, 243)
+        .setSize(160, 10)
+          .setColorValue(currentSettings.getStrokeAActive())
+            .setColorForeground(color(255, 255, 255))
+              .setRange(0, 255)
+                .moveTo(settG)
+                  ;
   cp5.addToggle("toggleStrokeActive")
     .setLabel("Stroke ON")
-    .setPosition(5,255)
-    .setSize(42,15)
-    .setValue(currentSettings.isStrokeOnActive())
-    .setMode(ControlP5.SWITCH)
-    .moveTo(settG)
-    ;
-  
+      .setPosition(5, 255)
+        .setSize(42, 15)
+          .setValue(currentSettings.isStrokeOnActive())
+            .setMode(ControlP5.SWITCH)
+              .moveTo(settG)
+                ;
+
   // cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
   // cp5e.setPosition(2,120)
   //   .setColorValue(color(0))
@@ -475,43 +475,43 @@ void setup()
 
   // LOCK GROUP
   lockG = cp5.addGroup("lockBox")
-    .setSize(width,height)
-    .setPosition(0,0)
-    .setBackgroundColor(color(10,0,10,200))
-    .hide()
-    ;
+    .setSize(width, height)
+      .setPosition(0, 0)
+        .setBackgroundColor(color(10, 0, 10, 200))
+          .hide()
+            ;
   // LOAD RLE AREA
   cp5.addButton("loadRleConfig")
     .setLabel("Aggiungi File RLE di Golly")
-    .setPosition(40,20)
-    .setSize(110,19)
-    .setColorBackground(cp)
-    .moveTo(mainG)
-    ;
+      .setPosition(40, 20)
+        .setSize(110, 19)
+          .setColorBackground(cp)
+            .moveTo(mainG)
+              ;
   cp5.addButton("exportToPDF")
     .setLabel("Esporta in PDF")
-    .setPosition(40,43)
-    .setSize(110,19)
-    .setColorBackground(cp)
-    .moveTo(mainG)
-    ;
+      .setPosition(40, 43)
+        .setSize(110, 19)
+          .setColorBackground(cp)
+            .moveTo(mainG)
+              ;
   // HISTORY AREA
   cp5.addButton("rewindConfigHistory")
     .setLabel("< prev")
-    .setPosition((width-sizeCP5Group)/2-20,height-50)
-    .setColorBackground(cq)
-    .setSize(35,25)
-    ;
+      .setPosition((width-sizeCP5Group)/2-20, height-50)
+        .setColorBackground(cq)
+          .setSize(35, 25)
+            ;
   cp5.addButton("forwardConfigHistory")
     .setLabel("next >")
-    .setPosition((width-sizeCP5Group)/2+20,height-50)
-    .setColorBackground(cq)
-    .setSize(35,25)
-    ;
-  
+      .setPosition((width-sizeCP5Group)/2+20, height-50)
+        .setColorBackground(cq)
+          .setSize(35, 25)
+            ;
+
   /* History starting locks */
-  setLock(mainG.getController("rewindConfigHistory"),true);
-  setLock(mainG.getController("forwardConfigHistory"),true);
+  setLock(mainG.getController("rewindConfigHistory"), true);
+  setLock(mainG.getController("forwardConfigHistory"), true);
 
   // MESSAGE BOX AREA
   winG =
@@ -603,9 +603,9 @@ boolean fileExists(String filename) {
 
   File file = new File(filename);
 
-  if(!file.exists())
+  if (!file.exists())
     return false;
-   
+
   return true;
 }
 
@@ -622,7 +622,7 @@ boolean fileExists(String filename) {
 //     sliderGreen.setSize(w, h);
 //     sliderBlue.setSize(w, h);
 //     sliderAlpha.setSize(w, h);
-   
+
 //     // you gotta move the sliders as well or they will overlap
 //     // sliderGreen.setPosition(PVector.add(sliderGreen.getPosition(), new PVector(0, h-10)));
 //     // sliderBlue.setPosition(PVector.add(sliderBlue.getPosition(), new PVector(0, 2*(h-10))));
@@ -633,7 +633,7 @@ boolean fileExists(String filename) {
 void setLock(Controller theController, boolean theValue)
 {
   theController.setLock(theValue);
-  if(theValue)
+  if (theValue)
   {
     theController.setColorBackground(cq);
   }
@@ -642,7 +642,7 @@ void setLock(Controller theController, boolean theValue)
     theController.setColorBackground(cp);
   }
 }
-  
+
 /* CP5 objects callbacks */
 void rowsNum(int val)
 {
@@ -779,8 +779,8 @@ void toggleKeepShapeRatio(boolean flag)
 }
 void toggleShapesLikeCells(boolean flag)
 {
-  setLock(cp5.getController("shapeWidth"),flag);
-  setLock(cp5.getController("shapeHeight"),flag);
+  setLock(cp5.getController("shapeWidth"), flag);
+  setLock(cp5.getController("shapeHeight"), flag);
   if (flag)
   {
     currentSettings.setShapeWidth(currentGrid.getCellWidth());
@@ -923,11 +923,12 @@ void zoomOut(int status)
 void fileSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
-  } else {
+  } 
+  else {
     gollyFilePath = selection.getAbsolutePath();
     println("User selected " + gollyFilePath);
     loadGollyRle();
-   }
+  }
 }
 void pdfSelected(File selection) {
   if (selection == null) {
@@ -965,11 +966,11 @@ void pdfSelected(File selection) {
 //   color colorFillActive = color(settings.getFillRActive(),
 //                                 settings.getFillGActive(),
 //                                 settings.getFillBActive());
-  
+
 //   color colorStrokeActive = color(settings.getStrokeRActive(),
 //                                   settings.getStrokeGActive(),
 //                                   settings.getStrokeBActive());
-  
+
 //   for (int i = 0; i < grid.getRows(); i++)
 //   {
 //     for (int j = 0; j < grid.getColumns(); j++)
@@ -993,7 +994,7 @@ void pdfSelected(File selection) {
 //       }
 //     }
 //   }
-  
+
 // }
 
 
@@ -1029,82 +1030,106 @@ void pdfSelected(File selection) {
 //   }
 // }
 
-void drawGollyPattern(PGraphics ctx,
-                      Grid2D grid,
-                      GollyRleConfiguration config,
-                      GollyPatternSettings settings)
+void drawInactiveCellStub(PGraphics ctx, 
+PVector point)
+{
+  ctx.fill(100, 100, 100);
+  ctx.noStroke();
+  ctx.rect(point.x, point.y, 5, 5);
+}
+
+
+void drawGollyPattern(PGraphics ctx, 
+Grid2D grid, 
+GollyRleConfiguration config, 
+GollyPatternSettings settings)
 {  
   /* retrieving sizes */
   int gridRows = grid.getRows();
   int gridCols = grid.getColumns();
   int matrixRows = config.getMatrixHeight();
   int matrixCols = config.getMatrixWidth();
-  
+
   /* computing offsets */
   int xOffset = ceil(abs(gridRows - matrixRows) / 2);
   int yOffset = ceil(abs(gridCols - matrixCols) / 2);
-  
-  //println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
-  
+
+  println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
+
   /* getting grid sub indices */
+  int minRows = min(matrixRows, gridRows);
+  int minCols = min(matrixCols, gridCols);
   int startX = (matrixRows < gridRows) ? xOffset : 0;
-  int endX = min(matrixRows, gridRows);
+  int endX = (matrixRows < gridRows) ? minRows + xOffset : minRows;
   int startY = (matrixCols < gridCols) ? yOffset : 0;
-  int endY = min(matrixCols, gridCols);
-  
-  //println("STEND ", startX, endX, startY, endY);
-  
-  color colorFillActive = color(settings.getFillRActive(),
-                                settings.getFillGActive(),
-                                settings.getFillBActive());
-  
-  color colorStrokeActive = color(settings.getStrokeRActive(),
-                                  settings.getStrokeGActive(),
-                                  settings.getStrokeBActive());
-  
-  for (int i = startX; i < endX; i++)
+  int endY = (matrixCols < gridCols) ? minCols + yOffset : minCols;
+
+  println("STEND ", startX, endX, startY, endY);
+
+  color colorFillActive = color(settings.getFillRActive(), 
+  settings.getFillGActive(), 
+  settings.getFillBActive());
+
+  color colorStrokeActive = color(settings.getStrokeRActive(), 
+  settings.getStrokeGActive(), 
+  settings.getStrokeBActive());
+
+  //  for (int i = startX; i < endX; i++)
+  //  {
+  //    for (int j = startY; j < endY; j++)
+  //    {
+  for (int i = 0; i < gridRows; i++)
   {
-    for (int j = startY; j < endY; j++)
+    for (int j = 0; j < gridCols; j++)
     {
-      /* get matrix indices */
-      int mi = (matrixRows > gridRows)? i + xOffset : i - xOffset; // you cannot increment array index indefinitely
-      int mj = (matrixCols > gridCols)? j + yOffset : j - yOffset; // ..maybe this is what you meant?
+      PVector currentPoint = grid.getPoint(i, j);
 
-      // c'è ancora qualcosa che non va
-
-      // if (i==startX && j==startY) println(mi,mj);
-      // if (i==endX-1 && j==endY-1) println(mi,mj);
-      
-      int currentState = config.getCellState(mi, mj);
-      PVector currentPoint = grid.getPoint(i,j);
-
-      if (currentState > 0) /* each state > 0 is considered active */
+      /* is pointer inside matrix? */
+      if (i >= startX && i < endX && j >= startY && j < endY)
       {
-        // Setting PShape fill&stroke up
-        if (settings.isFillOnActive())
-          ctx.fill(colorFillActive);
+
+        /* get matrix indices */
+         int mi = (matrixRows > gridRows)? i + xOffset : i - xOffset; // you cannot increment array index indefinitely
+         int mj = (matrixCols > gridCols)? j + yOffset : j - yOffset; // ..maybe this is what you meant?
+
+        // c'è ancora qualcosa che non va
+
+        // if (i==startX && j==startY) println(mi,mj);
+        // if (i==endX-1 && j==endY-1) println(mi,mj);
+
+        int currentState = config.getCellState(mi, mj);
+
+        if (currentState > 0) /* each state > 0 is considered active */
+        {
+          // Setting PShape fill&stroke up
+          if (settings.isFillOnActive())
+            ctx.fill(colorFillActive);
           //cellShape.setFill(colorFillActive);
-        else
-          ctx.noFill();
+          else
+            ctx.noFill();
           //cellShape.setFill(false);
-        if (settings.isStrokeOnActive())
-          ctx.stroke(colorStrokeActive);
-        //cellShape.setStroke(colorStrokeActive);
-        else
-          ctx.noStroke();
+          if (settings.isStrokeOnActive())
+            ctx.stroke(colorStrokeActive);
+          //cellShape.setStroke(colorStrokeActive);
+          else
+            ctx.noStroke();
           //cellShape.setStroke(false);
 
-        // Drawind shapes
-        //ctx.shape(cellShape, currentPoint.x, currentPoint.y); fuck you
-        ctx.rect(currentPoint.x, currentPoint.y, settings.getShapeWidth(), settings.getShapeHeight());
+          // Drawind shapes
+          //ctx.shape(cellShape, currentPoint.x, currentPoint.y); fuck you
+          ctx.rect(currentPoint.x, currentPoint.y, settings.getShapeWidth(), settings.getShapeHeight());
+        }
+        else /* inactive state */
+        {
+          drawInactiveCellStub(ctx, currentPoint);
+        }
       }
-      else /* inactive state */
+      else /* fake inactive cell */
       {
-      
+        drawInactiveCellStub(ctx, currentPoint);
       }
     }
   }
-  
 }
 
 // PShape generateShape(float w, float h,
@@ -1148,7 +1173,7 @@ void exportNow()
   /* Compute pdf size */
   int pdfWidth = (ceil(cols * cellWidth) + ceil(shapeWidth-cellWidth)) + (int)(2 * pdfBorder);
   int pdfHeight = (ceil(rows * cellHeight) + ceil(shapeHeight-cellHeight)) + (int)(2 * pdfBorder);
-  
+
   /* setting up pdf */
   PGraphics pdf = createGraphics(pdfWidth, pdfHeight, PDF, pdfFile);
   
@@ -1160,25 +1185,24 @@ void exportNow()
 
   /* drawing */
   drawGollyPattern(pdf, currentGrid, currentConfig, currentSettings);
-  
+
   pdf.dispose();
 
   /* goodbye */
   pdf.endDraw();
-  
 }
 
 void draw()
 {
   /* Refreshing bg */
   background(bg);
-  
+
   if (currentSettings.getTransformer() != null)
   {
     /* getting ready for drawing */
     transformer.startDrawing(); // I got some rare random npe here when loading files
     // FIXME: all I get is: golly_vectorializer.pde:1006:0:1006:0: NullPointerException
-  
+
     /* are we ready to draw? */
     if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
@@ -1192,19 +1216,19 @@ void checkConfigHistory()
 {
   /* Config history handling */
   if (manager.hasPrevConfig())
-    setLock(mainG.getController("rewindConfigHistory"),false);
+    setLock(mainG.getController("rewindConfigHistory"), false);
   else
-    setLock(mainG.getController("rewindConfigHistory"),true);
+    setLock(mainG.getController("rewindConfigHistory"), true);
   if (manager.hasNextConfig())
-    setLock(mainG.getController("forwardConfigHistory"),false);
+    setLock(mainG.getController("forwardConfigHistory"), false);
   else
-    setLock(mainG.getController("forwardConfigHistory"),true);
+    setLock(mainG.getController("forwardConfigHistory"), true);
 }
 
 void generateGridFrom(GollyRleConfiguration config)
 {
   PVector origin = new PVector();
-  
+
   int cols = config.getMatrixWidth();
   int rows = config.getMatrixHeight();
 
@@ -1212,7 +1236,7 @@ void generateGridFrom(GollyRleConfiguration config)
   float cellHeight = cellDim;
 
   currentGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight);
-  
+
   /* Adding grid to history */
   manager.addGrid(currentGrid);
 }
@@ -1221,26 +1245,26 @@ void initConfiguration(GollyRleConfiguration configuration)
 {
   /* Adding config history */
   manager.addConfiguration(configuration);
-  
+
   /* Generating grid from it (then adding it to history) */
   generateGridFrom(configuration);
-  
+
   /* Can we enable nextConfig button? */
   checkConfigHistory();
-  
+
   /* Associating default settings to config */
   currentSettings = new GollyPatternSettings();
   manager.addSettings(currentSettings); // start pattern with defaults
-  
+
   /* Init GUI controls */
   manageControls(false);
-  
+
   /* Init SketchTransformer */
   currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
-  
+
   /* Loading current transformer */
   transformer = currentSettings.getTransformer();
-  
+
   /* Centering sketch */
   centerSketch();
 }
@@ -1264,7 +1288,6 @@ void loadGollyRle()
 
     /* da shit */
     updateControls();
-    
   }
   catch (RuntimeException e)
   {
@@ -1290,13 +1313,13 @@ void centerSketch()
   float cellHeight = currentGrid.getCellHeight();
   float shapeWidth = currentSettings.getShapeWidth();
   float shapeHeight = currentSettings.getShapeHeight();
-  
+
   /* computing pattern size */
   float patternWidth = cols * cellWidth + (shapeWidth-cellWidth);
   float patternHeight = rows * cellHeight + (shapeHeight-cellHeight);
-  
+
   /* centering sketch */
-  transformer.centerSketch(width,sizeCP5Group,height,0,patternWidth,patternHeight);
+  transformer.centerSketch(width, sizeCP5Group, height, 0, patternWidth, patternHeight);
 }
 
 String GetTextFromClipboard()
@@ -1319,12 +1342,12 @@ Object GetFromClipboard(DataFlavor flavor)
     catch (UnsupportedFlavorException exu) // Unlikely but we must catch it
     {
       println("Unsupported flavor: " + exu);
-//~ exu.printStackTrace();
+      //~ exu.printStackTrace();
     }
     catch (java.io.IOException exi)
     {
       println("Unavailable data: " + exi);
-//~ exi.printStackTrace();
+      //~ exi.printStackTrace();
     }
   }
   return obj;
@@ -1365,25 +1388,25 @@ void mouseDragged()
 boolean checkKey(int k)
 {
   if (keys.length >= k) {
-    return keys[k];  
+    return keys[k];
   }
   return false;
 }
- 
+
 void keyPressed()
 { 
   keys[keyCode] = true;
   //println(KeyEvent.getKeyText(keyCode));
-  if(checkKey(KeyEvent.VK_META) && checkKey(KeyEvent.VK_V))
+  if (checkKey(KeyEvent.VK_META) && checkKey(KeyEvent.VK_V))
   {
     pastedMessage = GetTextFromClipboard();
     loadGollyRle();
   }
 }
- 
+
 void keyReleased()
 { 
-  keys[keyCode] = false; 
+  keys[keyCode] = false;
 }
 
 // void keyPressed()
@@ -1398,3 +1421,4 @@ void keyReleased()
 // void keyReleased()
 // {
 // }
+
