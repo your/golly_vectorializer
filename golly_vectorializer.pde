@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import controlP5.*;
+import java.nio.file.*;
 import processing.pdf.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.Transferable;
@@ -20,6 +21,7 @@ ControlP5 cp5;
 Group mainG, gridG, settG, lockG, winG;
 String gollyFilePath;
 String pastedMessage;
+String pdfFile;
 boolean[] keys = new boolean[526];
 
 /* Default window/drawing settings */
@@ -520,19 +522,41 @@ void setup()
     .setBackgroundColor(color(0,100))
     .moveTo(lockG)
     .hideBar()
-    ;  
-  cp5.addButton("buttonOk")
-    .setPosition(80,80)
-    .setSize(18,25)
+    ;
+  cp5.addButton("buttonCancel")
+    .setPosition(60,80)
+    .setSize(75,25)
     .moveTo(winG)
     .setColorBackground(color(5))
     .setColorActive(color(20))
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Ok")
+    .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .hide()
     ;
-  
+  cp5.addButton("buttonOkInfo")
+    .setPosition(160,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Ok").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
+  cp5.addButton("buttonOkOverwrite")
+    .setPosition(160,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Sovrascrivi").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ; 
   /* Message box is shown only upon request */
   winG.hide();
 
@@ -540,13 +564,39 @@ void setup()
   manageControls(true);
 }
 
-void showPopup(String message)
+void showPopup(String message,
+               boolean buttonCancel,
+               boolean buttonOkInfo,
+               boolean buttonOkOverwrite)
 {
   lockG.show();
-  cp5.addTextlabel("messageBoxLabel",message,30,30)
+  cp5.addTextlabel("messageBoxLabel")
+    .setValue(message)
+    .setPosition(30,30)
+    .setSize(100,100)
     .moveTo(winG)
     ;
+  if (buttonCancel)
+    winG.getController("buttonCancel").show();
+  else
+    winG.getController("buttonCancel").hide();
+  if (buttonOkInfo)
+    winG.getController("buttonOkInfo").show();
+  else
+    winG.getController("buttonOkInfo").hide();
+  if (buttonOkOverwrite)
+    winG.getController("buttonOkOverwrite").show();
+  else
+    winG.getController("buttonOkOverwrite").hide();
+  
   winG.show();
+}
+
+void killPopup()
+{
+  winG.getController("messageBoxLabel").remove();
+  winG.hide();
+  lockG.hide();
 }
 
 boolean fileExists(String filename) {
@@ -736,6 +786,10 @@ void toggleShapesLikeCells(boolean flag)
     currentSettings.setShapeWidth(currentGrid.getCellWidth());
     currentSettings.setShapeHeight(currentGrid.getCellHeight());
   }
+  // ensure we have always data mirrored
+  cp5.getController("shapeWidth").setValue(currentGrid.getCellWidth());
+  cp5.getController("shapeHeight").setValue(currentGrid.getCellHeight());
+  
   currentSettings.setShapesLikeCells(flag);
 }
 void toggleStrokeActive(boolean flag)
@@ -750,10 +804,17 @@ void toggleFillActive(boolean flag)
   mainG.getController("toggleFillActive").setLabel("Fill " + status);
   currentSettings.setIsFillOnActive(flag);
 }
-void buttonOk(int theValue) {
-  winG.getController("messageBoxLabel").remove();
-  winG.hide();
-  lockG.hide();
+void buttonOkOverwrite(boolean flag)
+{
+  exportNow();
+  killPopup();
+}
+void buttonOkInfo(boolean flag) {
+  killPopup();
+}
+void buttonCancel(boolean flag)
+{
+  killPopup();
 }
 public void pickRFillActive(int val) {
   currentSettings.setFillRActive(val);
@@ -872,11 +933,22 @@ void pdfSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
-    String pdfPath = selection.getAbsolutePath();
-    println("User selected " + pdfPath);
-    exportNow(pdfPath);
+    pdfFile = selection.getAbsolutePath() + ".pdf";
+    println("User selected " + pdfFile);
+    if (!fileExists(pdfFile)) exportNow();
+    else showPopup("Ao, questo file PDF esiste gia'!\n\nSovrascriverlo?", true, false, true);
   }
 }
+
+// boolean fileExist(String fileName)
+// {
+//   boolean canOverwrite = true;
+//   Path filePath = Paths.get(fileName);
+//   println(filePath);
+//   if (Files.exists(filePath))
+    
+//   else
+// }
 
 /* Drawing methods */
 // void drawGollyPattern(PGraphics ctx,
@@ -924,37 +996,38 @@ void pdfSelected(File selection) {
   
 // }
 
-void drawGrid(PGraphics ctx, Grid2D grid)
-{
-  int i, j;
-  int rowPoints = grid.getRowPoints();
-  int colPoints = grid.getColumnPoints();
+
+// void drawGrid(PGraphics ctx, Grid2D grid)
+// {
+//   int i, j;
+//   int rowPoints = grid.getRowPoints();
+//   int colPoints = grid.getColumnPoints();
   
-  // Building rows
-  for (i = 0; i < rowPoints; ++i)
-  {
-    for (j = 0; j < colPoints - 1; ++j)
-    {
-      PVector startingPoint = grid.getPoint(i, j);
-      PVector endingPoint = grid.getPoint(i, j + 1);
+//   // Building rows
+//   for (i = 0; i < rowPoints; ++i)
+//   {
+//     for (j = 0; j < colPoints - 1; ++j)
+//     {
+//       PVector startingPoint = grid.getPoint(i, j);
+//       PVector endingPoint = grid.getPoint(i, j + 1);
       
-      ctx.stroke(204, 204, 204);
-      ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
-    }
-  }
+//       ctx.stroke(204, 204, 204);
+//       ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
+//     }
+//   }
 
-  // Building cols
-  for (i = 0; i < colPoints; ++i)
-  {
-    for (j = 0; j < rowPoints - 1; ++j)
-    {
-      PVector startingPoint = grid.getPoint(j, i);
-      PVector endingPoint = grid.getPoint(j + 1, i);
+//   // Building cols
+//   for (i = 0; i < colPoints; ++i)
+//   {
+//     for (j = 0; j < rowPoints - 1; ++j)
+//     {
+//       PVector startingPoint = grid.getPoint(j, i);
+//       PVector endingPoint = grid.getPoint(j + 1, i);
 
-      ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
-    }
-  }
-}
+//       ctx.line(startingPoint.x, startingPoint.y, endingPoint.x, endingPoint.y);
+//     }
+//   }
+// }
 
 void drawGollyPattern(PGraphics ctx,
                       Grid2D grid,
@@ -1062,7 +1135,7 @@ void drawGollyPattern(PGraphics ctx,
 //   return patternShape;
 // }
 
-void exportNow(String pdfFile)
+void exportNow()
 {
   /* gathering info */
   int cols = currentGrid.getColumns();
@@ -1077,7 +1150,7 @@ void exportNow(String pdfFile)
   int pdfHeight = (ceil(rows * cellHeight) + ceil(shapeHeight-cellHeight)) + (int)(2 * pdfBorder);
   
   /* setting up pdf */
-  PGraphics pdf = createGraphics(pdfWidth, pdfHeight, PDF, pdfFile+".pdf");
+  PGraphics pdf = createGraphics(pdfWidth, pdfHeight, PDF, pdfFile);
   
   /* rendering */
   pdf.beginDraw();
@@ -1102,21 +1175,16 @@ void draw()
   
   if (currentSettings.getTransformer() != null)
   {
-    /* Loading current transformer */
-
     /* getting ready for drawing */
     transformer.startDrawing(); // I got some rare random npe here when loading files
     // FIXME: all I get is: golly_vectorializer.pde:1006:0:1006:0: NullPointerException
   
     /* are we ready to draw? */
-    if (currentSettings.getShowGrid()) drawGrid(g, currentGrid);
+    if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
     drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
     /* ended drawing */
     transformer.endDrawing();
-
-    //cp5.getController("shapeWidth").update();
-    //updateControls();
   }
 }
 
@@ -1201,7 +1269,7 @@ void loadGollyRle()
   catch (RuntimeException e)
   {
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
-    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n");
+    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n", true, false, false);
   }
   catch (IOException e)
   {
