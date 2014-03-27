@@ -22,8 +22,11 @@ public class GollyPatternSettings
   private float shapeWidth = 7;
   private float shapeHeight = 7;
   //private float scaleFactor = 1.0f;
-  private boolean keepRatio = true;
-  private boolean isStrokeOnActive = true;
+  private boolean showGrid = true;
+  private boolean keepCellRatio = true;
+  private boolean keepShapeRatio = true;
+  private boolean shapesLikeCells = false;
+  private boolean isStrokeOnActive = false;
   private boolean isStrokeOnInactive = false;
   private boolean isFillOnActive = true;
   private boolean isFillOnInactive = false;
@@ -148,9 +151,24 @@ public class GollyPatternSettings
   //   return scaleFactor;
   // }
 
-  public boolean getKeepRatio()
+  public boolean getShowGrid()
   {
-    return keepRatio;
+    return showGrid;
+  }
+  
+  public boolean getKeepCellRatio()
+  {
+    return keepCellRatio;
+  }
+
+  public boolean getKeepShapeRatio()
+  {
+    return keepShapeRatio;
+  }
+  
+  public boolean getShapesLikeCells()
+  {
+    return shapesLikeCells;
   }
   
   public boolean isStrokeOnActive()
@@ -288,10 +306,25 @@ public class GollyPatternSettings
   // {
   //   scaleFactor = val;
   // }
-
-  public void setKeepRatio(boolean flag)
+  
+  public void setShowGrid(boolean flag)
   {
-    keepRatio = flag;
+    showGrid = flag;
+  }
+  
+  public void setKeepCellRatio(boolean flag)
+  {
+    keepCellRatio = flag;
+  }
+
+  public void setKeepShapeRatio(boolean flag)
+  {
+    keepShapeRatio = flag;
+  }
+
+  public void setShapesLikeCells(boolean flag)
+  {
+    shapesLikeCells = flag;
   }
   
   public void setIsStrokeOnActive(boolean flag)
