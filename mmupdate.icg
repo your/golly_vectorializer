@@ -1,0 +1,36 @@
+#!/bin/bash
+## Settings ##
+DIR="release/"
+TTL="golly_vectorializer"
+APP=".app/Contents/Java"
+EXT=".java"
+cd $DIR
+if [ "$REQUEST_METHOD" = POST ]; then
+        query=$( head --bytes="$CONTENT_LENGTH" )
+else
+        query="$QUERY_STRING"
+fi
+echo "Content-Type: text/plain"
+echo
+if [ "$query" = "" ]; then
+        echo "Giovine, che stai a prendere in giro?"
+else
+        echo "Query=$query"
+        ## gathering latest file info ##
+        latestEdited=$(ls -ltr | grep '.zip' | tail -1 | awk '{print $9}')
+        unzip -ou $latestEdited
+        cd $TTL$APP
+        latestJar=$(ls -l | grep $TTL )
+        latestFilename=$(echo $latestJar | awk '{print $9}')
+        latestSize=$(echo $latestJar | awk '{print $5}')
+        latestMD5=$(md5sum $latestFilename | awk '{print $1}')
+        if [ "$latestEdited" = "" ]; then
+                echo "Answer=:NoFilesFound"
+        else
+                if [ "?$latestMD5" == "$query" ]; then
+                        echo "Answer=:UpToDate"
+                else
+                        echo "Answer=:"$latestMD5":"$latestFilename":"$latestSize
+                fi
+        fi
+fi

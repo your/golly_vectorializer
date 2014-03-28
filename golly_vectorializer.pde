@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.net.*;
 import controlP5.*;
 import java.nio.file.*;
 import processing.pdf.*;
@@ -8,6 +9,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
+import java.security.CodeSource;
 
 /* Global variables */
 GollyRleReader reader;
@@ -38,6 +40,13 @@ color cq = color(200, 180, 200, 100);
 // boolean showGrid = true;
 boolean initControls = false;
 boolean lockedGrid = false;
+
+/* Application Updater stuff */
+ApplicationUpdater updater;
+String remoteHost = "mm.sharped.net";
+int remotePort = 3300;
+String remoteScript = "cgi-bum/mmupdate.icg";
+String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 
 void manageControls(boolean lock)
 {
@@ -92,7 +101,7 @@ void manageControls(boolean lock)
 }
 
 void setup()
-{
+{   
   /* Setting up main display settings */
   smooth();
   frameRate(30);
@@ -103,6 +112,12 @@ void setup()
   // transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
 
   background(bg);
+
+  /* init ApplicationUpdater */
+  CodeSource codeSource =
+    golly_vectorializer.class.getProtectionDomain().getCodeSource();
+  updater = new ApplicationUpdater(remoteHost, remotePort,
+                                   remoteScript, remotePath, codeSource);
 
   /* Global objects init */
   manager = new GollyHistoryManager();
@@ -482,19 +497,26 @@ void setup()
             ;
   // LOAD RLE AREA
   cp5.addButton("loadRleConfig")
-    .setLabel("Aggiungi File RLE di Golly")
+    .setLabel("Aggiungi Golly RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
       .setPosition(40, 20)
         .setSize(110, 19)
           .setColorBackground(cp)
             .moveTo(mainG)
               ;
-  cp5.addButton("exportToPDF")
+  cp5.addButton("exportToPDF").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setLabel("Esporta in PDF")
       .setPosition(40, 43)
         .setSize(110, 19)
           .setColorBackground(cp)
             .moveTo(mainG)
-              ;
+    ;
+  cp5.addButton("checkForUpdate")
+    .setLabel("Controlla Aggiornamenti").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(40, 66)
+    .setSize(110, 19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
   // HISTORY AREA
   cp5.addButton("rewindConfigHistory")
     .setLabel("< prev")
@@ -523,8 +545,8 @@ void setup()
     .moveTo(lockG)
     .hideBar()
     ;
-  cp5.addButton("buttonCancel")
-    .setPosition(60,80)
+  cp5.addButton("buttonGenericCancel")
+    .setPosition(160,80)
     .setSize(75,25)
     .moveTo(winG)
     .setColorBackground(color(5))
@@ -535,8 +557,8 @@ void setup()
     .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .hide()
     ;
-  cp5.addButton("buttonOkInfo")
-    .setPosition(160,80)
+  cp5.addButton("buttonGenericOK")
+    .setPosition(60,80)
     .setSize(75,25)
     .moveTo(winG)
     .setColorBackground(color(5))
@@ -546,8 +568,8 @@ void setup()
     .setBroadcast(true)
     .setLabel("Ok").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
-  cp5.addButton("buttonOkOverwrite")
-    .setPosition(160,80)
+  cp5.addButton("buttonOverwriteOK")
+    .setPosition(60,80)
     .setSize(75,25)
     .moveTo(winG)
     .setColorBackground(color(5))
@@ -556,18 +578,51 @@ void setup()
     .setValue(1)
     .setBroadcast(true)
     .setLabel("Sovrascrivi").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    ; 
+    ;
+  cp5.addButton("buttonDownloadUpdateOK")
+    .setPosition(60,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Scarica").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
+  cp5.addButton("buttonApplyUpdateOK")
+    .setPosition(60,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Riavvia ora").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
+  cp5.addButton("buttonApplyUpdateCancel")
+    .setPosition(160,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Riavvia dopo").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
   /* Message box is shown only upon request */
   winG.hide();
 
   /* Lock controls @startup */
   manageControls(true);
+
+  /* test if any update downloaded has to be applied */
+  updateReady(false); // true to enable startup updates
 }
 
-void showPopup(String message,
-               boolean buttonCancel,
-               boolean buttonOkInfo,
-               boolean buttonOkOverwrite)
+void showPopup(String message, int buttonA, int buttonB)
 {
   lockG.show();
   cp5.addTextlabel("messageBoxLabel")
@@ -576,18 +631,61 @@ void showPopup(String message,
     .setSize(100,100)
     .moveTo(winG)
     ;
-  if (buttonCancel)
-    winG.getController("buttonCancel").show();
-  else
-    winG.getController("buttonCancel").hide();
-  if (buttonOkInfo)
-    winG.getController("buttonOkInfo").show();
-  else
-    winG.getController("buttonOkInfo").hide();
-  if (buttonOkOverwrite)
-    winG.getController("buttonOkOverwrite").show();
-  else
-    winG.getController("buttonOkOverwrite").hide();
+
+  /// button A
+  // 0: genericOK
+  // 1: overwriteOK
+  // 2: downloadUpdateOK
+  // 3: applyUpdateOK
+
+  /// button B
+  // 0: genericCancel
+  // 1: applyUpdateCancel
+
+  // reset buttons
+  winG.getController("buttonGenericOK").hide();
+  winG.getController("buttonOverwriteOK").hide();
+  winG.getController("buttonDownloadUpdateOK").hide();
+  winG.getController("buttonApplyUpdateOK").hide();
+  winG.getController("buttonGenericCancel").hide();
+  winG.getController("buttonApplyUpdateCancel").hide();
+  
+  switch(buttonA) {
+  case 0:
+    winG.getController("buttonGenericOK").show();
+    break;
+  case 1:
+    winG.getController("buttonOverwriteOK").show();
+    break;
+  case 2:
+    winG.getController("buttonDownloadUpdateOK").show();
+    break;
+  case 3:
+    winG.getController("buttonApplyUpdateOK").show();
+    break;
+  }
+
+  switch(buttonB) {
+  case 0:
+    winG.getController("buttonGenericCancel").show();
+    break;
+  case 1:
+    winG.getController("buttonApplyUpdateCancel").show();
+    break;
+  }
+  
+  // if (buttonCancel)
+  //   winG.getController("buttonCancel").show();
+  // else
+  //   winG.getController("buttonCancel").hide();
+  // if (buttonOkInfo)
+  //   winG.getController("buttonOkInfo").show();
+  // else
+  //   winG.getController("buttonOkInfo").hide();
+  // if (buttonOkOverwrite)
+  //   winG.getController("buttonOkOverwrite").show();
+  // else
+  //   winG.getController("buttonOkOverwrite").hide();
   
   winG.show();
 }
@@ -765,6 +863,10 @@ void exportToPDF(int status)
 {
   selectOutput("Selezionare destinazione PDF:", "pdfSelected");
 }
+void checkForUpdate(boolean flag)
+{
+  updateReady(true);
+}
 void toggleShowGrid(boolean flag)
 {
   currentSettings.setShowGrid(flag);
@@ -804,17 +906,39 @@ void toggleFillActive(boolean flag)
   mainG.getController("toggleFillActive").setLabel("Fill " + status);
   currentSettings.setIsFillOnActive(flag);
 }
-void buttonOkOverwrite(boolean flag)
+void buttonOverwriteOK(boolean flag)
 {
   exportNow();
   killPopup();
 }
-void buttonOkInfo(boolean flag) {
+void buttonGenericOK(boolean flag) {
   killPopup();
 }
-void buttonCancel(boolean flag)
+void buttonGenericCancel(boolean flag)
 {
   killPopup();
+}
+void buttonDownloadUpdateOK(boolean flag)
+{
+  killPopup();
+  downloadUpdate();
+}
+void buttonApplyUpdateOK(boolean flag)
+{
+  killPopup();
+  applyUpdate();
+}
+void buttonApplyUpdateCancel(boolean flag)
+{
+  killPopup();
+  cp5.getController("checkForUpdate").remove();
+  cp5.addButton("checkForUpdate")
+    .setLabel("Riavvia e aggiorna").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(40, 66)
+    .setSize(110, 19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
 }
 public void pickRFillActive(int val) {
   currentSettings.setFillRActive(val);
@@ -937,7 +1061,7 @@ void pdfSelected(File selection) {
     pdfFile = selection.getAbsolutePath() + ".pdf";
     println("User selected " + pdfFile);
     if (!fileExists(pdfFile)) exportNow();
-    else showPopup("Ao, questo file PDF esiste gia'!\n\nSovrascriverlo?", true, false, true);
+    else showPopup("Ao, questo file PDF esiste gia'!\n\nSovrascriverlo?", 1, 0);
   }
 }
 
@@ -1292,7 +1416,7 @@ void loadGollyRle()
   catch (RuntimeException e)
   {
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
-    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n", true, false, false);
+    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n", 0, -1);
   }
   catch (IOException e)
   {
@@ -1302,6 +1426,55 @@ void loadGollyRle()
   {
     pastedMessage = null; // reset
   }
+}
+
+void checkForUpdate()
+{
+  try {
+    if (updater.updateAvailable()) {
+      showPopup("E' disponibile un aggiornamento!\n\nScaricarlo?", 2, 0);
+    } else {
+      showPopup("Nessun aggiornamento disponibile!", 0, -1);
+    }
+  } catch(Exception e) {
+    showPopup("Non sono riuscito a verificare la presenza di aggiornamenti:(\n\n" +
+              e.getMessage(), 0, -1);
+  }
+}
+void downloadUpdate()
+{
+  try {
+    updater.downloadUpdate();
+    if (updater.updateReady()) {
+      showPopup("L'aggiornamento e' pronto!\nE' necessario il riavvio del programma.\n\n" +
+                "Riavviare adesso? (se no, sara' installato al prossimo avvio)", 3, 1);
+    }
+  } catch(Exception e) {
+    showPopup("Non sono riuscito a scaricare l'aggiornamento:(\n\n" +
+              e.getMessage(), 0, -1);
+  }
+}
+void applyUpdate()
+{
+  try {
+    updater.applyUpdate();
+    if (updater.updateSuccessfull()) {
+      showPopup("L'ultimo aggiornamento è stato installato con successo! :D", 0, -1);
+    } else {
+      showPopup("Sì e' verificato un errore durante l'aggiornamento :O", 0, -1);
+    }
+  } catch(Exception e) {
+    showPopup("Sì e' verificato un errore durante l'aggiornamento :O\n\n" +
+              e.getMessage(), 0, -1);
+  }
+}
+void updateReady(boolean checkNow)
+{
+  if (updater.updateReady())
+    applyUpdate();
+  else
+    if (checkNow)
+      checkForUpdate();
 }
 
 void centerSketch()
