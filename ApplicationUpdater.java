@@ -24,6 +24,7 @@ public class ApplicationUpdater {
   private String remoteJarPath;
 
   private static final String updateExtension = ".update";
+  private static final String updateScript = "update.sh";
   
   ApplicationUpdater(String servHost, int servPort,
                      String servScript, String remotePath,
@@ -126,14 +127,13 @@ public class ApplicationUpdater {
 
     String[] tokens = jarPath.split("/");
     String jarName = tokens[tokens.length - 1];
-    //String appName = tokens[tokens.length - 3];
-    String updateScript = "update.sh";
+    String appName = jarName.substring(0, jarName.length() - 3);
 
     File toUpdate = new File(jarPath);
     File savedUpdate = new File(jarPath + updateExtension);
 
     String scriptHeader = "#!/bin/sh";
-    String killCommand = "kill $(ps x | grep " + "golly_vectorializer" + " | awk '{print $1}' | head -1)";
+    String killCommand = "kill $(ps x | grep " + appName + " | awk '{print $1}' | head -1)";
     String moveCommand = "mv " + savedUpdate + " " + toUpdate;
     String sleepCommand = "sleep 3";
     String openCommand = "open -a " + appPath;
