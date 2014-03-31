@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 import controlP5.*;
+import sojamo.drop.*;
 import java.nio.file.*;
 import processing.pdf.*;
 import java.awt.datatransfer.Clipboard;
@@ -19,6 +20,7 @@ GollyPatternSettings currentSettings;
 SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
+SDrop drop;
 // ResizableColorPicker cp5e;
 Group mainG, gridG, settG, lockG, winG;
 String gollyFilePath = null;
@@ -223,8 +225,7 @@ void setup()
 
   size(x, y);
 
-  // /* setting up transformer */
-  // transformer = new SketchTransformer((width-sizeCP5Group)/2, height/2, 1.0);
+  drop = new SDrop(this);
 
   background(bg);
 
@@ -1539,8 +1540,12 @@ void exportNow()
   int rows = currentGrid.getRows();
   float cellWidth = currentGrid.getCellWidth();
   float cellHeight = currentGrid.getCellHeight();
-  float shapeWidth = currentSettings.getShapeWidthActive(); ////////
-  float shapeHeight = currentSettings.getShapeHeightActive();
+  float shapeWidth =
+    (currentSettings.getShapeWidthActive() > currentSettings.getShapeWidthInactive())?
+    currentSettings.getShapeWidthActive() : currentSettings.getShapeWidthInactive();
+  float shapeHeight =
+    (currentSettings.getShapeHeightActive() > currentSettings.getShapeHeightInactive())?
+    currentSettings.getShapeHeightActive() : currentSettings.getShapeHeightInactive();
 
   /* Compute pdf size */
   int pdfWidth = (ceil(cols * cellWidth) + ceil(shapeWidth-cellWidth)) + (int)(2 * pdfBorder);
@@ -1737,8 +1742,12 @@ void centerSketch()
   int rows = currentGrid.getRows();
   float cellWidth = currentGrid.getCellWidth();
   float cellHeight = currentGrid.getCellHeight();
-  float shapeWidth = currentSettings.getShapeWidthActive();
-  float shapeHeight = currentSettings.getShapeHeightInactive();
+  float shapeWidth =
+    (currentSettings.getShapeWidthActive() > currentSettings.getShapeWidthInactive())?
+    currentSettings.getShapeWidthActive() : currentSettings.getShapeWidthInactive();
+  float shapeHeight =
+    (currentSettings.getShapeHeightActive() > currentSettings.getShapeHeightInactive())?
+    currentSettings.getShapeHeightActive() : currentSettings.getShapeHeightInactive();
 
   /* computing pattern size */
   float patternWidth = cols * cellWidth + (shapeWidth-cellWidth);
@@ -1834,6 +1843,23 @@ void keyReleased()
 { 
   keys[keyCode] = false;
 }
+
+void dropEvent(DropEvent theDropEvent) {
+  if(theDropEvent.isFile()) {
+    // for further information see
+    // http://java.sun.com/j2se/1.4.2/docs/api/java/io/File.html
+    File myFile = theDropEvent.file();
+    println("\nisDirectory ? " + myFile.isDirectory() + "  /  isFile ? " + myFile.isFile());
+    if (myFile.isDirectory()) {
+      showPopup("Hai draggato una directory intera, esagerato!" +
+                "\n\nDragga un RLE per volta, thanks :D", 0, -1);
+    } else {
+      gollyFilePath = myFile.getAbsolutePath();
+      loadGollyRle();
+    }
+  }
+}
+
 
 // void keyPressed()
 // {
