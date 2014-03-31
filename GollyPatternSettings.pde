@@ -5,9 +5,9 @@ public class GollyPatternSettings
   private int fillGActive = 0;
   private int fillBActive = 0;
   private int fillAActive = 255;
-  private int fillRInactive = 255;
-  private int fillGInactive = 255;
-  private int fillBInactive = 255;
+  private int fillRInactive = 100;
+  private int fillGInactive = 100;
+  private int fillBInactive = 100;
   private int fillAInactive = 255;
   private int strokeRActive = 100;
   private int strokeGActive = 100;
@@ -19,17 +19,23 @@ public class GollyPatternSettings
   private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
-  private float shapeWidth = 7;
-  private float shapeHeight = 7;
+  private float shapeWidthActive = 7;
+  private float shapeWidthInactive = 5;
+  private float shapeHeightActive = 7;
+  private float shapeHeightInactive = 5;
   //private float scaleFactor = 1.0f;
   private boolean showGrid = true;
+  private boolean showInactives = false;
   private boolean keepCellRatio = true;
-  private boolean keepShapeRatio = true;
-  private boolean shapesLikeCells = false;
+  private boolean keepShapeRatioActive = true;
+  private boolean keepShapeRatioInactive = true;
+  private boolean shapesLikeCellsActive = false;
+  private boolean shapesLikeCellsInactive = false;
   private boolean isStrokeOnActive = false;
   private boolean isStrokeOnInactive = false;
   private boolean isFillOnActive = true;
-  private boolean isFillOnInactive = false;
+  private boolean isFillOnInactive = true;
+  private boolean workingOnActiveStates = true;
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
   private SketchTransformer transformer;
@@ -131,14 +137,24 @@ public class GollyPatternSettings
     return strokeWeightInactive;
   }
 
-  public float getShapeWidth()
+  public float getShapeWidthActive()
   {
-    return shapeWidth;
+    return shapeWidthActive;
   }
 
-  public float getShapeHeight()
+  public float getShapeWidthInactive()
   {
-    return shapeHeight;
+    return shapeWidthInactive;
+  }
+  
+  public float getShapeHeightActive()
+  {
+    return shapeHeightActive;
+  }
+
+  public float getShapeHeightInactive()
+  {
+    return shapeHeightInactive;
   }
 
   public SketchTransformer getTransformer()
@@ -155,20 +171,35 @@ public class GollyPatternSettings
   {
     return showGrid;
   }
+
+  public boolean getShowInactives()
+  {
+    return showInactives;
+  }
   
   public boolean getKeepCellRatio()
   {
     return keepCellRatio;
   }
 
-  public boolean getKeepShapeRatio()
+  public boolean getKeepShapeRatioActive()
   {
-    return keepShapeRatio;
+    return keepShapeRatioActive;
+  }
+
+  public boolean getKeepShapeRatioInactive()
+  {
+    return keepShapeRatioInactive;
   }
   
-  public boolean getShapesLikeCells()
+  public boolean getShapesLikeCellsActive()
   {
-    return shapesLikeCells;
+    return shapesLikeCellsActive;
+  }
+
+  public boolean getShapesLikeCellsInactive()
+  {
+    return shapesLikeCellsInactive;
   }
   
   public boolean isStrokeOnActive()
@@ -189,6 +220,11 @@ public class GollyPatternSettings
   public boolean isFillOnInactive()
   {
     return isFillOnInactive;
+  }
+
+  public boolean workingOnActiveStates()
+  {
+    return workingOnActiveStates;
   }
 
   public CellShape getCellShape()
@@ -292,16 +328,26 @@ public class GollyPatternSettings
     strokeWeightInactive = val;
   }
 
-  public void setShapeWidth(float val)
+  public void setShapeWidthActive(float val)
   {
-    shapeWidth = val;
+    shapeWidthActive = val;
   }
 
-  public void setShapeHeight(float val)
+  public void setShapeWidthInactive(float val)
   {
-    shapeHeight = val;
+    shapeWidthInactive = val;
+  }
+  
+  public void setShapeHeightActive(float val)
+  {
+    shapeHeightActive = val;
   }
 
+  public void setShapeHeightInactive(float val)
+  {
+    shapeHeightInactive = val;
+  }
+  
   // public void setScaleFactor(float val)
   // {
   //   scaleFactor = val;
@@ -311,20 +357,35 @@ public class GollyPatternSettings
   {
     showGrid = flag;
   }
+
+  public void setShowInactives(boolean flag)
+  {
+    showInactives = flag;
+  }
   
   public void setKeepCellRatio(boolean flag)
   {
     keepCellRatio = flag;
   }
 
-  public void setKeepShapeRatio(boolean flag)
+  public void setKeepShapeRatioActive(boolean flag)
   {
-    keepShapeRatio = flag;
+    keepShapeRatioActive = flag;
   }
 
-  public void setShapesLikeCells(boolean flag)
+  public void setKeepShapeRatioInactive(boolean flag)
   {
-    shapesLikeCells = flag;
+    keepShapeRatioInactive = flag;
+  }
+  
+  public void setShapesLikeCellsActive(boolean flag)
+  {
+    shapesLikeCellsActive = flag;
+  }
+
+  public void setShapesLikeCellsInactive(boolean flag)
+  {
+    shapesLikeCellsInactive = flag;
   }
   
   public void setIsStrokeOnActive(boolean flag)
@@ -345,6 +406,11 @@ public class GollyPatternSettings
   public void setIsFillOnInactive(boolean flag)
   {
     isFillOnInactive = flag;
+  }
+
+  public void setWorkingOnActiveStates(boolean flag)
+  {
+    workingOnActiveStates = flag;
   }
 
   public void setCellShape(CellShape cellShape)

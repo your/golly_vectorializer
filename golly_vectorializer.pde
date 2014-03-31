@@ -60,6 +60,7 @@ void manageControls(boolean lock)
   setLock(cp5.getController("inputCellHeight"), lock);
   setLock(cp5.getController("toggleKeepCellRatio"), lock);
   setLock(cp5.getController("toggleShowGrid"), lock);
+  setLock(cp5.getController("toggleShowInactives"), lock);
   setLock(cp5.getController("zoomIn"), lock);
   setLock(cp5.getController("zoomOut"), lock);
   setLock(cp5.getController("center"), lock);
@@ -72,34 +73,147 @@ void manageControls(boolean lock)
   setLock(cp5.getController("inputShapeHeight"), lock);
   setLock(cp5.getController("toggleKeepShapeRatio"), lock);
   setLock(cp5.getController("toggleShapesLikeCells"), lock);
-  setLock(cp5.getController("pickRFillActive"), lock);
-  setLock(cp5.getController("pickGFillActive"), lock);
-  setLock(cp5.getController("pickBFillActive"), lock);
-  setLock(cp5.getController("pickAFillActive"), lock);
-  setLock(cp5.getController("inputRFillActive"), lock);
-  setLock(cp5.getController("inputGFillActive"), lock);
-  setLock(cp5.getController("inputBFillActive"), lock);
-  setLock(cp5.getController("inputAFillActive"), lock);
-  setLock(cp5.getController("toggleFillActive"), lock);
-  setLock(cp5.getController("pickRStrokeActive"), lock);
-  setLock(cp5.getController("pickGStrokeActive"), lock);
-  setLock(cp5.getController("pickBStrokeActive"), lock);
-  setLock(cp5.getController("pickAStrokeActive"), lock);
-  setLock(cp5.getController("toggleStrokeActive"), lock);
+  setLock(cp5.getController("pickRFill"), lock);
+  setLock(cp5.getController("pickGFill"), lock);
+  setLock(cp5.getController("pickBFill"), lock);
+  setLock(cp5.getController("pickAFill"), lock);
+  setLock(cp5.getController("inputRFill"), lock);
+  setLock(cp5.getController("inputGFill"), lock);
+  setLock(cp5.getController("inputBFill"), lock);
+  setLock(cp5.getController("inputAFill"), lock);
+  setLock(cp5.getController("toggleFill"), lock);
+  setLock(cp5.getController("pickRStroke"), lock);
+  setLock(cp5.getController("pickGStroke"), lock);
+  setLock(cp5.getController("pickBStroke"), lock);
+  setLock(cp5.getController("pickAStroke"), lock);
+  setLock(cp5.getController("toggleStroke"), lock);
+  setLock(cp5.getController("toggleWorkingStates"), lock);
+  
+  // cp5 is da shit; I need to start triggering toggle events only when
+  // all the cp5 controllers set up by updateControls() are unlocked;
+  // in this specific case, the problem was that the event triggered by
+  // toggleWorkingStates called updateControls(), and I cant touch
+  // controls value until they are unlocked. Thus adding:
+  cp5.getController("toggleWorkingStates").setBroadcast(true);
+  cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
+  cp5.getController("toggleShapesLikeCells").setBroadcast(true);
+  
   if (!lock)
   {
     /* Colouring sliders if unlocked */
-    cp5.getController("pickRFillActive").setColorBackground(color(200, 20, 40));
-    cp5.getController("pickRStrokeActive").setColorBackground(color(200, 20, 40));
-    cp5.getController("pickGFillActive").setColorBackground(color(20, 200, 40));
-    cp5.getController("pickGStrokeActive").setColorBackground(color(20, 200, 40));
-    cp5.getController("pickBFillActive").setColorBackground(color(40, 20, 200));
-    cp5.getController("pickBStrokeActive").setColorBackground(color(40, 20, 200));
-    cp5.getController("pickAFillActive").setColorBackground(color(100, 100, 100));
-    cp5.getController("pickAStrokeActive").setColorBackground(color(100, 100, 100));
+    cp5.getController("pickRFill").setColorBackground(color(200, 20, 40));
+    cp5.getController("pickRStroke").setColorBackground(color(200, 20, 40));
+    cp5.getController("pickGFill").setColorBackground(color(20, 200, 40));
+    cp5.getController("pickGStroke").setColorBackground(color(20, 200, 40));
+    cp5.getController("pickBFill").setColorBackground(color(40, 20, 200));
+    cp5.getController("pickBStroke").setColorBackground(color(40, 20, 200));
+    cp5.getController("pickAFill").setColorBackground(color(100, 100, 100));
+    cp5.getController("pickAStroke").setColorBackground(color(100, 100, 100));
   }
 }
+void updateControls()
+{
+  // temp disable broadcast to avoid values r/w conflicts
+  cp5.getController("cellWidth").setBroadcast(false);
+  cp5.getController("cellHeight").setBroadcast(false);
+  cp5.getController("inputCellWidth").setBroadcast(false);
+  cp5.getController("inputCellHeight").setBroadcast(false);
+  cp5.getController("toggleKeepCellRatio").setBroadcast(false);
+  cp5.getController("toggleShowGrid").setBroadcast(false);
+  cp5.getController("toggleShowInactives").setBroadcast(false);
+  // doing stuff on controls
+  cp5.getController("cellWidth").setValue(currentGrid.getCellWidth());
+  cp5.getController("cellHeight").setValue(currentGrid.getCellHeight());
+  cp5.getController("inputCellWidth").setValue(currentGrid.getCellWidth());
+  cp5.getController("inputCellHeight").setValue(currentGrid.getCellHeight());
+  cp5.getController("toggleKeepCellRatio").setValue(currentSettings.getKeepCellRatio()?1:0);
+  cp5.getController("toggleShowGrid").setValue(currentSettings.getShowGrid()?1:0);
+  cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives()?1:0);
+  // broadcasting values again
+  cp5.getController("cellWidth").setBroadcast(true);
+  cp5.getController("cellHeight").setBroadcast(true);
+  cp5.getController("inputCellWidth").setBroadcast(true);
+  cp5.getController("inputCellHeight").setBroadcast(true);
+  cp5.getController("toggleKeepCellRatio").setBroadcast(true);
+  cp5.getController("toggleShowGrid").setBroadcast(true);
+  cp5.getController("toggleShowInactives").setBroadcast(true);
 
+  // this shit needs to be broadcasted off
+  cp5.getController("toggleShapesLikeCells").setBroadcast(false);
+  
+  if (currentSettings.workingOnActiveStates())
+  {
+    cp5.getController("shapeWidth").setValue(currentSettings.getShapeWidthActive());
+    cp5.getController("shapeHeight").setValue(currentSettings.getShapeHeightActive());
+    cp5.getController("inputShapeWidth").setValue(currentSettings.getShapeWidthActive());
+    cp5.getController("inputShapeHeight").setValue(currentSettings.getShapeHeightActive());
+    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioActive()?1:0);
+    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsActive()?1:0);
+    // ensure we get the updated locks
+    if (currentSettings.getShapesLikeCellsActive())
+    {
+      setLock(cp5.getController("shapeWidth"), true);
+      setLock(cp5.getController("shapeHeight"), true);
+    }
+    else
+    {
+      setLock(cp5.getController("shapeWidth"), false);
+      setLock(cp5.getController("shapeHeight"), false);
+    }
+    cp5.getController("pickRFill").setValue(currentSettings.getFillRActive());
+    cp5.getController("pickGFill").setValue(currentSettings.getFillGActive());
+    cp5.getController("pickBFill").setValue(currentSettings.getFillBActive());
+    cp5.getController("pickAFill").setValue(currentSettings.getFillAActive());
+    cp5.getController("inputRFill").setValue(currentSettings.getFillRActive());
+    cp5.getController("inputGFill").setValue(currentSettings.getFillGActive());
+    cp5.getController("inputBFill").setValue(currentSettings.getFillBActive());
+    cp5.getController("inputAFill").setValue(currentSettings.getFillAActive());
+    cp5.getController("toggleFill").setValue(currentSettings.isFillOnActive()?1:0);
+    cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRActive());
+    cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGActive());
+    cp5.getController("pickBStroke").setValue(currentSettings.getStrokeBActive());
+    cp5.getController("pickAStroke").setValue(currentSettings.getStrokeAActive());
+    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnActive()?1:0);
+  }
+  else
+  {
+    cp5.getController("shapeWidth").setValue(currentSettings.getShapeWidthInactive());
+    cp5.getController("shapeHeight").setValue(currentSettings.getShapeHeightInactive());
+    cp5.getController("inputShapeWidth").setValue(currentSettings.getShapeWidthInactive());
+    cp5.getController("inputShapeHeight").setValue(currentSettings.getShapeHeightInactive());
+    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioInactive()?1:0);
+    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsInactive()?1:0);
+    // ensure we get the updated locks
+    if (currentSettings.getShapesLikeCellsInactive())
+    {
+      setLock(cp5.getController("shapeWidth"), true);
+      setLock(cp5.getController("shapeHeight"), true);
+    }
+    else
+    {
+      setLock(cp5.getController("shapeWidth"), false);
+      setLock(cp5.getController("shapeHeight"), false);
+    }
+    cp5.getController("pickRFill").setValue(currentSettings.getFillRInactive());
+    cp5.getController("pickGFill").setValue(currentSettings.getFillGInactive());
+    cp5.getController("pickBFill").setValue(currentSettings.getFillBInactive());
+    cp5.getController("pickAFill").setValue(currentSettings.getFillAInactive());
+    cp5.getController("inputRFill").setValue(currentSettings.getFillRInactive());
+    cp5.getController("inputGFill").setValue(currentSettings.getFillGInactive());
+    cp5.getController("inputBFill").setValue(currentSettings.getFillBInactive());
+    cp5.getController("inputAFill").setValue(currentSettings.getFillAInactive());
+    cp5.getController("toggleFill").setValue(currentSettings.isFillOnInactive()?1:0);
+    cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRInactive());
+    cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGInactive());
+    cp5.getController("pickBStroke").setValue(currentSettings.getStrokeBInactive());
+    cp5.getController("pickAStroke").setValue(currentSettings.getStrokeAInactive());
+    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnInactive()?1:0);
+  }
+
+  // broadcasting again
+  cp5.getController("toggleShapesLikeCells").setBroadcast(true);
+
+}
 void setup()
 {   
   /* Setting up main display settings */
@@ -137,7 +251,7 @@ void setup()
   // GRID SUBGROUP AREA
   gridG = cp5.addGroup("gridControls")
     .setPosition(10, 130)
-      .setSize(180, 185)
+    .setSize(180, 220)
         .setBackgroundColor(color(1, 108, 158))
           //.setBackgroundColor(color(20,0,20,150))
           //.setBackgroundColor(color(175,190,175,220))
@@ -146,7 +260,7 @@ void setup()
               ;
   cp5.addTextlabel("resizeGrid")
     .setPosition(5, 10)
-      .setText("DIMENSIONE GRIGLIA (beta disabled)")
+      .setText("DIMENSIONE GRIGLIA")
         .moveTo(gridG)
           ;
   cp5.addSlider("rowsNum")
@@ -219,13 +333,21 @@ void setup()
               .moveTo(gridG)
                 ;
   cp5.addToggle("toggleShowGrid")
-    .setLabel("Show Grid")
+    .setLabel("Disegna Griglia")
       .setPosition(5, 145)
         .setSize(42, 15)
           .setValue(currentSettings.getShowGrid())
             .setMode(ControlP5.SWITCH)
               .moveTo(gridG)
-                ;
+    ;
+  cp5.addToggle("toggleShowInactives")
+    .setLabel("Disegna celle inattive")
+    .setPosition(5, 180)
+    .setSize(42, 15)
+    .setValue(currentSettings.getShowInactives())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
+    ;
   cp5.addButton("zoomIn")
     .setLabel("Zoom +")
       .setPosition(70, 110)
@@ -255,8 +377,8 @@ void setup()
               ;
   // SETTINGS SUBGROUP AREA
   settG = cp5.addGroup("settControls")
-    .setPosition(10, 335)
-      .setSize(180, 320)
+    .setPosition(10, 375)
+      .setSize(180, 340)
         .setBackgroundColor(color(1, 108, 158))
           //.setBackgroundColor(color(175,190,175,220))
           //.setBackgroundColor(color(20,0,20,150))
@@ -284,12 +406,12 @@ void setup()
     ;
   cp5.addSlider("shapeWidth")
     .setLabel("L")
-      .setPosition(5, 25)
-        .setSize(123, 10)
-          .setValue(currentSettings.getShapeWidth())
-            .setRange(0, 200)
-              .moveTo(settG)
-                ;
+    .setPosition(5, 25)
+    .setSize(123, 10)
+    //.setValue(currentSettings.getShapeWidth())
+    .setRange(0, 200)
+    .moveTo(settG)
+    ;
   cp5.addTextfield("inputShapeHeight")
     .setLabel("")
     .setPosition(140,36)
@@ -304,34 +426,36 @@ void setup()
     ;
   cp5.addSlider("shapeHeight")
     .setLabel("A")
-      .setPosition(5, 36)
-        .setSize(123, 10)
-          .setValue(currentSettings.getShapeHeight())
-            .setRange(0, 200)
-              .moveTo(settG)
-                ;
+    .setPosition(5, 36)
+    .setSize(123, 10)
+    //.setValue(currentSettings.getShapeHeight())
+    .setRange(0, 200)
+    .moveTo(settG)
+    ;
   cp5.addToggle("toggleKeepShapeRatio")
     .setLabel("Keep Ratio")
-      .setPosition(5, 48)
-        .setSize(42, 15)
-          .setValue(currentSettings.getKeepShapeRatio())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(settG)
-                ;
+    .setPosition(5, 48)
+    .setSize(42, 15)
+    .setBroadcast(false)
+    //.setValue(currentSettings.getKeepShapeRatio())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
   cp5.addToggle("toggleShapesLikeCells")
     .setLabel("Copia Dim Celle")
-      .setPosition(65, 48)
-        .setSize(63, 15)
-          .setValue(currentSettings.getShapesLikeCells())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(settG)
-                ;
+    .setPosition(65, 48)
+    .setSize(63, 15)
+    .setBroadcast(false)
+    //.setValue(currentSettings.getShapesLikeCells())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
   cp5.addTextlabel("pickerFillLabel")
     .setPosition(5, 90)
-      .setText("RIEMPIMENTO FORME ATTIVE")
-        .moveTo(settG)
-          ;
-  cp5.addTextfield("inputRFillActive")
+    .setText("RIEMPIMENTO FORME ATTIVE")
+    .moveTo(settG)
+    ;
+  cp5.addTextfield("inputRFill")
     .setLabel("")
     .setPosition(150,105)
     .setSize(25,11)
@@ -343,16 +467,26 @@ void setup()
     .setColorActive(255)
     .moveTo(settG)
     ;
-  cp5.addSlider("pickRFillActive")
+  cp5.addToggle("toggleWorkingStates")
+    .setLabel("Impostazioni stati attivi")
+    .setPosition(40, 300)
+    .setSize(100, 15)
+    .setBroadcast(false) // needed as explained above
+    .setValue(currentSettings.workingOnActiveStates()) // def
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickRFill")
     .setLabel("R")
-      .setPosition(5, 105)
-        .setSize(132, 10)
-          .setColorValue(currentSettings.getFillRActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addTextfield("inputGFillActive")
+    .setPosition(5, 105)
+    .setSize(132, 10)
+    //.setColorValue(currentSettings.getFillRActive())
+    //.setValue(currentSettings.getFillRActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addTextfield("inputGFill")
     .setLabel("")
     .setPosition(150,116)
     .setSize(25,11)
@@ -364,16 +498,16 @@ void setup()
     .setColorActive(255)
     .moveTo(settG)
     ;
-  cp5.addSlider("pickGFillActive")
+  cp5.addSlider("pickGFill")
     .setLabel("G")
-      .setPosition(5, 116)
-        .setSize(132, 10)
-          .setColorValue(currentSettings.getFillGActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addTextfield("inputBFillActive")
+    .setPosition(5, 116)
+    .setSize(132, 10)
+    //.setColorValue(currentSettings.getFillGActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addTextfield("inputBFill")
     .setLabel("")
     .setPosition(150,127)
     .setSize(25,11)
@@ -385,16 +519,16 @@ void setup()
     .setColorActive(255)
     .moveTo(settG)
     ;
-  cp5.addSlider("pickBFillActive")
+  cp5.addSlider("pickBFill")
     .setLabel("B")
-      .setPosition(5, 127)
-        .setSize(132, 10)
-          .setColorValue(currentSettings.getFillBActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addTextfield("inputAFillActive")
+    .setPosition(5, 127)
+    .setSize(132, 10)
+    //.setColorValue(currentSettings.getFillBActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addTextfield("inputAFill")
     .setLabel("")
     .setPosition(150,138)
     .setSize(25,11)
@@ -406,74 +540,74 @@ void setup()
     .setColorActive(255)
     .moveTo(settG)
     ;
-  cp5.addSlider("pickAFillActive")
+  cp5.addSlider("pickAFill")
     .setLabel("A")
-      .setPosition(5, 138)
-        .setSize(132, 10)
-          .setColorValue(currentSettings.getFillAActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addToggle("toggleFillActive")
+    .setPosition(5, 138)
+    .setSize(132, 10)
+    //.setColorValue(currentSettings.getFillAActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addToggle("toggleFill")
     .setLabel("Fill ON")
-      .setPosition(5, 150)
-        .setSize(42, 15)
-          .setValue(currentSettings.isFillOnActive())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(settG)
-                ;
+    .setPosition(5, 150)
+    .setSize(42, 15)
+    .setValue(currentSettings.isFillOnActive())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
   cp5.addTextlabel("pickerStrokeLabel")
     .setPosition(5, 195)
-      .setText("CONTORNO FORME ATTIVE")
-        .moveTo(settG)
-          ;
-  cp5.addSlider("pickRStrokeActive")
+    .setText("CONTORNO FORME ATTIVE")
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickRStroke")
     .setLabel("R")
-      .setPosition(5, 210)
-        .setSize(160, 10)
-          .setColorValue(currentSettings.getStrokeRActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addSlider("pickGStrokeActive")
+    .setPosition(5, 210)
+    .setSize(160, 10)
+    //.setColorValue(currentSettings.getStrokeRActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickGStroke")
     .setLabel("G")
-      .setPosition(5, 221)
-        .setSize(160, 10)
-          .setColorValue(currentSettings.getStrokeGActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addSlider("pickBStrokeActive")
+    .setPosition(5, 221)
+    .setSize(160, 10)
+    //.setColorValue(currentSettings.getStrokeGActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickBStroke")
     .setLabel("B")
-      .setPosition(5, 232)
-        .setSize(160, 10)
-          .setColorValue(currentSettings.getStrokeBActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addSlider("pickAStrokeActive")
+    .setPosition(5, 232)
+    .setSize(160, 10)
+    //.setColorValue(currentSettings.getStrokeBActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addSlider("pickAStroke")
     .setLabel("A")
-      .setPosition(5, 243)
-        .setSize(160, 10)
-          .setColorValue(currentSettings.getStrokeAActive())
-            .setColorForeground(color(255, 255, 255))
-              .setRange(0, 255)
-                .moveTo(settG)
-                  ;
-  cp5.addToggle("toggleStrokeActive")
+    .setPosition(5, 243)
+    .setSize(160, 10)
+    //.setColorValue(currentSettings.getStrokeAActive())
+    .setColorForeground(color(255, 255, 255))
+    .setRange(0, 255)
+    .moveTo(settG)
+    ;
+  cp5.addToggle("toggleStroke")
     .setLabel("Stroke ON")
-      .setPosition(5, 255)
-        .setSize(42, 15)
-          .setValue(currentSettings.isStrokeOnActive())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(settG)
-                ;
+    .setPosition(5, 255)
+    .setSize(42, 15)
+    .setValue(currentSettings.isStrokeOnActive())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(settG)
+    ;
 
-  // cp5e = new ResizableColorPicker(cp5,"pickerFillActive");
+  // cp5e = new ResizableColorPicker(cp5,"pickerFill");
   // cp5e.setPosition(2,120)
   //   .setColorValue(color(0))
   //   .moveTo(settG)
@@ -741,6 +875,21 @@ void setLock(Controller theController, boolean theValue)
   }
 }
 
+void toggleWorkingStates(boolean flag)
+{
+  currentSettings.setWorkingOnActiveStates(flag);
+  String status = flag? "ATTIV" : "INATTIV";
+  mainG.getController("toggleWorkingStates").setLabel(
+    "IMPOSTAZIONI STATI " + status + "I");
+  mainG.getController("resizeShapes").setStringValue(
+    "DIMENSIONI FORME " + status + "E");
+  mainG.getController("pickerFillLabel").setStringValue(
+    "RIEMPIMENTO FORME " + status + "E");
+  mainG.getController("pickerStrokeLabel").setStringValue(
+    "CONTORNO FORME " + status + "E");
+  updateControls();
+}
+
 /* CP5 objects callbacks */
 void rowsNum(int val)
 {
@@ -754,10 +903,21 @@ void cellWidth(float val) {
   currentGrid.setCellWidth(val);
   if (currentSettings.getKeepCellRatio())
     currentGrid.setCellHeight(val);
-  if (currentSettings.getShapesLikeCells())
+  if (currentSettings.workingOnActiveStates())
   {
-    currentSettings.setShapeWidth(currentGrid.getCellWidth());
-    currentSettings.setShapeHeight(currentGrid.getCellHeight());
+    if (currentSettings.getShapesLikeCellsActive())
+    {
+      currentSettings.setShapeWidthActive(currentGrid.getCellWidth());
+      currentSettings.setShapeHeightActive(currentGrid.getCellHeight());
+    }
+  }
+  else
+  {
+    if (currentSettings.getShapesLikeCellsInactive())
+    {
+      currentSettings.setShapeWidthInactive(currentGrid.getCellWidth());
+      currentSettings.setShapeHeightInactive(currentGrid.getCellHeight());
+    }
   }
   Textfield txt = ((Textfield)cp5.getController("inputCellWidth"));
   txt.setValue(String.format("%.2f", val));
@@ -770,10 +930,21 @@ void cellHeight(float val) {
   currentGrid.setCellHeight(val);
   if (currentSettings.getKeepCellRatio())
     currentGrid.setCellWidth(val);
-  if (currentSettings.getShapesLikeCells())
+  if (currentSettings.workingOnActiveStates())
   {
-    currentSettings.setShapeWidth(currentGrid.getCellWidth());
-    currentSettings.setShapeHeight(currentGrid.getCellHeight());
+    if (currentSettings.getShapesLikeCellsActive())
+    {
+      currentSettings.setShapeWidthActive(currentGrid.getCellWidth()); ////////
+      currentSettings.setShapeHeightActive(currentGrid.getCellHeight());
+    }
+  }
+  else
+  {
+    if (currentSettings.getShapesLikeCellsInactive())
+    {
+      currentSettings.setShapeWidthInactive(currentGrid.getCellWidth()); ////////
+      currentSettings.setShapeHeightInactive(currentGrid.getCellHeight());
+    }
   }
   Textfield txt = ((Textfield)cp5.getController("inputCellHeight"));
   txt.setValue(String.format("%.2f", val));
@@ -783,9 +954,18 @@ void inputCellHeight(String val) {
   cp5.controller("cellHeight").setValue(float(val));
 }
 void shapeWidth(float val) {
-  currentSettings.setShapeWidth(val);
-  if (currentSettings.getKeepShapeRatio())
-    currentSettings.setShapeHeight(val);
+  if (currentSettings.workingOnActiveStates())
+  {  
+    currentSettings.setShapeWidthActive(val);
+    if (currentSettings.getKeepShapeRatioActive())
+      currentSettings.setShapeHeightActive(val);
+  }
+  else
+  {
+    currentSettings.setShapeWidthInactive(val);
+    if (currentSettings.getKeepShapeRatioInactive())
+      currentSettings.setShapeHeightInactive(val);
+  }
   Textfield txt = ((Textfield)cp5.getController("inputShapeWidth"));
   txt.setValue(String.format("%.2f", val));
 }
@@ -794,9 +974,18 @@ void inputShapeWidth(String val) {
   cp5.controller("shapeWidth").setValue(float(val));
 }
 void shapeHeight(float val) {
-  currentSettings.setShapeHeight(val);
-  if (currentSettings.getKeepShapeRatio())
-    currentSettings.setShapeWidth(val);
+  if (currentSettings.workingOnActiveStates())
+  {  
+    currentSettings.setShapeHeightActive(val);
+    if (currentSettings.getKeepShapeRatioActive())
+      currentSettings.setShapeWidthActive(val);
+  }
+  else
+  {
+    currentSettings.setShapeHeightInactive(val);
+    if (currentSettings.getKeepShapeRatioInactive())
+      currentSettings.setShapeWidthInactive(val);
+  }
   Textfield txt = ((Textfield)cp5.getController("inputShapeHeight"));
   txt.setValue(String.format("%.2f", val));
 }
@@ -816,37 +1005,7 @@ void rewindConfigHistory(int status)
   updateHistory();
   updateControls();
 }
-void updateControls()
-{
-  // gridG
-  cp5.getController("cellWidth").setValue(currentGrid.getCellWidth());
-  cp5.getController("cellHeight").setValue(currentGrid.getCellHeight());
-  cp5.getController("inputCellWidth").setValue(currentGrid.getCellWidth());
-  cp5.getController("inputCellHeight").setValue(currentGrid.getCellHeight());
-  cp5.getController("toggleKeepCellRatio").setValue(currentSettings.getKeepCellRatio()?1:0);
-  cp5.getController("toggleShowGrid").setValue(currentSettings.getShowGrid()?1:0);
-  // settG
-  cp5.getController("shapeWidth").setValue(currentSettings.getShapeWidth());
-  cp5.getController("shapeHeight").setValue(currentSettings.getShapeHeight());
-  cp5.getController("inputShapeWidth").setValue(currentSettings.getShapeWidth());
-  cp5.getController("inputShapeHeight").setValue(currentSettings.getShapeHeight());
-  cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatio()?1:0);
-  cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCells()?1:0);
-  cp5.getController("pickRFillActive").setValue(currentSettings.getFillRActive());
-  cp5.getController("pickGFillActive").setValue(currentSettings.getFillGActive());
-  cp5.getController("pickBFillActive").setValue(currentSettings.getFillBActive());
-  cp5.getController("pickAFillActive").setValue(currentSettings.getFillAActive());
-  cp5.getController("inputRFillActive").setValue(currentSettings.getFillRActive());
-  cp5.getController("inputGFillActive").setValue(currentSettings.getFillGActive());
-  cp5.getController("inputBFillActive").setValue(currentSettings.getFillBActive());
-  cp5.getController("inputAFillActive").setValue(currentSettings.getFillAActive());
-  cp5.getController("toggleFillActive").setValue(currentSettings.isFillOnActive()?1:0);
-  cp5.getController("pickRStrokeActive").setValue(currentSettings.getStrokeRActive());
-  cp5.getController("pickGStrokeActive").setValue(currentSettings.getStrokeGActive());
-  cp5.getController("pickBStrokeActive").setValue(currentSettings.getStrokeBActive());
-  cp5.getController("pickAStrokeActive").setValue(currentSettings.getStrokeAActive());
-  cp5.getController("toggleStrokeActive").setValue(currentSettings.isStrokeOnActive()?1:0);
-}
+
 void updateHistory()
 {
   currentGrid = manager.getCurrentGrid();
@@ -871,39 +1030,59 @@ void toggleShowGrid(boolean flag)
 {
   currentSettings.setShowGrid(flag);
 }
+void toggleShowInactives(boolean flag)
+{
+  currentSettings.setShowInactives(flag);
+}
 void toggleKeepCellRatio(boolean flag)
 {
   currentSettings.setKeepCellRatio(flag);
 }
 void toggleKeepShapeRatio(boolean flag)
 {
-  currentSettings.setKeepShapeRatio(flag);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setKeepShapeRatioActive(flag);
+  else
+    currentSettings.setKeepShapeRatioInactive(flag);
 }
 void toggleShapesLikeCells(boolean flag)
 {
-  setLock(cp5.getController("shapeWidth"), flag);
-  setLock(cp5.getController("shapeHeight"), flag);
   if (flag)
   {
-    currentSettings.setShapeWidth(currentGrid.getCellWidth());
-    currentSettings.setShapeHeight(currentGrid.getCellHeight());
+    if (currentSettings.workingOnActiveStates())
+    {
+      currentSettings.setShapeWidthActive(currentGrid.getCellWidth());
+      currentSettings.setShapeHeightActive(currentGrid.getCellHeight());
+    }
+    else
+    {
+      currentSettings.setShapeWidthInactive(currentGrid.getCellWidth());
+      currentSettings.setShapeHeightInactive(currentGrid.getCellHeight());
+    }
   }
+  // setLock(cp5.getController("shapeWidth"), flag);
+  // setLock(cp5.getController("shapeHeight"), flag);
   // ensure we have always data mirrored
-  cp5.getController("shapeWidth").setValue(currentGrid.getCellWidth());
-  cp5.getController("shapeHeight").setValue(currentGrid.getCellHeight());
-  
-  currentSettings.setShapesLikeCells(flag);
+  // cp5.getController("shapeWidth").setValue(currentGrid.getCellWidth());
+  // cp5.getController("shapeHeight").setValue(currentGrid.getCellHeight());
+
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setShapesLikeCellsActive(flag);
+  else
+    currentSettings.setShapesLikeCellsInactive(flag);
+
+  updateControls();
 }
-void toggleStrokeActive(boolean flag)
+void toggleStroke(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleStrokeActive").setLabel("Stroke " + status);
+  mainG.getController("toggleStroke").setLabel("Stroke " + status);
   currentSettings.setIsStrokeOnActive(flag);
 }
 void toggleFillActive(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleFillActive").setLabel("Fill " + status);
+  mainG.getController("toggleFill").setLabel("Fill " + status);
   currentSettings.setIsFillOnActive(flag);
 }
 void buttonOverwriteOK(boolean flag)
@@ -940,56 +1119,80 @@ void buttonApplyUpdateCancel(boolean flag)
     .moveTo(mainG)
     ;
 }
-public void pickRFillActive(int val) {
-  currentSettings.setFillRActive(val);
-  Textfield txt = ((Textfield)cp5.getController("inputRFillActive"));
+void pickRFill(int val) {
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setFillRActive(val);
+  else
+    currentSettings.setFillRInactive(val);
+  Textfield txt = ((Textfield)cp5.getController("inputRFill"));
   txt.setValue(Integer.toString(val));
 }
-public void inputRFillActive(String val) {
-  cp5.controller("pickRFillActive").setValue(int(val));
+void inputRFill(String val) {
+  cp5.controller("pickRFill").setValue(int(val));
 }
-void pickGFillActive(int val)
+void pickGFill(int val)
 {
-  currentSettings.setFillGActive(val);
-  Textfield txt = ((Textfield)cp5.getController("inputGFillActive"));
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setFillGActive(val);
+  else
+    currentSettings.setFillGInactive(val);
+  Textfield txt = ((Textfield)cp5.getController("inputGFill"));
   txt.setValue(Integer.toString(val));
 }
-public void inputGFillActive(String val) {
-  cp5.controller("pickGFillActive").setValue(int(val));
+void inputGFill(String val) {
+  cp5.controller("pickGFill").setValue(int(val));
 }
-void pickBFillActive(int val)
+void pickBFill(int val)
 {
-  currentSettings.setFillBActive(val);
-  Textfield txt = ((Textfield)cp5.getController("inputBFillActive"));
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setFillBActive(val);
+  else
+    currentSettings.setFillBInactive(val);
+  Textfield txt = ((Textfield)cp5.getController("inputBFill"));
   txt.setValue(Integer.toString(val));
 }
-public void inputBFillActive(String val) {
-  cp5.controller("pickBFillActive").setValue(int(val));
+void inputBFill(String val) {
+  cp5.controller("pickBFill").setValue(int(val));
 }
-void pickAFillActive(int val)
+void pickAFill(int val)
 {
-  currentSettings.setFillAActive(val);
-  Textfield txt = ((Textfield)cp5.getController("inputAFillActive"));
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setFillAActive(val);
+  else
+    currentSettings.setFillAInactive(val);
+  Textfield txt = ((Textfield)cp5.getController("inputAFill"));
   txt.setValue(Integer.toString(val));
 }
-public void inputAFillActive(String val) {
-  cp5.controller("pickAFillActive").setValue(int(val));
+void inputAFill(String val) {
+  cp5.controller("pickAFill").setValue(int(val));
 }
-void pickRStrokeActive(int val)
+void pickRStroke(int val)
 {
-  currentSettings.setStrokeRActive(val);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setStrokeRActive(val);
+  else
+    currentSettings.setStrokeRInactive(val);
 }
-void pickGStrokeActive(int val)
+void pickGStroke(int val)
 {
-  currentSettings.setStrokeGActive(val);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setStrokeGActive(val);
+  else
+    currentSettings.setStrokeGInactive(val);
 }
-void pickBStrokeActive(int val)
+void pickBStroke(int val)
 {
-  currentSettings.setStrokeBActive(val);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setStrokeBActive(val);
+  else
+  currentSettings.setStrokeBInactive(val);
 }
-void pickAStrokeActive(int val)
+void pickAStroke(int val)
 {
-  currentSettings.setStrokeAActive(val);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setStrokeAActive(val);
+  else
+    currentSettings.setStrokeAInactive(val);
 }
 // void pickerFillActive(int val)
 // {
@@ -1154,12 +1357,28 @@ void pdfSelected(File selection) {
 //   }
 // }
 
-void drawInactiveCellStub(PGraphics ctx, 
-PVector point)
+void drawInactiveCellStub(PGraphics ctx, PVector point,
+                          GollyPatternSettings settings)
 {
-  ctx.fill(100, 100, 100);
-  ctx.noStroke();
-  ctx.rect(point.x, point.y, 5, 5);
+  color colorFillInactive = color(settings.getFillRInactive(), 
+                                  settings.getFillGInactive(), 
+                                  settings.getFillBInactive());
+
+  color colorStrokeInactive = color(settings.getStrokeRInactive(), 
+                                    settings.getStrokeGInactive(), 
+                                    settings.getStrokeBInactive());
+  if (settings.isFillOnInactive())
+    ctx.fill(colorFillInactive);
+  else
+    ctx.noFill();
+  if (settings.isStrokeOnInactive())
+    ctx.stroke(colorStrokeInactive);
+  else
+    ctx.noStroke();
+  
+  ctx.rect(point.x, point.y,
+           currentSettings.getShapeWidthInactive(),
+           currentSettings.getShapeHeightInactive());
 }
 
 
@@ -1178,7 +1397,7 @@ GollyPatternSettings settings)
   int xOffset = ceil(abs(gridRows - matrixRows) / 2);
   int yOffset = ceil(abs(gridCols - matrixCols) / 2);
 
-  println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
+  // println("OFFSET", gridRows, gridCols, matrixRows, matrixCols, xOffset, yOffset);
 
   /* getting grid sub indices */
   int minRows = min(matrixRows, gridRows);
@@ -1188,7 +1407,7 @@ GollyPatternSettings settings)
   int startY = (matrixCols < gridCols) ? yOffset : 0;
   int endY = (matrixCols < gridCols) ? minCols + yOffset : minCols;
 
-  println("STEND ", startX, endX, startY, endY);
+  // println("STEND ", startX, endX, startY, endY);
 
   color colorFillActive = color(settings.getFillRActive(), 
   settings.getFillGActive(), 
@@ -1241,16 +1460,18 @@ GollyPatternSettings settings)
 
           // Drawind shapes
           //ctx.shape(cellShape, currentPoint.x, currentPoint.y); fuck you
-          ctx.rect(currentPoint.x, currentPoint.y, settings.getShapeWidth(), settings.getShapeHeight());
+          ctx.rect(currentPoint.x, currentPoint.y, settings.getShapeWidthActive(), settings.getShapeHeightActive());
         }
         else /* inactive state */
         {
-          drawInactiveCellStub(ctx, currentPoint);
+          if (currentSettings.getShowInactives())
+            drawInactiveCellStub(ctx, currentPoint, settings);
         }
       }
       else /* fake inactive cell */
       {
-        drawInactiveCellStub(ctx, currentPoint);
+        if (currentSettings.getShowInactives())
+          drawInactiveCellStub(ctx, currentPoint, settings);
       }
     }
   }
@@ -1291,8 +1512,8 @@ void exportNow()
   int rows = currentGrid.getRows();
   float cellWidth = currentGrid.getCellWidth();
   float cellHeight = currentGrid.getCellHeight();
-  float shapeWidth = currentSettings.getShapeWidth();
-  float shapeHeight = currentSettings.getShapeHeight();
+  float shapeWidth = currentSettings.getShapeWidthActive(); ////////
+  float shapeHeight = currentSettings.getShapeHeightActive();
 
   /* Compute pdf size */
   int pdfWidth = (ceil(cols * cellWidth) + ceil(shapeWidth-cellWidth)) + (int)(2 * pdfBorder);
@@ -1484,8 +1705,8 @@ void centerSketch()
   int rows = currentGrid.getRows();
   float cellWidth = currentGrid.getCellWidth();
   float cellHeight = currentGrid.getCellHeight();
-  float shapeWidth = currentSettings.getShapeWidth();
-  float shapeHeight = currentSettings.getShapeHeight();
+  float shapeWidth = currentSettings.getShapeWidthActive();
+  float shapeHeight = currentSettings.getShapeHeightInactive();
 
   /* computing pattern size */
   float patternWidth = cols * cellWidth + (shapeWidth-cellWidth);
