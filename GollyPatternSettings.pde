@@ -39,6 +39,7 @@ public class GollyPatternSettings
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
   private SketchTransformer transformer;
+  private String rleFilePath = null;
 
   /* Utilities */
   public void initTransformer(float xOffset, float yOffset,
@@ -237,6 +238,11 @@ public class GollyPatternSettings
     return SVGPath;
   }
   
+  public String getRleFilePath()
+  {
+    return rleFilePath;
+  }
+  
   /* Setters */
   public void setFillRActive(int val)
   {
@@ -421,5 +427,10 @@ public class GollyPatternSettings
   public void setSVGPath(String path)
   {
     SVGPath = path;
+  }
+  
+  public void setRleFilePath(String path)
+  {
+    rleFilePath = path;
   }
 }

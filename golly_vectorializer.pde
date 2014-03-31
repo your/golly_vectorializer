@@ -21,7 +21,7 @@ Grid2D currentGrid;
 ControlP5 cp5;
 // ResizableColorPicker cp5e;
 Group mainG, gridG, settG, lockG, winG;
-String gollyFilePath;
+String gollyFilePath = null;
 String pastedMessage;
 String pdfFile;
 boolean[] keys = new boolean[526];
@@ -40,6 +40,7 @@ color cq = color(200, 180, 200, 100);
 // boolean showGrid = true;
 boolean initControls = false;
 boolean lockedGrid = false;
+
 
 /* Application Updater stuff */
 ApplicationUpdater updater;
@@ -1020,7 +1021,8 @@ void loadRleConfig(int status)
 }
 void exportToPDF(int status)
 {
-  selectOutput("Selezionare destinazione PDF:", "pdfSelected");
+  File defaultFile = createDefaultFile();
+  selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
 }
 void checkForUpdate(boolean flag)
 {
@@ -1244,6 +1246,31 @@ void zoomOut(int status)
   transformer.setScaleFactor(scaleFactor);
   centerSketch();
   updateZoomPercentage();
+}
+
+File createDefaultFile()
+{
+  File defaultFile = null;
+  
+  /* an rle file has been selected */
+  String currentRlePath = currentSettings.getRleFilePath();
+  if(currentRlePath != null)
+  {
+    println("Current path ", currentRlePath);
+    /* get the filename */
+    int index = currentRlePath.lastIndexOf(File.separator);
+    
+    String filename = currentRlePath.substring(index + 1);
+    println("Current filename", filename);
+    /* removing the extension */
+    index = filename.lastIndexOf(".rle");
+    String rawName = filename.substring(0, index);
+    println("Current rawname ", rawName);
+    
+    defaultFile = new File(rawName);
+  }
+    
+  return defaultFile;
 }
 
 /* Processing file selection callback */
@@ -1599,6 +1626,8 @@ void initConfiguration(GollyRleConfiguration configuration)
 
   /* Associating default settings to config */
   currentSettings = new GollyPatternSettings();
+  currentSettings.setRleFilePath(gollyFilePath);
+  
   manager.addSettings(currentSettings); // start pattern with defaults
 
   /* Init GUI controls */
@@ -1624,9 +1653,12 @@ void loadGollyRle()
     if (pastedMessage != null)
     {
       currentConfig = reader.parseString(pastedMessage);
+      gollyFilePath = null;
     }
     else
+    {
       currentConfig = reader.parseFile(gollyFilePath);
+    }
 
     /* Init current configuration */
     initConfiguration(currentConfig);
