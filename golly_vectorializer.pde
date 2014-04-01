@@ -43,6 +43,10 @@ color cq = color(200, 180, 200, 100);
 boolean initControls = false;
 boolean lockedGrid = false;
 
+/* Spinning wheel vars */
+float[] arcStartPositions = new float[3];
+float arcBoundSize, arcMaxBoundSize = 80;
+boolean loadingSomething = false;
 
 /* Application Updater stuff */
 ApplicationUpdater updater;
@@ -120,8 +124,8 @@ void updateControls()
   // temp disable broadcast to avoid values r/w conflicts
   cp5.getController("rowsNum").setBroadcast(false);
   cp5.getController("colsNum").setBroadcast(false);
-  // cp5.getController("cellWidth").setBroadcast(false);
-  // cp5.getController("cellHeight").setBroadcast(false);
+  cp5.getController("cellWidth").setBroadcast(false);
+  cp5.getController("cellHeight").setBroadcast(false);
   // cp5.getController("inputCellWidth").setBroadcast(false);
   // cp5.getController("inputCellHeight").setBroadcast(false);
   cp5.getController("toggleKeepCellRatio").setBroadcast(false);
@@ -144,8 +148,8 @@ void updateControls()
   // broadcasting values again
   cp5.getController("rowsNum").setBroadcast(true);
   cp5.getController("colsNum").setBroadcast(true);
-  // cp5.getController("cellWidth").setBroadcast(true);
-  // cp5.getController("cellHeight").setBroadcast(true);
+  cp5.getController("cellWidth").setBroadcast(true);
+  cp5.getController("cellHeight").setBroadcast(true);
   // cp5.getController("inputCellWidth").setBroadcast(true);
   // cp5.getController("inputCellHeight").setBroadcast(true);
   cp5.getController("toggleKeepCellRatio").setBroadcast(true);
@@ -390,8 +394,6 @@ void setup()
     .setSliderMode(Slider.FLEXIBLE)
     .setColorForeground(color(240,0,0))
     .setValue(100)
-//    .setBroadcast(false)
-    //.setValue(currentSettings.getShapeHeight())
     .setRange(1, 500)
     .moveTo(gridG)
     ;
@@ -1629,20 +1631,44 @@ void draw()
 {
   /* Refreshing bg */
   background(bg);
-
-  if (currentSettings.getTransformer() != null)
+  
+  if (loadingSomething)
+    drawLoadingWheel(g);
+  else
   {
-    /* getting ready for drawing */
-    transformer.startDrawing(); // I got some rare random npe here when loading files
-    // FIXME: all I get is: golly_vectorializer.pde:1006:0:1006:0: NullPointerException
+  
+    if (currentSettings.getTransformer() != null)
+    {
+    
+      /* getting ready for drawing */
+      transformer.startDrawing();
+      
+      /* are we ready to draw? */
+      if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
+      drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
-    /* are we ready to draw? */
-    if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
-    drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
-
-    /* ended drawing */
-    transformer.endDrawing();
+      /* ended drawing */
+      transformer.endDrawing();
+    }
   }
+}
+
+void drawLoadingWheel(PGraphics ctx)
+{
+  ctx.background(210, 210, 210);
+  arcBoundSize = arcMaxBoundSize;
+  for (float s : arcStartPositions){
+    float arcLength = random(PI, 8 * PI / 6);
+    color c = color(random(0, 255), random(0, 255), random(0, 255));
+    ctx.stroke(c);
+    ctx.noFill();
+    ctx.arc((width - sizeCP5Group) / 2 + arcMaxBoundSize / 2,
+            height / 2 - arcMaxBoundSize / 2,
+            arcBoundSize, arcBoundSize, s, s + arcLength);
+    arcBoundSize -= 10;
+  }
+  for (int i = 0; i < arcStartPositions.length; i++)
+    arcStartPositions[i] += PI / 8;
 }
 
 void checkConfigHistory()
@@ -1710,6 +1736,8 @@ void loadGollyRle()
   /* Trying to get configuration from parser */
   try
   {
+    loadingSomething = true; ///
+    
     /* Load clipboard content if any otherwise go with file */
     if (pastedMessage != null)
     {
@@ -1739,6 +1767,7 @@ void loadGollyRle()
   finally
   {
     pastedMessage = null; // reset
+    loadingSomething = false; ///
   }
 }
 
