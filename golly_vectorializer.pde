@@ -66,6 +66,7 @@ void manageControls(boolean lock)
   setLock(cp5.getController("toggleShowInactives"), lock);
   setLock(cp5.getController("zoomIn"), lock);
   setLock(cp5.getController("zoomOut"), lock);
+  setLock(cp5.getController("zoomSlider"), lock);
   setLock(cp5.getController("center"), lock);
   // settG
   setLock(cp5.getController("rowsNum"), lock); // temp disabled
@@ -117,31 +118,46 @@ void manageControls(boolean lock)
 void updateControls()
 {
   // temp disable broadcast to avoid values r/w conflicts
-  cp5.getController("cellWidth").setBroadcast(false);
-  cp5.getController("cellHeight").setBroadcast(false);
-  cp5.getController("inputCellWidth").setBroadcast(false);
-  cp5.getController("inputCellHeight").setBroadcast(false);
+  cp5.getController("rowsNum").setBroadcast(false);
+  cp5.getController("colsNum").setBroadcast(false);
+  // cp5.getController("cellWidth").setBroadcast(false);
+  // cp5.getController("cellHeight").setBroadcast(false);
+  // cp5.getController("inputCellWidth").setBroadcast(false);
+  // cp5.getController("inputCellHeight").setBroadcast(false);
   cp5.getController("toggleKeepCellRatio").setBroadcast(false);
+  //cp5.getController("toggleFill").setBroadcast(false);
   cp5.getController("toggleShowGrid").setBroadcast(false);
   cp5.getController("toggleShowInactives").setBroadcast(false);
+  cp5.getController("zoomSlider").setBroadcast(false);
   // doing stuff on controls
+  cp5.getController("rowsNum").setValue(currentGrid.getRows());
+  cp5.getController("colsNum").setValue(currentGrid.getColumns());
   cp5.getController("cellWidth").setValue(currentGrid.getCellWidth());
   cp5.getController("cellHeight").setValue(currentGrid.getCellHeight());
   cp5.getController("inputCellWidth").setValue(currentGrid.getCellWidth());
   cp5.getController("inputCellHeight").setValue(currentGrid.getCellHeight());
-  cp5.getController("toggleKeepCellRatio").setValue(currentSettings.getKeepCellRatio()?1:0);
+  cp5.getController("toggleKeepCellRatio").setValue(currentSettings.getKeepCellRatio() ? 1 : 0);
   cp5.getController("toggleShowGrid").setValue(currentSettings.getShowGrid()?1:0);
-  cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives()?1:0);
+  cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives() ? 1 : 0);
+  cp5.getController("zoomSlider").setValue(transformer.getScaleFactor() * 100);
+  cp5.getController("zoomPercentage").setStringValue((int)(transformer.getScaleFactor() * 100) + "%");
   // broadcasting values again
-  cp5.getController("cellWidth").setBroadcast(true);
-  cp5.getController("cellHeight").setBroadcast(true);
-  cp5.getController("inputCellWidth").setBroadcast(true);
-  cp5.getController("inputCellHeight").setBroadcast(true);
+  cp5.getController("rowsNum").setBroadcast(true);
+  cp5.getController("colsNum").setBroadcast(true);
+  // cp5.getController("cellWidth").setBroadcast(true);
+  // cp5.getController("cellHeight").setBroadcast(true);
+  // cp5.getController("inputCellWidth").setBroadcast(true);
+  // cp5.getController("inputCellHeight").setBroadcast(true);
   cp5.getController("toggleKeepCellRatio").setBroadcast(true);
+  //cp5.getController("toggleFill").setBroadcast(true);
   cp5.getController("toggleShowGrid").setBroadcast(true);
   cp5.getController("toggleShowInactives").setBroadcast(true);
+  cp5.getController("zoomSlider").setBroadcast(true);
 
   // this shit needs to be broadcasted off
+  cp5.getController("toggleFill").setBroadcast(false);
+  cp5.getController("toggleStroke").setBroadcast(false);
+  cp5.getController("toggleKeepShapeRatio").setBroadcast(false);
   cp5.getController("toggleShapesLikeCells").setBroadcast(false);
   
   if (currentSettings.workingOnActiveStates())
@@ -150,8 +166,8 @@ void updateControls()
     cp5.getController("shapeHeight").setValue(currentSettings.getShapeHeightActive());
     cp5.getController("inputShapeWidth").setValue(currentSettings.getShapeWidthActive());
     cp5.getController("inputShapeHeight").setValue(currentSettings.getShapeHeightActive());
-    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioActive()?1:0);
-    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsActive()?1:0);
+    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioActive() ? 1 : 0);
+    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsActive() ? 1 : 0);
     // ensure we get the updated locks
     if (currentSettings.getShapesLikeCellsActive())
     {
@@ -171,12 +187,12 @@ void updateControls()
     cp5.getController("inputGFill").setValue(currentSettings.getFillGActive());
     cp5.getController("inputBFill").setValue(currentSettings.getFillBActive());
     cp5.getController("inputAFill").setValue(currentSettings.getFillAActive());
-    cp5.getController("toggleFill").setValue(currentSettings.isFillOnActive()?1:0);
+    cp5.getController("toggleFill").setValue(currentSettings.isFillOnActive() ? 1 : 0);
     cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRActive());
     cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGActive());
     cp5.getController("pickBStroke").setValue(currentSettings.getStrokeBActive());
     cp5.getController("pickAStroke").setValue(currentSettings.getStrokeAActive());
-    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnActive()?1:0);
+    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnActive() ? 1 : 0);
   }
   else
   {
@@ -184,8 +200,8 @@ void updateControls()
     cp5.getController("shapeHeight").setValue(currentSettings.getShapeHeightInactive());
     cp5.getController("inputShapeWidth").setValue(currentSettings.getShapeWidthInactive());
     cp5.getController("inputShapeHeight").setValue(currentSettings.getShapeHeightInactive());
-    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioInactive()?1:0);
-    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsInactive()?1:0);
+    cp5.getController("toggleKeepShapeRatio").setValue(currentSettings.getKeepShapeRatioInactive() ? 1 : 0);
+    cp5.getController("toggleShapesLikeCells").setValue(currentSettings.getShapesLikeCellsInactive() ? 1 : 0);
     // ensure we get the updated locks
     if (currentSettings.getShapesLikeCellsInactive())
     {
@@ -205,15 +221,18 @@ void updateControls()
     cp5.getController("inputGFill").setValue(currentSettings.getFillGInactive());
     cp5.getController("inputBFill").setValue(currentSettings.getFillBInactive());
     cp5.getController("inputAFill").setValue(currentSettings.getFillAInactive());
-    cp5.getController("toggleFill").setValue(currentSettings.isFillOnInactive()?1:0);
+    cp5.getController("toggleFill").setValue(currentSettings.isFillOnInactive() ? 1 : 0);
     cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRInactive());
     cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGInactive());
     cp5.getController("pickBStroke").setValue(currentSettings.getStrokeBInactive());
     cp5.getController("pickAStroke").setValue(currentSettings.getStrokeAInactive());
-    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnInactive()?1:0);
+    cp5.getController("toggleStroke").setValue(currentSettings.isStrokeOnInactive() ? 1 : 0);
   }
 
   // broadcasting again
+  cp5.getController("toggleFill").setBroadcast(true);
+  cp5.getController("toggleStroke").setBroadcast(true);
+  cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
   cp5.getController("toggleShapesLikeCells").setBroadcast(true);
 
 }
@@ -247,45 +266,45 @@ void setup()
   // MAIN GROUP AREA
   mainG = cp5.addGroup("mainControls")
     .setPosition(width-sizeCP5Group, 0)
-      .setSize(sizeCP5Group, height)
-        //.setBackgroundColor(color(0,0,0,0))
-        ;
+    .setSize(sizeCP5Group, height)
+    //.setBackgroundColor(color(0,0,0,0))
+    ;
   // GRID SUBGROUP AREA
   gridG = cp5.addGroup("gridControls")
     .setPosition(10, 130)
-    .setSize(180, 220)
-        .setBackgroundColor(color(1, 108, 158))
-          //.setBackgroundColor(color(20,0,20,150))
-          //.setBackgroundColor(color(175,190,175,220))
-          .setLabel("Impostazioni Griglia").setColorBackground(color(10, 0, 10, 200))
-            .moveTo(mainG)
-              ;
+    .setSize(180, 250)
+    .setBackgroundColor(color(1, 108, 158))
+    //.setBackgroundColor(color(20,0,20,150))
+    //.setBackgroundColor(color(175,190,175,220))
+    .setLabel("Impostazioni Griglia").setColorBackground(color(10, 0, 10, 200))
+    .moveTo(mainG)
+    ;
   cp5.addTextlabel("resizeGrid")
     .setPosition(5, 10)
-      .setText("DIMENSIONE GRIGLIA")
-        .moveTo(gridG)
-          ;
+    .setText("DIMENSIONE GRIGLIA")
+    .moveTo(gridG)
+    ;
   cp5.addSlider("rowsNum")
     .setLabel("ROWS")
-      .setPosition(5, 25)
-        .setSize(145, 10)
-          .setValue(currentGrid.getRows())
-            .setRange(0, 200)
-              .moveTo(gridG)
-                ;
+    .setPosition(5, 25)
+    .setSize(145, 10)
+    .setValue(currentGrid.getRows())
+    .setRange(0, 200)
+    .moveTo(gridG)
+    ;
   cp5.addSlider("colsNum")
     .setLabel("COLS")
-      .setPosition(5, 36)
-        .setSize(145, 10)
-          .setValue(currentGrid.getColumns())
-            .setRange(0, 200)
-              .moveTo(gridG)
-                ;
+    .setPosition(5, 36)
+    .setSize(145, 10)
+    .setValue(currentGrid.getColumns())
+    .setRange(0, 200)
+    .moveTo(gridG)
+    ;
   cp5.addTextlabel("resizeCells")
     .setPosition(5, 60)
-      .setText("DIMENSIONE CELLE")
-        .moveTo(gridG)
-          ;
+    .setText("DIMENSIONE CELLE")
+    .moveTo(gridG)
+    ;
   cp5.addTextfield("inputCellWidth")
     .setLabel("")
     .setPosition(140,75)
@@ -300,12 +319,12 @@ void setup()
     ;
   cp5.addSlider("cellWidth")
     .setLabel("L")
-      .setPosition(5, 75)
-        .setSize(123, 10)
-          .setValue(currentGrid.getCellWidth())
-            .setRange(0, 200)
-              .moveTo(gridG)
-                ;
+    .setPosition(5, 75)
+    .setSize(123, 10)
+    .setValue(currentGrid.getCellWidth())
+    .setRange(0, 200)
+    .moveTo(gridG)
+    ;
   cp5.addTextfield("inputCellHeight")
     .setLabel("")
     .setPosition(140,86)
@@ -320,31 +339,31 @@ void setup()
     ;
   cp5.addSlider("cellHeight")
     .setLabel("A")
-      .setPosition(5, 86)
-        .setSize(123, 10)
-          .setValue(currentGrid.getCellHeight())
-            .setRange(0, 200)
-              .moveTo(gridG)
-                ;
+    .setPosition(5, 86)
+    .setSize(123, 10)
+    .setValue(currentGrid.getCellHeight())
+    .setRange(0, 200)
+    .moveTo(gridG)
+    ;
   cp5.addToggle("toggleKeepCellRatio")
-    .setLabel("Keep Ratio")
-      .setPosition(5, 98)
-        .setSize(42, 15)
-          .setValue(currentSettings.getKeepCellRatio())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(gridG)
-                ;
+    .setLabel("Mantieni rapporto")
+    .setPosition(5, 98)
+    .setSize(42, 15)
+    .setValue(currentSettings.getKeepCellRatio())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
+    ;
   cp5.addToggle("toggleShowGrid")
     .setLabel("Disegna Griglia")
-      .setPosition(5, 145)
-        .setSize(42, 15)
-          .setValue(currentSettings.getShowGrid())
-            .setMode(ControlP5.SWITCH)
-              .moveTo(gridG)
+    .setPosition(5, 210)
+    .setSize(42, 15)
+    .setValue(currentSettings.getShowGrid())
+    .setMode(ControlP5.SWITCH)
+    .moveTo(gridG)
     ;
   cp5.addToggle("toggleShowInactives")
     .setLabel("Disegna celle inattive")
-    .setPosition(5, 180)
+    .setPosition(80, 210)
     .setSize(42, 15)
     .setValue(currentSettings.getShowInactives())
     .setMode(ControlP5.SWITCH)
@@ -352,48 +371,60 @@ void setup()
     ;
   cp5.addButton("zoomIn")
     .setLabel("Zoom +")
-      .setPosition(70, 110)
-        .setSize(35, 15)
-          .setColorBackground(cp)
-            .moveTo(gridG)
-              ;
+    .setPosition(75, 140)
+    .setSize(35, 15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
   cp5.addButton("zoomOut")
     .setLabel("Zoom -")
-      .setPosition(110, 110)
-        .setSize(35, 15)
-          .setColorBackground(cp)
-            .moveTo(gridG)
-              ;
+    .setPosition(115, 140)
+    .setSize(35, 15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addSlider("zoomSlider")
+    .setLabel("Zoom")
+    .setPosition(5, 157)
+    .setSize(145, 20)
+    .setSliderMode(Slider.FLEXIBLE)
+    .setColorForeground(color(240,0,0))
+    .setValue(100)
+//    .setBroadcast(false)
+    //.setValue(currentSettings.getShapeHeight())
+    .setRange(1, 500)
+    .moveTo(gridG)
+    ;
   cp5.addTextlabel("zoomPercentage")
     .setText("100%")
-      .setPosition(150, 113)
-        .setSize(35, 15)
-          .moveTo(gridG)
-            ;
+    .setPosition(150, 143)
+    .setSize(35, 15)
+    .moveTo(gridG)
+    ;
   cp5.addButton("center")
-    .setLabel("Centrami!").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
-      .setPosition(70, 130)
-        .setSize(75, 15)
-          .setColorBackground(cp)
-            .moveTo(gridG)
-              ;
+    .setLabel("Centra sketch").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(5, 183)
+    .setSize(145, 15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
   // SETTINGS SUBGROUP AREA
   settG = cp5.addGroup("settControls")
-    .setPosition(10, 375)
-      .setSize(180, 340)
-        .setBackgroundColor(color(1, 108, 158))
-          //.setBackgroundColor(color(175,190,175,220))
-          //.setBackgroundColor(color(20,0,20,150))
-          //.setBackgroundColor(color(0,0,0,220))
-          .setLabel("Impostazioni Pattern").setColorBackground(color(10, 0, 10, 200))
-            .moveTo(mainG)
-              ;
+    .setPosition(10, 395)
+    .setSize(180, 340)
+    .setBackgroundColor(color(1, 108, 158))
+    //.setBackgroundColor(color(175,190,175,220))
+    //.setBackgroundColor(color(20,0,20,150))
+    //.setBackgroundColor(color(0,0,0,220))
+    .setLabel("Impostazioni Pattern").setColorBackground(color(10, 0, 10, 200))
+    .moveTo(mainG)
+    ;
   // SHAPES AREA
   cp5.addTextlabel("resizeShapes")
     .setPosition(5, 10)
-      .setText("DIMENSIONE FORME ATTIVE")
-        .moveTo(settG)
-          ;
+    .setText("DIMENSIONE FORME ATTIVE")
+    .moveTo(settG)
+    ;
   cp5.addTextfield("inputShapeWidth")
     .setLabel("")
     .setPosition(140,25)
@@ -435,7 +466,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleKeepShapeRatio")
-    .setLabel("Keep Ratio")
+    .setLabel("Mantieni Rapporto")
     .setPosition(5, 48)
     .setSize(42, 15)
     .setBroadcast(false)
@@ -444,8 +475,8 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleShapesLikeCells")
-    .setLabel("Copia Dim Celle")
-    .setPosition(65, 48)
+    .setLabel("Copia Dimensioni Celle")
+    .setPosition(85, 48)
     .setSize(63, 15)
     .setBroadcast(false)
     //.setValue(currentSettings.getShapesLikeCells())
@@ -552,7 +583,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleFill")
-    .setLabel("Fill ON")
+    .setLabel("Riempimento ON")
     .setPosition(5, 150)
     .setSize(42, 15)
     .setValue(currentSettings.isFillOnActive())
@@ -601,7 +632,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleStroke")
-    .setLabel("Stroke ON")
+    .setLabel("Contorno ON")
     .setPosition(5, 255)
     .setSize(42, 15)
     .setValue(currentSettings.isStrokeOnActive())
@@ -648,7 +679,7 @@ void setup()
     ;
   cp5.addButton("checkForUpdate")
     .setLabel("Controlla Aggiornamenti").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setPosition(40, 66)
+    .setPosition(40, 70)
     .setSize(110, 19)
     .setColorBackground(cp)
     .moveTo(mainG)
@@ -896,10 +927,14 @@ void toggleWorkingStates(boolean flag)
 void rowsNum(int val)
 {
   currentGrid.setRows(val);
+  if (currentSettings.getTransformer() != null)
+    centerSketch();
 }
 void colsNum(int val)
 {
   currentGrid.setColumns(val);
+  if (currentSettings.getTransformer() != null)
+    centerSketch();
 }
 void cellWidth(float val) {
   currentGrid.setCellWidth(val);
@@ -1047,6 +1082,7 @@ void toggleKeepShapeRatio(boolean flag)
     currentSettings.setKeepShapeRatioActive(flag);
   else
     currentSettings.setKeepShapeRatioInactive(flag);
+  updateControls();
 }
 void toggleShapesLikeCells(boolean flag)
 {
@@ -1079,14 +1115,20 @@ void toggleShapesLikeCells(boolean flag)
 void toggleStroke(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleStroke").setLabel("Stroke " + status);
-  currentSettings.setIsStrokeOnActive(flag);
+  mainG.getController("toggleStroke").setLabel("Contorno " + status);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setIsStrokeOnActive(flag);
+  else
+    currentSettings.setIsStrokeOnInactive(flag);
 }
-void toggleFillActive(boolean flag)
+void toggleFill(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleFill").setLabel("Fill " + status);
-  currentSettings.setIsFillOnActive(flag);
+  mainG.getController("toggleFill").setLabel("Riempimento " + status);
+  if (currentSettings.workingOnActiveStates())
+    currentSettings.setIsFillOnActive(flag);
+  else
+    currentSettings.setIsFillOnInactive(flag);
 }
 void buttonOverwriteOK(boolean flag)
 {
@@ -1222,15 +1264,29 @@ void updateZoomPercentage()
 {
   float scaleFactor = transformer.getScaleFactor();
   int percentage = ceil(100 * scaleFactor);
-  cp5.remove("zoomPercentage");
-  cp5.addTextlabel("zoomPercentage")
-    .setText(percentage+"%")
-    .setPosition(150,113)
-    .setSize(35,15)
-    .moveTo(gridG)
-    ;
+  mainG.getController("zoomPercentage").setStringValue(percentage + "%");
+  updateControls();
+  // cp5.remove("zoomPercentage");
+  // cp5.addTextlabel("zoomPercentage")
+  //   .setText(percentage + "%")
+  //   .setPosition(150,113)
+  //   .setSize(35,15)
+  //   .moveTo(gridG)
+  //   ;
 }
 
+void zoomSlider(int value)
+{
+  float scaleFactor = (float)value / 100; 
+  //scaleFactor += scaleUnit;
+  if (currentSettings.getTransformer() != null)
+  {
+    transformer.setScaleFactor(scaleFactor);
+    centerSketch();
+    updateZoomPercentage();
+  }
+  //updateControls();
+}
 void zoomIn(int status)
 {
   float scaleFactor = transformer.getScaleFactor();
