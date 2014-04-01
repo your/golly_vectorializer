@@ -22,6 +22,7 @@ public class HTTPClientTCP {
   
   private static final String HTTPVersion = "1.0";
   private static final String CRLF = "\r\n";
+  private static final int connectTimeout = 3000;
   
   public enum HTTPRequest {
     HEAD,GET,POST;
@@ -68,7 +69,11 @@ public class HTTPClientTCP {
 
   /* Methods */
   public void connect() throws IOException {
-    link = new Socket(serverHost, serverPort);
+    SocketAddress sockAddr = new InetSocketAddress(serverHost, serverPort);
+    link = new Socket();
+    link.connect(sockAddr, connectTimeout);
+    //link = new Socket(serverHost, serverPort);
+    
   }
 
   // POST request
@@ -167,20 +172,20 @@ public class HTTPClientTCP {
       }
   }
 
-  public static void main(String args[]) {
+  // public static void main(String args[]) {
 
-    try {
-      HTTPClientTCP test = new HTTPClientTCP("mm.sharped.net",3300);
-      test.setRequestType(HTTPRequest.POST);
-      test.connect();
-      test.request("cgi-bum/mmupdate.icg","?lol");
-      //test.request("cgi-bum/release/golly_vectorializer.app/Contents/Java/golly_vectorializer.jar");
-      byte[] a = test.getResponseBody();
-      String responseBody = new String(a, "UTF-8");
-      System.out.println(responseBody);
-    } catch(IOException e) {
-      e.printStackTrace();
-    }
+  //   try {
+  //     HTTPClientTCP test = new HTTPClientTCP("mm.sharped.net",3300);
+  //     test.setRequestType(HTTPRequest.POST);
+  //     test.connect();
+  //     test.request("cgi-bum/mmupdate.icg","?lol");
+  //     //test.request("cgi-bum/release/golly_vectorializer.app/Contents/Java/golly_vectorializer.jar");
+  //     byte[] a = test.getResponseBody();
+  //     String responseBody = new String(a, "UTF-8");
+  //     System.out.println(responseBody);
+  //   } catch(IOException e) {
+  //     e.printStackTrace();
+  //   }
     
-  }
+  // }
 }
