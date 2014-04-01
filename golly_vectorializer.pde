@@ -1593,6 +1593,8 @@ GollyPatternSettings settings)
 
 void exportNow()
 {
+  loadingSomething = true;
+  
   /* gathering info */
   int cols = currentGrid.getColumns();
   int rows = currentGrid.getRows();
@@ -1625,6 +1627,8 @@ void exportNow()
 
   /* goodbye */
   pdf.endDraw();
+
+  loadingSomething = false;
 }
 
 void draw()
