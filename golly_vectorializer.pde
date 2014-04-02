@@ -781,6 +781,9 @@ void setup()
     .setBroadcast(true)
     .setLabel("Riavvia dopo").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
+  
+  cp5.addButton("scale2xstub").setPosition(20,20);  
+    
   /* Message box is shown only upon request */
   winG.hide();
 
@@ -789,6 +792,20 @@ void setup()
 
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
+}
+
+void scale2xstub(int value)
+{
+  if(currentConfig != null)
+  {
+      GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
+  currentConfig = x2Config;
+  /* Init current configuration */
+    initConfiguration(currentConfig);
+
+    /* da shit */
+    updateControls();
+  }
 }
 
 void showPopup(String message, int buttonA, int buttonB)

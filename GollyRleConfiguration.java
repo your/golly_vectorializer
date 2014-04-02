@@ -52,6 +52,16 @@ public class GollyRleConfiguration
   {
     this.cellState = cellState;
   }
+  
+  public void setCellState(int i, int j, int state)
+  {
+    matrix[i][j] = state;
+  }
+  
+  public void setRule(String rule)
+  {
+    this.rule = rule;
+  }
 
   public int getMatrixWidth()
   {
@@ -157,6 +167,42 @@ public class GollyRleConfiguration
       //   addMatrixCell(0);
       // }
     }
+  }
+  
+  /* creating a scaled matrix configuration 
+     NB: the algorithm works for integer valuess > 1 (=1 it behaves like a copy constructor) 
+     */
+  public GollyRleConfiguration newScaledConfiguration(int scaleFactor)
+  {
+    GollyRleConfiguration scaledConfig = new GollyRleConfiguration();
+    scaledConfig.setMatrixHeight(this.matrixHeight * scaleFactor);
+    scaledConfig.setMatrixWidth(this.matrixWidth * scaleFactor);
+    
+    scaledConfig.initMatrix();
+    scaledConfig.setRule(this.rule);
+    
+    /* saving all the states */
+    for(int i = 0; i < matrixHeight; ++i)
+    {
+      /* get the scaled matrix row index */
+      int si = i * scaleFactor;
+      for(int j = 0; j < matrixWidth; ++j)
+      {
+        /* same goes for the col index */
+        int sj = j * scaleFactor;
+        
+        /* now copying all the states in the scaleFactor X scaleFactor square */
+        for(int ki = si; ki < si + scaleFactor; ++ki)
+        {
+          for(int kj = sj; kj < sj + scaleFactor; ++kj)
+          {
+            scaledConfig.setCellState(ki, kj, matrix[i][j]);
+          }
+        }
+      }
+    }
+    
+    return scaledConfig;
   }
 
   /********** config checks ***********/
