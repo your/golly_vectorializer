@@ -13,18 +13,6 @@ public class GollyRleConfiguration
   private int actualCol;
 
   /******* constructors *********/
-
-  GollyRleConfiguration(GollyRleConfiguration overritingConfig)
-  {
-    this.matrixWidth = overritingConfig.matrixWidth;
-    this.matrixHeight = overritingConfig.matrixHeight;
-    this.cellState = overritingConfig.cellState;
-    this.rule = overritingConfig.rule;
-    this.matrix = overritingConfig.matrix;
-    this.actualRow = overritingConfig.actualRow;
-    this.actualCol = overritingConfig.actualCol;
-  }
-  
   GollyRleConfiguration()
   {
     this.cellState = 0; //default
