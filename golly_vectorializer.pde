@@ -72,6 +72,8 @@ void manageControls(boolean lock)
   setLock(cp5.getController("zoomOut"), lock);
   setLock(cp5.getController("zoomSlider"), lock);
   setLock(cp5.getController("center"), lock);
+  setLock(cp5.getController("scaleIn"), lock);
+  setLock(cp5.getController("scaleOut"), lock);
   // settG
   setLock(cp5.getController("rowsNum"), lock); // temp disabled
   setLock(cp5.getController("colsNum"), lock); // temp disabled
@@ -97,15 +99,6 @@ void manageControls(boolean lock)
   setLock(cp5.getController("toggleStroke"), lock);
   setLock(cp5.getController("toggleWorkingStates"), lock);
   
-  // cp5 is da shit; I need to start triggering toggle events only when
-  // all the cp5 controllers set up by updateControls() are unlocked;
-  // in this specific case, the problem was that the event triggered by
-  // toggleWorkingStates called updateControls(), and I cant touch
-  // controls value until they are unlocked. Thus adding:
-  cp5.getController("toggleWorkingStates").setBroadcast(true);
-  cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
-  cp5.getController("toggleShapesLikeCells").setBroadcast(true);
-  
   if (!lock)
   {
     /* Colouring sliders if unlocked */
@@ -117,6 +110,15 @@ void manageControls(boolean lock)
     cp5.getController("pickBStroke").setColorBackground(color(40, 20, 200));
     cp5.getController("pickAFill").setColorBackground(color(100, 100, 100));
     cp5.getController("pickAStroke").setColorBackground(color(100, 100, 100));
+
+    // cp5 is da shit; I need to start triggering toggle events only when
+    // all the cp5 controllers set up by updateControls() are unlocked;
+    // in this specific case, the problem was that the event triggered by
+    // toggleWorkingStates called updateControls(), and I cant touch
+    // *TOGGLE* controls value until they are unlocked. Thus adding:
+    cp5.getController("toggleWorkingStates").setBroadcast(true);
+    cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
+    cp5.getController("toggleShapesLikeCells").setBroadcast(true);
   }
 }
 void updateControls()
@@ -124,8 +126,8 @@ void updateControls()
   // temp disable broadcast to avoid values r/w conflicts
   cp5.getController("rowsNum").setBroadcast(false);
   cp5.getController("colsNum").setBroadcast(false);
-  cp5.getController("cellWidth").setBroadcast(false);
-  cp5.getController("cellHeight").setBroadcast(false);
+  // cp5.getController("cellWidth").setBroadcast(false);
+  // cp5.getController("cellHeight").setBroadcast(false);
   // cp5.getController("inputCellWidth").setBroadcast(false);
   // cp5.getController("inputCellHeight").setBroadcast(false);
   cp5.getController("toggleKeepCellRatio").setBroadcast(false);
@@ -145,11 +147,12 @@ void updateControls()
   cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives() ? 1 : 0);
   cp5.getController("zoomSlider").setValue(transformer.getScaleFactor() * 100);
   cp5.getController("zoomPercentage").setStringValue((int)(transformer.getScaleFactor() * 100) + "%");
+  cp5.getController("scaleFactor").setStringValue((int)(currentSettings.getScaleFactor()) + "x");
   // broadcasting values again
   cp5.getController("rowsNum").setBroadcast(true);
   cp5.getController("colsNum").setBroadcast(true);
-  cp5.getController("cellWidth").setBroadcast(true);
-  cp5.getController("cellHeight").setBroadcast(true);
+  // cp5.getController("cellWidth").setBroadcast(true);
+  // cp5.getController("cellHeight").setBroadcast(true);
   // cp5.getController("inputCellWidth").setBroadcast(true);
   // cp5.getController("inputCellHeight").setBroadcast(true);
   cp5.getController("toggleKeepCellRatio").setBroadcast(true);
@@ -404,10 +407,30 @@ void setup()
     .moveTo(gridG)
     ;
   cp5.addButton("center")
-    .setLabel("Centra sketch").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Centrami!").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 183)
-    .setSize(145, 15)
+    .setSize(55, 15)
     .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addButton("scaleIn")
+    .setLabel("Scala+")
+    .setPosition(75, 183)
+    .setSize(35, 15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addButton("scaleOut")
+    .setLabel("Scala-")
+    .setPosition(115, 183)
+    .setSize(35, 15)
+    .setColorBackground(cp)
+    .moveTo(gridG)
+    ;
+  cp5.addTextlabel("scaleFactor")
+    .setText("1x")
+    .setPosition(150, 187)
+    .setSize(35, 15)
     .moveTo(gridG)
     ;
   // SETTINGS SUBGROUP AREA
@@ -782,7 +805,7 @@ void setup()
     .setLabel("Riavvia dopo").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   
-  cp5.addButton("scale2xstub").setPosition(20,20);  
+  //cp5.addButton("scale2xstub").setPosition(20,20);  
     
   /* Message box is shown only upon request */
   winG.hide();
@@ -792,20 +815,6 @@ void setup()
 
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
-}
-
-void scale2xstub(int value)
-{
-  if(currentConfig != null)
-  {
-      GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
-  currentConfig = x2Config;
-  /* Init current configuration */
-    initConfiguration(currentConfig);
-
-    /* da shit */
-    updateControls();
-  }
 }
 
 void showPopup(String message, int buttonA, int buttonB)
@@ -1306,6 +1315,7 @@ void zoomSlider(int value)
   }
   //updateControls();
 }
+
 void zoomIn(int status)
 {
   float scaleFactor = transformer.getScaleFactor();
@@ -1314,6 +1324,7 @@ void zoomIn(int status)
   centerSketch();
   updateZoomPercentage();
 }
+
 void zoomOut(int status)
 {
   float scaleFactor = transformer.getScaleFactor();
@@ -1323,6 +1334,67 @@ void zoomOut(int status)
   centerSketch();
   updateZoomPercentage();
 }
+
+void updateScale(float newScale)
+{
+  mainG.getController("scaleFactor").setStringValue((int)newScale + "x");
+  updateControls();
+}
+  
+void scaleIn(int value)
+{
+  if(currentConfig != null)
+  {
+    float currentScaleFactor = currentSettings.getScaleFactor();
+    float newScaleFactor = currentScaleFactor * 2;
+    println(currentScaleFactor, newScaleFactor);
+    
+    /* updating scale right now */
+    currentSettings.setScaleFactor(newScaleFactor);
+    
+    scaleConfiguration(newScaleFactor);
+
+    updateScale(newScaleFactor);
+  }
+}
+
+void scaleOut(int value)
+{
+  if(currentConfig != null)
+  {
+    float currentScaleFactor = currentSettings.getScaleFactor();
+    float newScaleFactor = currentScaleFactor * 2;
+    println(currentScaleFactor, newScaleFactor);
+    
+    /* updating scale right now */
+    currentSettings.setScaleFactor(newScaleFactor);
+    
+    scaleConfiguration(currentScaleFactor == 1? 1 : 0.5f);
+
+    updateScale(newScaleFactor);
+  }
+}
+// void scaleOut(int value)
+// {
+//   if(currentConfig != null)
+//   {
+//     float currentScaleFactor = currentSettings.getScaleFactor();
+//     float newScaleFactor = currentScaleFactor == 1? 1 : currentScaleFactor / 2;
+//     println(currentScaleFactor, newScaleFactor);
+
+//     /* updating scale right now */
+//     currentSettings.setScaleFactor(newScaleFactor);
+
+//     /* overwriting current config */
+//     GollyRleConfiguration x2Config =
+//       currentConfig.newScaledConfiguration(currentScaleFactor == 1? 1 : 0.5f);
+
+//     /* overwriting current config */
+//     overwriteConfiguration(x2Config);
+
+//     updateScale(newScaleFactor);
+//   }
+// }
 
 File createDefaultFile()
 {
@@ -1660,16 +1732,21 @@ void draw()
   
     if (currentSettings.getTransformer() != null)
     {
-    
-      /* getting ready for drawing */
-      transformer.startDrawing();
-      
-      /* are we ready to draw? */
-      if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
-      drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
-      /* ended drawing */
-      transformer.endDrawing();
+      if (loadingSomething)
+        drawLoadingWheel(g);
+      else
+      {
+        /* getting ready for drawing */
+        transformer.startDrawing();
+      
+        /* are we ready to draw? */
+        if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
+        drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
+
+        /* ended drawing */
+        transformer.endDrawing();
+      }
     }
   }
 }
@@ -1694,6 +1771,7 @@ void drawLoadingWheel(PGraphics ctx)
 
 void checkConfigHistory()
 {
+  println(currentConfig);
   /* Config history handling */
   if (manager.hasPrevConfig())
     setLock(mainG.getController("rewindConfigHistory"), false);
@@ -1705,7 +1783,7 @@ void checkConfigHistory()
     setLock(mainG.getController("forwardConfigHistory"), true);
 }
 
-void generateGridFrom(GollyRleConfiguration config)
+Grid2D generateGridFrom(GollyRleConfiguration config)
 {
   PVector origin = new PVector();
 
@@ -1715,10 +1793,25 @@ void generateGridFrom(GollyRleConfiguration config)
   float cellWidth = cellDim;
   float cellHeight = cellDim;
 
-  currentGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight);
+  Grid2D genGrid = new Grid2D(origin, cols, rows, cellWidth, cellHeight);
 
-  /* Adding grid to history */
-  manager.addGrid(currentGrid);
+  return genGrid;
+}
+
+void scaleConfiguration(float newScaleFactor)
+{
+  println(currentConfig); ////
+  
+  GollyRleConfiguration tmp = currentConfig.newScaledConfiguration(newScaleFactor);
+  /* overwriting configuration */
+  currentConfig = tmp;
+  
+  println(currentConfig); ////
+  
+  /* overwriting grid */
+  currentGrid = generateGridFrom(currentConfig);
+  
+  /* settings are kept */
 }
 
 void initConfiguration(GollyRleConfiguration configuration)
@@ -1727,7 +1820,9 @@ void initConfiguration(GollyRleConfiguration configuration)
   manager.addConfiguration(configuration);
 
   /* Generating grid from it (then adding it to history) */
-  generateGridFrom(configuration);
+  currentGrid = generateGridFrom(configuration);
+  /* Adding grid to history */
+  manager.addGrid(currentGrid);
 
   /* Can we enable nextConfig button? */
   checkConfigHistory();
@@ -1769,7 +1864,7 @@ void loadGollyRle()
     {
       currentConfig = reader.parseFile(gollyFilePath);
     }
-
+    
     /* Init current configuration */
     initConfiguration(currentConfig);
 
