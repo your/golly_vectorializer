@@ -19,11 +19,12 @@ public class GollyPatternSettings
   private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
+  // private int scaleFactor = 1;
   private float shapeWidthActive = 7;
   private float shapeWidthInactive = 5;
   private float shapeHeightActive = 7;
   private float shapeHeightInactive = 5;
-  //private float scaleFactor = 1.0f;
+  private float scaleFactor = 1.0f;
   private boolean showGrid = true;
   private boolean showInactives = false;
   private boolean keepCellRatio = true;
@@ -138,6 +139,11 @@ public class GollyPatternSettings
     return strokeWeightInactive;
   }
 
+  // public int getScaleFactor()
+  // {
+  //   return scaleFactor;
+  // }
+
   public float getShapeWidthActive()
   {
     return shapeWidthActive;
@@ -163,10 +169,10 @@ public class GollyPatternSettings
     return transformer;
   }
 
-  // public float getScaleFactor()
-  // {
-  //   return scaleFactor;
-  // }
+  public float getScaleFactor()
+  {
+    return scaleFactor;
+  }
 
   public boolean getShowGrid()
   {
@@ -334,6 +340,11 @@ public class GollyPatternSettings
     strokeWeightInactive = val;
   }
 
+  // public void setScaleFactor(int val)
+  // {
+  //   scaleFactor = val;
+  // }
+
   public void setShapeWidthActive(float val)
   {
     shapeWidthActive = val;
@@ -354,10 +365,10 @@ public class GollyPatternSettings
     shapeHeightInactive = val;
   }
   
-  // public void setScaleFactor(float val)
-  // {
-  //   scaleFactor = val;
-  // }
+  public void setScaleFactor(float val)
+  {
+    scaleFactor = val;
+  }
   
   public void setShowGrid(boolean flag)
   {
