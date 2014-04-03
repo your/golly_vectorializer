@@ -33,6 +33,18 @@ public class GollyHistoryManager {
     if (settingsHistoryIndex > -1)
       settingsHistory.set(settingsHistoryIndex, updatedSettings);
   }
+
+  public void setCurrentConfiguration(GollyRleConfiguration overwritingConfig) {
+    //println("prima: " + configHistory.get(configHistoryIndex));
+    configHistory.set(configHistoryIndex, overwritingConfig);
+    //println("dopo: " + configHistory.get(configHistoryIndex));
+  }
+
+  public void setCurrentGrid(Grid2D overwritingGrid) {
+    //println("prima: " + gridHistory.get(gridHistoryIndex));
+    gridHistory.set(gridHistoryIndex, overwritingGrid);
+    //println("dopo: " + gridHistory.get(gridHistoryIndex));
+  }
   
   /* Getters */
   public GollyRleConfiguration getCurrentConfiguration() {

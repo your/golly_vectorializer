@@ -1346,13 +1346,12 @@ void scaleIn(int value)
   if(currentConfig != null)
   {
     float currentScaleFactor = currentSettings.getScaleFactor();
-    float newScaleFactor = currentScaleFactor * 2;
-    println(currentScaleFactor, newScaleFactor);
+    float newScaleFactor = 2 * currentScaleFactor;
     
     /* updating scale right now */
     currentSettings.setScaleFactor(newScaleFactor);
     
-    scaleConfiguration(newScaleFactor);
+    scaleConfiguration(2); // default multiplier
 
     updateScale(newScaleFactor);
   }
@@ -1363,8 +1362,7 @@ void scaleOut(int value)
   if(currentConfig != null)
   {
     float currentScaleFactor = currentSettings.getScaleFactor();
-    float newScaleFactor = currentScaleFactor * 2;
-    println(currentScaleFactor, newScaleFactor);
+    float newScaleFactor = currentScaleFactor == 1? 1 : currentScaleFactor / 2;
     
     /* updating scale right now */
     currentSettings.setScaleFactor(newScaleFactor);
@@ -1800,16 +1798,16 @@ Grid2D generateGridFrom(GollyRleConfiguration config)
 
 void scaleConfiguration(float newScaleFactor)
 {
-  println(currentConfig); ////
-  
-  GollyRleConfiguration tmp = currentConfig.newScaledConfiguration(newScaleFactor);
+  GollyRleConfiguration newConfig = currentConfig.newScaledConfiguration(newScaleFactor);
+  Grid2D newGrid = generateGridFrom(newConfig);
+ 
   /* overwriting configuration */
-  currentConfig = tmp;
-  
-  println(currentConfig); ////
+  manager.setCurrentConfiguration(newConfig);
+  currentConfig = manager.getCurrentConfiguration();
   
   /* overwriting grid */
-  currentGrid = generateGridFrom(currentConfig);
+  manager.setCurrentGrid(newGrid);
+  currentGrid = manager.getCurrentGrid();
   
   /* settings are kept */
 }
