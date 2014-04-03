@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.Math;
 
 public class GollyRleConfiguration
 {
@@ -12,6 +13,18 @@ public class GollyRleConfiguration
   private int actualCol;
 
   /******* constructors *********/
+
+  GollyRleConfiguration(GollyRleConfiguration overritingConfig)
+  {
+    this.matrixWidth = overritingConfig.matrixWidth;
+    this.matrixHeight = overritingConfig.matrixHeight;
+    this.cellState = overritingConfig.cellState;
+    this.rule = overritingConfig.rule;
+    this.matrix = overritingConfig.matrix;
+    this.actualRow = overritingConfig.actualRow;
+    this.actualCol = overritingConfig.actualCol;
+  }
+  
   GollyRleConfiguration()
   {
     this.cellState = 0; //default
@@ -172,11 +185,11 @@ public class GollyRleConfiguration
   /* creating a scaled matrix configuration 
      NB: the algorithm works for integer valuess > 1 (=1 it behaves like a copy constructor) 
      */
-  public GollyRleConfiguration newScaledConfiguration(int scaleFactor)
+  public GollyRleConfiguration newScaledConfiguration(float scaleFactor)
   {
     GollyRleConfiguration scaledConfig = new GollyRleConfiguration();
-    scaledConfig.setMatrixHeight(this.matrixHeight * scaleFactor);
-    scaledConfig.setMatrixWidth(this.matrixWidth * scaleFactor);
+    scaledConfig.setMatrixHeight((int)(this.matrixHeight * scaleFactor));
+    scaledConfig.setMatrixWidth((int)(this.matrixWidth * scaleFactor));
     
     scaledConfig.initMatrix();
     scaledConfig.setRule(this.rule);
@@ -185,16 +198,16 @@ public class GollyRleConfiguration
     for(int i = 0; i < matrixHeight; ++i)
     {
       /* get the scaled matrix row index */
-      int si = i * scaleFactor;
+      int si = (int)(i * scaleFactor);
       for(int j = 0; j < matrixWidth; ++j)
       {
         /* same goes for the col index */
-        int sj = j * scaleFactor;
+        int sj = (int)(j * scaleFactor);
         
         /* now copying all the states in the scaleFactor X scaleFactor square */
-        for(int ki = si; ki < si + scaleFactor; ++ki)
+        for(int ki = si; ki < si + Math.ceil(scaleFactor); ++ki)
         {
-          for(int kj = sj; kj < sj + scaleFactor; ++kj)
+          for(int kj = sj; kj < sj + Math.ceil(scaleFactor); ++kj)
           {
             scaledConfig.setCellState(ki, kj, matrix[i][j]);
           }
