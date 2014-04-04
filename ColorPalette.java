@@ -15,7 +15,7 @@ public class ColorPalette
   /* ctors */
   public ColorPalette(int numColors)
   {
-    length = numColors;
+    maxLength = numColors;
     initColors(length);
   }
 
@@ -88,6 +88,7 @@ public class ColorPalette
       length++;
       normalizeDistribution();
       computeCumulativeDistribution();
+      added = true;
     }
     return added;
   }

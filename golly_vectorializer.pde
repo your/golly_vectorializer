@@ -55,6 +55,10 @@ int remotePort = 3300;
 String remoteScript = "cgi-bum/mmupdate.icg";
 String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 
+/* color palette stub, each pattern can have its own as a setting */
+ColorPalette palette = new ColorPalette(7);
+
+
 void manageControls(boolean lock)
 {
   /* Locking/unlocking controls */
@@ -815,6 +819,22 @@ void setup()
 
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
+
+  /* setting just the first three colors */
+  color rc = color(23, 123, 123);
+  color gc = color(180, 45, 11);
+  color bc = color(123, 100, 89);
+  color tc = color(34, 55, 89);
+  color zc = color(222, 90, 111);
+  color mc = color(4, 34, 230);
+
+  
+  palette.setColor(0, rc);
+  palette.setColor(1, gc);
+  palette.setColor(2, bc);
+  palette.setColor(3, tc);
+  palette.setColor(4, zc);
+  palette.setColor(5, zc);
 }
 
 void showPopup(String message, int buttonA, int buttonB)
@@ -1619,7 +1639,10 @@ void drawGollyPattern(PGraphics ctx,
         {
           // Setting PShape fill&stroke up
           if (settings.isFillOnActive())
-            ctx.fill(colorFillActive);
+          {
+            //ctx.fill(colorFillActive);
+            ctx.fill(palette.getColor(currentState - 1));
+          }
           //cellShape.setFill(colorFillActive);
           else
             ctx.noFill();
@@ -2049,15 +2072,19 @@ void mouseReleased()
         PVector pointInMatrix = getPointInMatrix(pointInGrid,
                                                  currentGrid,
                                                  currentConfig);
+        int mi = (int)pointInMatrix.x;
+        int mj = (int)pointInMatrix.y;
+        int currentState = currentConfig.getCellState(mi, mj);
         if(mouseButton == RIGHT)
         {
-          println("RIGHT mouse button, decrementing status");
-          currentConfig.decrementState((int)pointInMatrix.x, (int)pointInMatrix.y);
+          
+          println("RIGHT mouse button, decrementing status", currentState);
+          currentConfig.decrementState(mi, mj);
         }
         else if (mouseButton == LEFT)
         {
-          println("LEFT mouse button, incrementing status");
-          currentConfig.incrementState((int)pointInMatrix.x, (int)pointInMatrix.y);
+          println("LEFT mouse button, incrementing status", currentState);
+          currentConfig.incrementState(mi, mj);
         }
       }
 
