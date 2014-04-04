@@ -84,6 +84,24 @@ public class GollyRleConfiguration
     return this.matrix[row][col];
   }
 
+  public void incrementState(int i, int j)
+  {
+    matrix[i][j]++;
+    if(matrix[i][j] > 255)
+    {
+      matrix[i][j] = 255;
+    }
+  }
+
+  public void decrementState(int i, int j)
+  {
+    matrix[i][j]--;
+    if(matrix[i][j] < 0)
+    {
+      matrix[i][j] = 0;
+    }
+  }
+  
   /******* utilities *********/
   public boolean equalsToMatrix(GollyRleConfiguration newConfig)
   {

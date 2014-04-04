@@ -1556,9 +1556,9 @@ void drawInactiveCellStub(PGraphics ctx, PVector point,
 
 
 void drawGollyPattern(PGraphics ctx, 
-Grid2D grid, 
-GollyRleConfiguration config, 
-GollyPatternSettings settings)
+                      Grid2D grid, 
+                      GollyRleConfiguration config, 
+                      GollyPatternSettings settings)
 {  
   /* retrieving sizes */
   int gridRows = grid.getRows();
@@ -1995,19 +1995,75 @@ void center(int value)
 
 void mousePressed()
 {
-  if (currentSettings.getTransformer() != null)
+  if (mouseX < x - sizeCP5Group)
   {
-    if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+    if (currentSettings.getTransformer() != null)
+    {
+    // avoid sliders conflict
       transformer.saveMousePosition(mouseX, mouseY);
+    }
   }
+}
+
+PVector getPointInMatrix(PVector point,
+                         Grid2D grid, 
+                         GollyRleConfiguration config)
+{
+  PVector matrixPoint = new PVector();
+  
+  /* retrieving sizes */
+  int gridRows = grid.getRows();
+  int gridCols = grid.getColumns();
+  int matrixRows = config.getMatrixHeight();
+  int matrixCols = config.getMatrixWidth();
+
+  /* computing offsets */
+  int xOffset = ceil(abs(gridRows - matrixRows) / 2);
+  int yOffset = ceil(abs(gridCols - matrixCols) / 2);
+
+  int i = (int)point.x;
+  int j = (int)point.y;
+
+  matrixPoint.x = (matrixRows > gridRows)? i + xOffset : i - xOffset;
+  matrixPoint.y = (matrixCols > gridCols)? j + yOffset : j - yOffset;
+  
+  return matrixPoint;
 }
 
 void mouseReleased()
 {
-  if (currentSettings.getTransformer() != null)
+  if (mouseX < x - sizeCP5Group)
   {
-    transformer.resetMousePosition();
-  }
+   
+    if (currentSettings.getTransformer() != null)
+    {
+      /* if there is a transformer there's a pattern too */
+      PVector currentTransformPoint = 
+        currentSettings.getTransformer().convertCoordinates(mouseX, mouseY);
+      /* get point inside the grid */
+      PVector pointInGrid =
+        currentGrid.getPointForCoordinates(currentTransformPoint);
+      /* right click decrement the status, left one increments it */
+      if(pointInGrid != null)
+      {
+        PVector pointInMatrix = getPointInMatrix(pointInGrid,
+                                                 currentGrid,
+                                                 currentConfig);
+        if(mouseButton == RIGHT)
+        {
+          println("RIGHT mouse button, decrementing status");
+          currentConfig.decrementState((int)pointInMatrix.x, (int)pointInMatrix.y);
+        }
+        else if (mouseButton == LEFT)
+        {
+          println("LEFT mouse button, incrementing status");
+          currentConfig.incrementState((int)pointInMatrix.x, (int)pointInMatrix.y);
+        }
+      }
+
+      transformer.resetMousePosition();
+    }
+  }  
 }
 
 void mouseDragged()

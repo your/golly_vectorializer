@@ -22,8 +22,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
- public class Grid2D
+public class Grid2D
 {
+  private static final float MIN_FLT_CMP = 0.5;
   protected PVector[][] points;
   protected PVector origin;
   protected float cellWidth;
@@ -207,5 +208,103 @@
   {
     pg.stroke(c);
     draw(pg);
+  }
+
+  private int getRowIndex(float y, int start, int end)
+  {
+    // println("row", y, start, end);
+    int i = -1;
+    float startY = points[start][0].y;
+    if(y - startY < cellHeight)
+    {
+      i = start;
+    }
+    else
+    {
+      int middle = start + floor((end - start) / 2);
+      float middleY = points[middle][0].y;
+      // println("middle", middle, middleY);
+      if(y > middleY)
+      {
+        if(y - middleY < cellHeight)
+        {
+          i = middle;
+        }
+        else
+        {
+          i = getRowIndex(y, middle, end);
+        }
+      }
+      else if(y < middleY)
+      {
+        i = getRowIndex(y, start, middle);
+      }
+    }
+    return i;
+  }
+
+  private int getColumnIndex(float x, int start, int end)
+  {
+    int i = -1;
+    // println("col", x, start, end);
+    float startX = points[0][start].x;
+    if(x - startX < cellWidth)
+    {
+      i = start;
+    }
+    else
+    {
+      int middle = start + floor((end - start) / 2);
+      float middleX = points[0][middle].x;
+      // println("middle", middle, middleX);
+      if(x > middleX)
+      {
+        if(x - middleX < cellWidth)
+        {
+          i = middle;
+        }
+        else
+        {
+          i = getColumnIndex(x, middle, end);
+        }
+      }
+      else if(x < middleX)
+      {
+        i = getColumnIndex(x, start, middle);
+      }
+    }
+
+    return i;
+  }
+  
+  public PVector getPointForCoordinates(PVector point)
+  {
+    PVector gridPoint = null;
+
+    /* assuming the grid is instantiated */
+    float x = point.x;
+    float y = point.y;
+
+    /* is the point inside the grid? */
+    float startX = points[0][0].x;
+    float startY = points[0][0].y;
+    float endX = points[rowPoints- 1][colPoints -1].x;
+    float endY = points[rowPoints- 1][colPoints -1].y;
+
+    if(x >= startX && x <= endX
+       &&
+       y >= startY && y < endY)
+
+    {
+      /* binary search */
+      int i = getRowIndex(y, 0, rowPoints);
+      int j = getColumnIndex(x, 0, colPoints);
+      if(i != -1 && j != -1)
+      {
+        gridPoint = new PVector(i, j);
+      }
+    }
+    
+    return gridPoint;
   }
 }

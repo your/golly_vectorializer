@@ -80,7 +80,7 @@ public class SketchTransformer
   }
 
 
-  public PVector translateCoordinates(float x, float y)
+  public PVector convertCoordinates(float x, float y)
   {
     PVector translatedPoint = new PVector((x - xOffset) / scaleFactor, (y - yOffset) / scaleFactor);
     return translatedPoint;
