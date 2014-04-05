@@ -20,6 +20,7 @@ GollyPatternSettings currentSettings;
 SketchTransformer transformer;
 Grid2D currentGrid;
 ControlP5 cp5;
+CDrawable[] d;
 SDrop drop;
 // ResizableColorPicker cp5e;
 Group mainG, gridG, settG, lockG, winG;
@@ -33,6 +34,8 @@ int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
+int popupXSize, popupYSize = 0;
+int paletteColors = 7;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
 color bg = color(255);
@@ -259,6 +262,24 @@ void setup()
 
   background(bg);
 
+  /* palette stuff */
+  d = new CDrawable[paletteColors];
+
+  /* setting just the first three colors */
+  color rc = color(23, 123, 123);
+  color gc = color(180, 45, 11);
+  color bc = color(123, 100, 89);
+  color tc = color(34, 55, 89);
+  color zc = color(222, 90, 111);
+  color mc = color(4, 34, 230);
+  
+  palette.setColor(0, rc);
+  palette.setColor(1, gc);
+  palette.setColor(2, bc);
+  palette.setColor(3, tc);
+  palette.setColor(4, zc);
+  palette.setColor(5, zc);
+  
   /* init ApplicationUpdater */
   CodeSource codeSource =
     golly_vectorializer.class.getProtectionDomain().getCodeSource();
@@ -741,6 +762,115 @@ void setup()
     .moveTo(lockG)
     .hideBar()
     ;
+  // cp5.addTextlabel("labelPaletteColor1")
+  //   .setValue("Stato 0:")
+  //   .setPosition(30,60)
+  //   .setSize(10,10)
+  //   .moveTo(winG)
+  //   .hide()
+  //   ;
+  // cp5.addTextarea("labelPaletteColor1")
+  //   //.setText("Anteprima")
+  //   .setSize(40,20)
+  //   .setPosition(50,60)
+  //   .setColorBackground(0)
+  //   //.setColorForeground(0)
+  //   //.setColorLabel(0)
+  //   //.setSize(10,10)
+  //   .moveTo(winG)
+  //   //.hide()
+  //   ;
+  cp5.addTextlabel("labelPalettePreview")
+    .setValue("Anteprime:")
+    .setPosition(30,60)
+    .setSize(10,10)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor1")
+    .setLabel("Stato 1")
+    .setPosition(100,80)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor2")
+    .setLabel("Stato 2")
+    .setPosition(100,120)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor3")
+    .setLabel("Stato 3")
+    .setPosition(100,160)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor4")
+    .setLabel("Stato 4")
+    .setPosition(100,200)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor5")
+    .setLabel("Stato 5")
+    .setPosition(100,240)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor6")
+    .setLabel("Stato 6")
+    .setPosition(100,280)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteColor7")
+    .setLabel("Stato 7")
+    .setPosition(100,320)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addButton("buttonGenericCancel")
     .setPosition(160,80)
     .setSize(75,25)
@@ -808,9 +938,30 @@ void setup()
     .setBroadcast(true)
     .setLabel("Riavvia dopo").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
-  
-  //cp5.addButton("scale2xstub").setPosition(20,20);  
-    
+  cp5.addButton("buttonPaletteOK")
+    .setPosition(60,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Salva").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
+  cp5.addButton("buttonPaletteCancel")
+    .setPosition(160,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;  
+  cp5.addButton("openPalette").setPosition(20,20);  
+
   /* Message box is shown only upon request */
   winG.hide();
 
@@ -819,90 +970,280 @@ void setup()
 
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
-
-  /* setting just the first three colors */
-  color rc = color(23, 123, 123);
-  color gc = color(180, 45, 11);
-  color bc = color(123, 100, 89);
-  color tc = color(34, 55, 89);
-  color zc = color(222, 90, 111);
-  color mc = color(4, 34, 230);
-
   
-  palette.setColor(0, rc);
-  palette.setColor(1, gc);
-  palette.setColor(2, bc);
-  palette.setColor(3, tc);
-  palette.setColor(4, zc);
-  palette.setColor(5, zc);
 }
 
-void showPopup(String message, int buttonA, int buttonB)
-{
+/* Will draw pgraphics objects into cp5 layers (workaround) */
+void setDrawable(int objNum,
+                 final int xOffset, final int yOffset,
+                 final int xWidth, final int yHeight,
+                 final color fillColor) {
+  d[objNum] = new CDrawable() {    
+    public void draw(PApplet p) {
+      p.pushMatrix();
+      p.translate(xOffset, yOffset);
+      p.fill(fillColor);
+      p.rect(0, 0, xWidth, yHeight);
+      p.popMatrix();
+    }
+  };
+}
+
+/* HEX stuff utilities */
+color getColorFromHex(String hexString) {
+  // n.b. input hex has to miss 0x or such
+  int unhexed = unhex(hexString);
+  float r = red(unhexed);
+  float g = green(unhexed);
+  float b = blue(unhexed);
+  color newColor = color(r, g, b);
+  return newColor;
+}
+String sanitizeHexInput(String hexInput) {
+  // n.b. will cut down 0x or # @ beginning if any
+  if (hexInput.startsWith("0x"))
+    hexInput = hexInput.substring(2, hexInput.length());
+  else if (hexInput.startsWith("#"))
+    hexInput = hexInput.substring(1, hexInput.length());
+  hexInput = hexInput.replaceAll("[^a-fA-F0-9]", "");
+  int endIdx = hexInput.length() <= 6 ? hexInput.length() : 6;
+  hexInput = hexInput.substring(0, endIdx);
+  return hexInput;
+}
+
+void inputPaletteColor1(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor1"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(0);
+}
+void inputPaletteColor2(String val) {
+  if (val != "") {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor2"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(1);
+  }
+}
+void inputPaletteColor3(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor3"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(2);
+}
+void inputPaletteColor4(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor4"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(3);
+}
+void inputPaletteColor5(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor5"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(4);
+}
+void inputPaletteColor6(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor6"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(5);
+}
+void inputPaletteColor7(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColor7"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(6);
+}
+void updatePaletteDrawable(int number) {
+  String currentInput = "inputPaletteColor" + (number + 1);
+  String stringColor = cp5.getController(currentInput).getStringValue();
+  color newColor = getColorFromHex(stringColor);
+  winG.remove(d[number]);
+  setDrawable(number, 50, 80 + (40 * number), 10, 10, newColor);
+  winG.addDrawable(d[number]);
+}
+void savePalette() {
+  for (int i = 0; i < paletteColors; i++) {
+    String currentInput = "inputPaletteColor" + (i + 1);
+    String stringColor = cp5.getController(currentInput).getStringValue();
+    if (stringColor != "") {
+      color newColor = getColorFromHex(stringColor);
+      palette.setColor(i, newColor);
+    }
+  }
+}
+void openPalette(int value) {
+  showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 420, 4, 2);
+  showPalette();
+}
+void showPalette() {
+  winG.controller("labelPalettePreview").show();
+  for (int i = 0; i < paletteColors; i++) {
+    String currentInput = "inputPaletteColor" + (i + 1);
+    Textfield content = ((Textfield)cp5.getController(currentInput));
+    String hexedColor = hex(palette.getColor(i));
+    content.setValue(hexedColor.substring(2));
+    winG.controller(currentInput).show();
+  }
+  setDrawable(0, 50, 80, 10, 10, palette.getColor(0));
+  setDrawable(1, 50, 120, 10, 10, palette.getColor(1));
+  setDrawable(2, 50, 160, 10, 10, palette.getColor(2));
+  setDrawable(3, 50, 200, 10, 10, palette.getColor(3));
+  setDrawable(4, 50, 240, 10, 10, palette.getColor(4));
+  setDrawable(5, 50, 280, 10, 10, palette.getColor(5));
+  setDrawable(6, 50, 320, 10, 10, palette.getColor(6));
+  winG.addDrawable(d[0]);
+  winG.addDrawable(d[1]);
+  winG.addDrawable(d[2]);
+  winG.addDrawable(d[3]);
+  winG.addDrawable(d[4]);
+  winG.addDrawable(d[5]);
+  winG.addDrawable(d[6]);
+}
+void killPalette() {
+  // if you are asking, no, it wont work in a loop...
+  // (cp5 oddities....)
+  winG.remove(d[0]);
+  winG.remove(d[1]);
+  winG.remove(d[2]);
+  winG.remove(d[3]);
+  winG.remove(d[4]);
+  winG.remove(d[5]);
+  winG.remove(d[6]);
+  winG.controller("labelPalettePreview").hide();
+  winG.controller("inputPaletteColor1").hide();
+  winG.controller("inputPaletteColor2").hide();
+  winG.controller("inputPaletteColor3").hide();
+  winG.controller("inputPaletteColor4").hide();
+  winG.controller("inputPaletteColor5").hide();
+  winG.controller("inputPaletteColor6").hide();
+  winG.controller("inputPaletteColor7").hide();
+}
+void buttonPaletteOK() {
+  savePalette();
+  killPalette();
+  killPopup();
+}
+void buttonPaletteCancel() {
+  killPalette();
+  killPopup();
+}
+void resetPopup() {
+  // reset buttons
+  winG.controller("buttonGenericOK").hide();
+  winG.controller("buttonOverwriteOK").hide();
+  winG.controller("buttonDownloadUpdateOK").hide();
+  winG.controller("buttonApplyUpdateOK").hide();
+  winG.controller("buttonGenericCancel").hide();
+  winG.controller("buttonApplyUpdateCancel").hide();
+  winG.controller("buttonPaletteOK").hide();
+  winG.controller("buttonPaletteCancel").hide();
+}
+void showPopup(String message, int xSize, int ySize, int buttonA, int buttonB) {
+  popupXSize = xSize;
+  popupYSize = ySize;
+  showPopup(message, buttonA, buttonB);
+}
+void showPopup(String message, int buttonA, int buttonB) {
+  if (popupXSize == 0 && popupYSize == 0) {
+
+    /* adapting popup size and position to its msg content */
+    Scanner in = new Scanner(message);
+    int lines = 0;
+    int chars = 0;
+    while(in.hasNextLine()) {
+      lines++;
+      String line = in.nextLine();
+      chars = line.length() > chars? line.length() : chars;
+    }
+    popupXSize = chars * 5 + 20;
+    popupXSize = popupXSize > 300 ? popupXSize : 300; // not going under 300p in width
+    popupYSize = lines * 40;
+  }
+  
+  cp5.group("messageBox").setPosition((width - popupXSize) / 2 - 50,
+                                      (height - popupYSize) / 2 - 50);
+  cp5.group("messageBox").setSize(popupXSize, popupYSize);
+  
   lockG.show();
   cp5.addTextlabel("messageBoxLabel")
     .setValue(message)
     .setPosition(30,30)
-    .setSize(100,100)
+    .setSize(popupXSize - 10, popupYSize - 10)
     .moveTo(winG)
     ;
+
+  resetPopup();
 
   /// button A
   // 0: genericOK
   // 1: overwriteOK
   // 2: downloadUpdateOK
   // 3: applyUpdateOK
+  // 4: paletteOK
 
   /// button B
   // 0: genericCancel
   // 1: applyUpdateCancel
-
-  // reset buttons
-  winG.getController("buttonGenericOK").hide();
-  winG.getController("buttonOverwriteOK").hide();
-  winG.getController("buttonDownloadUpdateOK").hide();
-  winG.getController("buttonApplyUpdateOK").hide();
-  winG.getController("buttonGenericCancel").hide();
-  winG.getController("buttonApplyUpdateCancel").hide();
+  // 2: paletteCancel
   
   switch(buttonA) {
   case 0:
-    winG.getController("buttonGenericOK").show();
+    cp5.controller("buttonGenericOK").setPosition(popupXSize / 2 - 100,
+                                                  popupYSize - 45);
+    cp5.controller("buttonGenericOK").show();
     break;
   case 1:
-    winG.getController("buttonOverwriteOK").show();
+    cp5.controller("buttonOverwriteOK").setPosition(popupXSize / 2 - 100,
+                                                    popupYSize - 45);
+    cp5.controller("buttonOverwriteOK").show();
     break;
   case 2:
-    winG.getController("buttonDownloadUpdateOK").show();
+    cp5.controller("buttonDownloadUpdateOK").setPosition(popupXSize / 2 - 100,
+                                                         popupYSize - 45);
+    cp5.controller("buttonDownloadUpdateOK").show();
     break;
   case 3:
-    winG.getController("buttonApplyUpdateOK").show();
+    cp5.controller("buttonApplyUpdateOK").setPosition(popupXSize / 2 - 100,
+                                                      popupYSize - 45);
+    cp5.controller("buttonApplyUpdateOK").show();
     break;
+  case 4:
+    cp5.controller("buttonPaletteOK").setPosition(popupXSize / 2 - 100,
+                                                  popupYSize - 45);
+    cp5.controller("buttonPaletteOK").show();
   }
 
   switch(buttonB) {
   case 0:
-    winG.getController("buttonGenericCancel").show();
+    cp5.controller("buttonGenericCancel").setPosition(popupXSize / 2 + 25,
+                                                      popupYSize - 45);
+    cp5.controller("buttonGenericCancel").show();
     break;
   case 1:
-    winG.getController("buttonApplyUpdateCancel").show();
+    cp5.controller("buttonApplyUpdateCancel").setPosition(popupXSize / 2 + 25,
+                                                          popupYSize - 45);
+    cp5.controller("buttonApplyUpdateCancel").show();
     break;
+  case 2:
+    cp5.controller("buttonPaletteCancel").setPosition(popupXSize / 2 + 25,
+                                                      popupYSize - 45);
+    cp5.controller("buttonPaletteCancel").show();
   }
   
-  // if (buttonCancel)
-  //   winG.getController("buttonCancel").show();
-  // else
-  //   winG.getController("buttonCancel").hide();
-  // if (buttonOkInfo)
-  //   winG.getController("buttonOkInfo").show();
-  // else
-  //   winG.getController("buttonOkInfo").hide();
-  // if (buttonOkOverwrite)
-  //   winG.getController("buttonOkOverwrite").show();
-  // else
-  //   winG.getController("buttonOkOverwrite").hide();
-  
   winG.show();
+
+  // resetting those
+  popupXSize = 0;
+  popupYSize = 0;
 }
 
 void killPopup()
