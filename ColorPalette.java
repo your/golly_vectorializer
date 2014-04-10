@@ -76,7 +76,7 @@ public class ColorPalette
       length++;
     }
     
-    colors[index] = color;
+    colors[index] = color; //FIXME: oob write ¡!
   }
 
   public boolean addColor(int color)
@@ -95,7 +95,7 @@ public class ColorPalette
 
   public int getColor(int index)
   {
-    int color = colors[index];
+    int color = colors[index]; //FIXME: oob read ¡!
     /* if the chosen index leads to a non color, try the last one */
     if(color == -1)
     {
