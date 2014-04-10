@@ -71,12 +71,13 @@ public class ColorPalette
 
   public void setColor(int index, int color)
   {
-    if(colors[index] == -1)
-    {
-      length++;
-    }
+    if (index < maxLength) {
+      if(colors[index] == -1)
+	length++;
+    } else
+      index = maxLength - 1; //def write @ last position
     
-    colors[index] = color; //FIXME: oob write ¡!
+    colors[index] = color; //FIXED: index always in boundaries
   }
 
   public boolean addColor(int color)
@@ -95,7 +96,10 @@ public class ColorPalette
 
   public int getColor(int index)
   {
-    int color = colors[index]; //FIXME: oob read ¡!
+    if (index >= maxLength)
+      index = maxLength - 1; //def read @ last position
+    
+    int color = colors[index]; //FIXED
     /* if the chosen index leads to a non color, try the last one */
     if(color == -1)
     {
