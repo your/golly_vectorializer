@@ -1223,7 +1223,7 @@ void showPopup(String message, int buttonA, int buttonB) {
   }
   
   winG.show();
-  popupOn = true;
+  //popupOn = true;
   
   // resetting those
   popupXSize = 0;
@@ -1235,7 +1235,7 @@ void killPopup()
   winG.getController("messageBoxLabel").remove();
   winG.hide();
   lockG.hide();
-  popupOn = false;
+  //popupOn = false;
 }
 
 boolean fileExists(String filename) {
@@ -2346,7 +2346,7 @@ void mousePressed()
 {
   if (draggingOn)
     draggingOn = false;
-//  popupOn = lockG.isVisible(); // update this guy at each press
+    popupOn = lockG.isVisible(); // update this guy at each press
   if (mouseX < x - sizeCP5Group)
   {
     if (currentSettings.getTransformer() != null && !popupOn)
@@ -2385,7 +2385,7 @@ void mouseReleased()
 {
   if (mouseX < x - sizeCP5Group)
   {
-    if (currentSettings.getTransformer() != null && !draggingOn)
+    if (currentSettings.getTransformer() != null && !popupOn && !draggingOn)
     {
       /* if there is a transformer there's a pattern too */
       PVector currentTransformPoint =
