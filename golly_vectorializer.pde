@@ -40,10 +40,7 @@ float pdfBorder = 5.0;
 color bg = color(255);
 color cp = color(10, 20, 10, 200);
 color cq = color(200, 180, 200, 100);
-// boolean keepRatio = true;
-// boolean showGrid = true;
-boolean initControls = false;
-boolean lockedGrid = false;
+boolean popupOn = false;
 
 /* Spinning wheel vars */
 float[] arcStartPositions = new float[3];
@@ -90,14 +87,15 @@ void manageControls(boolean lock)
   setLock(cp5.getController("inputShapeHeight"), lock);
   setLock(cp5.getController("toggleKeepShapeRatio"), lock);
   setLock(cp5.getController("toggleShapesLikeCells"), lock);
-  setLock(cp5.getController("pickRFill"), lock);
-  setLock(cp5.getController("pickGFill"), lock);
-  setLock(cp5.getController("pickBFill"), lock);
-  setLock(cp5.getController("pickAFill"), lock);
-  setLock(cp5.getController("inputRFill"), lock);
-  setLock(cp5.getController("inputGFill"), lock);
-  setLock(cp5.getController("inputBFill"), lock);
-  setLock(cp5.getController("inputAFill"), lock);
+  setLock(cp5.getController("openPalette"), lock);
+  // setLock(cp5.getController("pickRFill"), lock);
+  // setLock(cp5.getController("pickGFill"), lock);
+  // setLock(cp5.getController("pickBFill"), lock);
+  // setLock(cp5.getController("pickAFill"), lock);
+  // setLock(cp5.getController("inputRFill"), lock);
+  // setLock(cp5.getController("inputGFill"), lock);
+  // setLock(cp5.getController("inputBFill"), lock);
+  // setLock(cp5.getController("inputAFill"), lock);
   setLock(cp5.getController("toggleFill"), lock);
   setLock(cp5.getController("pickRStroke"), lock);
   setLock(cp5.getController("pickGStroke"), lock);
@@ -109,13 +107,13 @@ void manageControls(boolean lock)
   if (!lock)
   {
     /* Colouring sliders if unlocked */
-    cp5.getController("pickRFill").setColorBackground(color(200, 20, 40));
+    // cp5.getController("pickRFill").setColorBackground(color(200, 20, 40));
+    // cp5.getController("pickGFill").setColorBackground(color(20, 200, 40));
+    // cp5.getController("pickBFill").setColorBackground(color(40, 20, 200));
+    // cp5.getController("pickAFill").setColorBackground(color(100, 100, 100));
     cp5.getController("pickRStroke").setColorBackground(color(200, 20, 40));
-    cp5.getController("pickGFill").setColorBackground(color(20, 200, 40));
     cp5.getController("pickGStroke").setColorBackground(color(20, 200, 40));
-    cp5.getController("pickBFill").setColorBackground(color(40, 20, 200));
     cp5.getController("pickBStroke").setColorBackground(color(40, 20, 200));
-    cp5.getController("pickAFill").setColorBackground(color(100, 100, 100));
     cp5.getController("pickAStroke").setColorBackground(color(100, 100, 100));
 
     // cp5 is da shit; I need to start triggering toggle events only when
@@ -133,12 +131,7 @@ void updateControls()
   // temp disable broadcast to avoid values r/w conflicts
   cp5.getController("rowsNum").setBroadcast(false);
   cp5.getController("colsNum").setBroadcast(false);
-  // cp5.getController("cellWidth").setBroadcast(false);
-  // cp5.getController("cellHeight").setBroadcast(false);
-  // cp5.getController("inputCellWidth").setBroadcast(false);
-  // cp5.getController("inputCellHeight").setBroadcast(false);
   cp5.getController("toggleKeepCellRatio").setBroadcast(false);
-  //cp5.getController("toggleFill").setBroadcast(false);
   cp5.getController("toggleShowGrid").setBroadcast(false);
   cp5.getController("toggleShowInactives").setBroadcast(false);
   cp5.getController("zoomSlider").setBroadcast(false);
@@ -158,12 +151,7 @@ void updateControls()
   // broadcasting values again
   cp5.getController("rowsNum").setBroadcast(true);
   cp5.getController("colsNum").setBroadcast(true);
-  // cp5.getController("cellWidth").setBroadcast(true);
-  // cp5.getController("cellHeight").setBroadcast(true);
-  // cp5.getController("inputCellWidth").setBroadcast(true);
-  // cp5.getController("inputCellHeight").setBroadcast(true);
   cp5.getController("toggleKeepCellRatio").setBroadcast(true);
-  //cp5.getController("toggleFill").setBroadcast(true);
   cp5.getController("toggleShowGrid").setBroadcast(true);
   cp5.getController("toggleShowInactives").setBroadcast(true);
   cp5.getController("zoomSlider").setBroadcast(true);
@@ -193,14 +181,14 @@ void updateControls()
       setLock(cp5.getController("shapeWidth"), false);
       setLock(cp5.getController("shapeHeight"), false);
     }
-    cp5.getController("pickRFill").setValue(currentSettings.getFillRActive());
-    cp5.getController("pickGFill").setValue(currentSettings.getFillGActive());
-    cp5.getController("pickBFill").setValue(currentSettings.getFillBActive());
-    cp5.getController("pickAFill").setValue(currentSettings.getFillAActive());
-    cp5.getController("inputRFill").setValue(currentSettings.getFillRActive());
-    cp5.getController("inputGFill").setValue(currentSettings.getFillGActive());
-    cp5.getController("inputBFill").setValue(currentSettings.getFillBActive());
-    cp5.getController("inputAFill").setValue(currentSettings.getFillAActive());
+    // cp5.getController("pickRFill").setValue(currentSettings.getFillRActive());
+    // cp5.getController("pickGFill").setValue(currentSettings.getFillGActive());
+    // cp5.getController("pickBFill").setValue(currentSettings.getFillBActive());
+    // cp5.getController("pickAFill").setValue(currentSettings.getFillAActive());
+    // cp5.getController("inputRFill").setValue(currentSettings.getFillRActive());
+    // cp5.getController("inputGFill").setValue(currentSettings.getFillGActive());
+    // cp5.getController("inputBFill").setValue(currentSettings.getFillBActive());
+    // cp5.getController("inputAFill").setValue(currentSettings.getFillAActive());
     cp5.getController("toggleFill").setValue(currentSettings.isFillOnActive() ? 1 : 0);
     cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRActive());
     cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGActive());
@@ -227,14 +215,14 @@ void updateControls()
       setLock(cp5.getController("shapeWidth"), false);
       setLock(cp5.getController("shapeHeight"), false);
     }
-    cp5.getController("pickRFill").setValue(currentSettings.getFillRInactive());
-    cp5.getController("pickGFill").setValue(currentSettings.getFillGInactive());
-    cp5.getController("pickBFill").setValue(currentSettings.getFillBInactive());
-    cp5.getController("pickAFill").setValue(currentSettings.getFillAInactive());
-    cp5.getController("inputRFill").setValue(currentSettings.getFillRInactive());
-    cp5.getController("inputGFill").setValue(currentSettings.getFillGInactive());
-    cp5.getController("inputBFill").setValue(currentSettings.getFillBInactive());
-    cp5.getController("inputAFill").setValue(currentSettings.getFillAInactive());
+    // cp5.getController("pickRFill").setValue(currentSettings.getFillRInactive());
+    // cp5.getController("pickGFill").setValue(currentSettings.getFillGInactive());
+    // cp5.getController("pickBFill").setValue(currentSettings.getFillBInactive());
+    // cp5.getController("pickAFill").setValue(currentSettings.getFillAInactive());
+    // cp5.getController("inputRFill").setValue(currentSettings.getFillRInactive());
+    // cp5.getController("inputGFill").setValue(currentSettings.getFillGInactive());
+    // cp5.getController("inputBFill").setValue(currentSettings.getFillBInactive());
+    // cp5.getController("inputAFill").setValue(currentSettings.getFillAInactive());
     cp5.getController("toggleFill").setValue(currentSettings.isFillOnInactive() ? 1 : 0);
     cp5.getController("pickRStroke").setValue(currentSettings.getStrokeRInactive());
     cp5.getController("pickGStroke").setValue(currentSettings.getStrokeGInactive());
@@ -534,21 +522,21 @@ void setup()
     .setMode(ControlP5.SWITCH)
     .moveTo(settG)
     ;
-  cp5.addTextlabel("pickerFillLabel")
+  cp5.addTextlabel("paletteLabel")
     .setPosition(5, 90)
-    .setText("RIEMPIMENTO FORME ATTIVE")
+    .setText("PALETTE FORME ATTIVE")
     .moveTo(settG)
     ;
-  cp5.addTextfield("inputRFill")
-    .setLabel("")
-    .setPosition(150,105)
-    .setSize(25,11)
-    .setColorBackground(0)
-    .setInputFilter(ControlP5.INTEGER)
-    .setFocus(false)
-    .setAutoClear(false)
-    .setColor(color(255,0,0))
-    .setColorActive(255)
+  cp5.addButton("openPalette")
+    .setLabel("APRI PALETTE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(50, 105)
+    .setSize(80, 20)
+    .setColorBackground(cp)
+    .moveTo(settG)
+    ;
+  cp5.addTextlabel("pickerFillLabel")
+    .setPosition(5, 135)
+    .setText("RIEMPIMENTO FORME ATTIVE")
     .moveTo(settG)
     ;
   cp5.addToggle("toggleWorkingStates")
@@ -560,79 +548,91 @@ void setup()
     .setMode(ControlP5.SWITCH)
     .moveTo(settG)
     ;
-  cp5.addSlider("pickRFill")
-    .setLabel("R")
-    .setPosition(5, 105)
-    .setSize(132, 10)
-    //.setColorValue(currentSettings.getFillRActive())
-    //.setValue(currentSettings.getFillRActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0, 255)
-    .moveTo(settG)
-    ;
-  cp5.addTextfield("inputGFill")
-    .setLabel("")
-    .setPosition(150,116)
-    .setSize(25,11)
-    .setColorBackground(0)
-    .setInputFilter(ControlP5.INTEGER)
-    .setFocus(false)
-    .setAutoClear(false)
-    .setColor(color(255,0,0))
-    .setColorActive(255)
-    .moveTo(settG)
-    ;
-  cp5.addSlider("pickGFill")
-    .setLabel("G")
-    .setPosition(5, 116)
-    .setSize(132, 10)
-    //.setColorValue(currentSettings.getFillGActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0, 255)
-    .moveTo(settG)
-    ;
-  cp5.addTextfield("inputBFill")
-    .setLabel("")
-    .setPosition(150,127)
-    .setSize(25,11)
-    .setColorBackground(0)
-    .setInputFilter(ControlP5.INTEGER)
-    .setFocus(false)
-    .setAutoClear(false)
-    .setColor(color(255,0,0))
-    .setColorActive(255)
-    .moveTo(settG)
-    ;
-  cp5.addSlider("pickBFill")
-    .setLabel("B")
-    .setPosition(5, 127)
-    .setSize(132, 10)
-    //.setColorValue(currentSettings.getFillBActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0, 255)
-    .moveTo(settG)
-    ;
-  cp5.addTextfield("inputAFill")
-    .setLabel("")
-    .setPosition(150,138)
-    .setSize(25,11)
-    .setColorBackground(0)
-    .setInputFilter(ControlP5.INTEGER)
-    .setFocus(false)
-    .setAutoClear(false)
-    .setColor(color(255,0,0))
-    .setColorActive(255)
-    .moveTo(settG)
-    ;
-  cp5.addSlider("pickAFill")
-    .setLabel("A")
-    .setPosition(5, 138)
-    .setSize(132, 10)
-    //.setColorValue(currentSettings.getFillAActive())
-    .setColorForeground(color(255, 255, 255))
-    .setRange(0, 255)
-    .moveTo(settG)
-    ;
+  // cp5.addTextfield("inputRFill")
+  //   .setLabel("")
+  //   .setPosition(150,105)
+  //   .setSize(25,11)
+  //   .setColorBackground(0)
+  //   .setInputFilter(ControlP5.INTEGER)
+  //   .setFocus(false)
+  //   .setAutoClear(false)
+  //   .setColor(color(255,0,0))
+  //   .setColorActive(255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addSlider("pickRFill")
+  //   .setLabel("R")
+  //   .setPosition(5, 105)
+  //   .setSize(132, 10)
+  //   //.setColorValue(currentSettings.getFillRActive())
+  //   //.setValue(currentSettings.getFillRActive())
+  //   .setColorForeground(color(255, 255, 255))
+  //   .setRange(0, 255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addTextfield("inputGFill")
+  //   .setLabel("")
+  //   .setPosition(150,116)
+  //   .setSize(25,11)
+  //   .setColorBackground(0)
+  //   .setInputFilter(ControlP5.INTEGER)
+  //   .setFocus(false)
+  //   .setAutoClear(false)
+  //   .setColor(color(255,0,0))
+  //   .setColorActive(255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addSlider("pickGFill")
+  //   .setLabel("G")
+  //   .setPosition(5, 116)
+  //   .setSize(132, 10)
+  //   //.setColorValue(currentSettings.getFillGActive())
+  //   .setColorForeground(color(255, 255, 255))
+  //   .setRange(0, 255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addTextfield("inputBFill")
+  //   .setLabel("")
+  //   .setPosition(150,127)
+  //   .setSize(25,11)
+  //   .setColorBackground(0)
+  //   .setInputFilter(ControlP5.INTEGER)
+  //   .setFocus(false)
+  //   .setAutoClear(false)
+  //   .setColor(color(255,0,0))
+  //   .setColorActive(255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addSlider("pickBFill")
+  //   .setLabel("B")
+  //   .setPosition(5, 127)
+  //   .setSize(132, 10)
+  //   //.setColorValue(currentSettings.getFillBActive())
+  //   .setColorForeground(color(255, 255, 255))
+  //   .setRange(0, 255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addTextfield("inputAFill")
+  //   .setLabel("")
+  //   .setPosition(150,138)
+  //   .setSize(25,11)
+  //   .setColorBackground(0)
+  //   .setInputFilter(ControlP5.INTEGER)
+  //   .setFocus(false)
+  //   .setAutoClear(false)
+  //   .setColor(color(255,0,0))
+  //   .setColorActive(255)
+  //   .moveTo(settG)
+  //   ;
+  // cp5.addSlider("pickAFill")
+  //   .setLabel("A")
+  //   .setPosition(5, 138)
+  //   .setSize(132, 10)
+  //   //.setColorValue(currentSettings.getFillAActive())
+  //   .setColorForeground(color(255, 255, 255))
+  //   .setRange(0, 255)
+  //   .moveTo(settG)
+  //   ;
   cp5.addToggle("toggleFill")
     .setLabel("Riempimento ON")
     .setPosition(5, 150)
@@ -763,24 +763,6 @@ void setup()
     .moveTo(lockG)
     .hideBar()
     ;
-  // cp5.addTextlabel("labelPaletteColor1")
-  //   .setValue("Stato 0:")
-  //   .setPosition(30,60)
-  //   .setSize(10,10)
-  //   .moveTo(winG)
-  //   .hide()
-  //   ;
-  // cp5.addTextarea("labelPaletteColor1")
-  //   //.setText("Anteprima")
-  //   .setSize(40,20)
-  //   .setPosition(50,60)
-  //   .setColorBackground(0)
-  //   //.setColorForeground(0)
-  //   //.setColorLabel(0)
-  //   //.setSize(10,10)
-  //   .moveTo(winG)
-  //   //.hide()
-  //   ;
   cp5.addTextlabel("labelPalettePreview")
     .setValue("Anteprime:")
     .setPosition(30,60)
@@ -960,8 +942,7 @@ void setup()
     .setValue(1)
     .setBroadcast(true)
     .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    ;  
-  cp5.addButton("openPalette").setPosition(20,20);  
+    ; 
 
   /* Message box is shown only upon request */
   winG.hide();
@@ -1241,7 +1222,7 @@ void showPopup(String message, int buttonA, int buttonB) {
   }
   
   winG.show();
-
+  
   // resetting those
   popupXSize = 0;
   popupYSize = 0;
@@ -2360,11 +2341,11 @@ void center(int value)
 
 void mousePressed()
 {
+  popupOn = lockG.isVisible(); // update this guy at each press
   if (mouseX < x - sizeCP5Group)
   {
-    if (currentSettings.getTransformer() != null)
-    {
-    // avoid sliders conflict
+    if (currentSettings.getTransformer() != null && !popupOn)
+    { 
       transformer.saveMousePosition(mouseX, mouseY);
     }
   }
@@ -2399,11 +2380,10 @@ void mouseReleased()
 {
   if (mouseX < x - sizeCP5Group)
   {
-   
-    if (currentSettings.getTransformer() != null)
+    if (currentSettings.getTransformer() != null && !popupOn)
     {
       /* if there is a transformer there's a pattern too */
-      PVector currentTransformPoint = 
+      PVector currentTransformPoint =
         currentSettings.getTransformer().convertCoordinates(mouseX, mouseY);
       /* get point inside the grid */
       PVector pointInGrid =
@@ -2430,7 +2410,7 @@ void mouseReleased()
             currentConfig.incrementState(mi, mj);
         }
       }
-
+      
       transformer.resetMousePosition();
     }
   }  
@@ -2438,7 +2418,7 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (currentSettings.getTransformer() != null)
+  if (currentSettings.getTransformer() != null && !popupOn)
   {
     //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
     transformer.updateTranslationOffset(mouseX, mouseY);
