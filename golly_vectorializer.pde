@@ -41,6 +41,7 @@ color bg = color(255);
 color cp = color(10, 20, 10, 200);
 color cq = color(200, 180, 200, 100);
 boolean popupOn = false;
+boolean draggingOn = false;
 
 /* Spinning wheel vars */
 float[] arcStartPositions = new float[3];
@@ -1222,6 +1223,7 @@ void showPopup(String message, int buttonA, int buttonB) {
   }
   
   winG.show();
+  popupOn = true;
   
   // resetting those
   popupXSize = 0;
@@ -1233,6 +1235,7 @@ void killPopup()
   winG.getController("messageBoxLabel").remove();
   winG.hide();
   lockG.hide();
+  popupOn = false;
 }
 
 boolean fileExists(String filename) {
@@ -2341,7 +2344,9 @@ void center(int value)
 
 void mousePressed()
 {
-  popupOn = lockG.isVisible(); // update this guy at each press
+  if (draggingOn)
+    draggingOn = false;
+//  popupOn = lockG.isVisible(); // update this guy at each press
   if (mouseX < x - sizeCP5Group)
   {
     if (currentSettings.getTransformer() != null && !popupOn)
@@ -2380,7 +2385,7 @@ void mouseReleased()
 {
   if (mouseX < x - sizeCP5Group)
   {
-    if (currentSettings.getTransformer() != null && !popupOn)
+    if (currentSettings.getTransformer() != null && !draggingOn)
     {
       /* if there is a transformer there's a pattern too */
       PVector currentTransformPoint =
@@ -2420,7 +2425,7 @@ void mouseDragged()
 {
   if (currentSettings.getTransformer() != null && !popupOn)
   {
-    //if (mouseX < x - sizeCP5Group) // avoid sliders conflict
+    draggingOn = true;
     transformer.updateTranslationOffset(mouseX, mouseY);
   }
 }
