@@ -35,7 +35,6 @@ int y = 768;
 int sizeCP5Group = 200;
 int cellDim = 10;
 int popupXSize, popupYSize = 0;
-int paletteColors = 7;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
 color bg = color(255);
@@ -59,7 +58,8 @@ String remoteScript = "cgi-bum/mmupdate.icg";
 String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 
 /* color palette stub, each pattern can have its own as a setting */
-ColorPalette palette = new ColorPalette(7);
+ColorPalette palette;
+int paletteColors = 7;
 
 
 void manageControls(boolean lock)
@@ -264,6 +264,7 @@ void setup()
 
   /* palette stuff */
   d = new CDrawable[paletteColors];
+  palette = new ColorPalette(paletteColors);
 
   /* setting just the first three colors */
   color rc = color(23, 123, 123);
@@ -2425,7 +2426,8 @@ void mouseReleased()
         else if (mouseButton == LEFT)
         {
           println("LEFT mouse button, incrementing status", currentState);
-          currentConfig.incrementState(mi, mj);
+          if (currentConfig.getCellState(mi, mj) < paletteColors)
+            currentConfig.incrementState(mi, mj);
         }
       }
 
