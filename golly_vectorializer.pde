@@ -23,7 +23,7 @@ ControlP5 cp5;
 CDrawable[] d;
 SDrop drop;
 // ResizableColorPicker cp5e;
-Group mainG, gridG, settG, lockG, winG;
+Group mainG, gridG, settG, lockG, winG, caG;
 String gollyFilePath = null;
 String pastedMessage;
 String pdfFile;
@@ -49,6 +49,7 @@ float arcBoundSize, arcMaxBoundSize = 80;
 boolean loadingSomething = false;
 
 /* Application Updater stuff */
+CodeSource codeSource;
 ApplicationUpdater updater;
 String remoteHost = "mm.sharped.net";
 int remotePort = 3300;
@@ -132,6 +133,9 @@ void manageControls(boolean lock)
     RadioButton r = (RadioButton)cp5.getGroup("modeRadio");
     r.activate(0);
 
+    // showing ca name
+    caG.show();
+    updateCAName();
   }
 }
 void updateControls()
@@ -247,6 +251,20 @@ void updateControls()
 
 }
 
+void removeConfig() {
+  //TODO
+}
+void updateCAName() {
+  String nameBase = "CA: ";
+  String nameCA = createDefaultFile() != null ? createDefaultFile().toString() : "Untitled";
+  Textarea txt = (Textarea)cp5.getGroup("nameConfig");
+  txt.setText(nameBase + nameCA);
+  
+  int newLength = (nameBase.length() + nameCA.length()) * 7;
+  txt.setWidth(newLength);
+  caG.setWidth(newLength);
+}
+
 void modeRadio(int value) {
   switch(value) {
   case -1:
@@ -310,12 +328,11 @@ void setup()
   background(bg);
 
   /* palette stuff */
-  d = new CDrawable[paletteColors];
+  d = new CDrawable[paletteColors + 1]; // add a position for inactive states too
 
   
   /* init ApplicationUpdater */
-  CodeSource codeSource =
-    golly_vectorializer.class.getProtectionDomain().getCodeSource();
+  codeSource = golly_vectorializer.class.getProtectionDomain().getCodeSource();
   updater = new ApplicationUpdater(remoteHost, remotePort,
                                    remoteScript, remotePath, codeSource);
 
@@ -770,6 +787,28 @@ void setup()
   // cp5e.setItemSize(175,10)
   //   ;
 
+  // CA group
+  caG = cp5.addGroup("caGroup")
+    .setPosition(10, 10)
+    .setSize(200, 30)
+    .setBackgroundColor(color(200,180,200,50))
+    .hideBar()
+    ;
+  cp5.addButton("removeConfig")
+    .setLabel("X")
+    .setPosition(5, 9)
+    .setSize(12,12)
+    .setGroup(caG)
+    .lock()
+    ;
+  cp5.addTextarea("nameConfig")
+    .setPosition(20,10)
+    .setSize(200,15)
+    .setColor(0)
+    .hideScrollbar()
+    .setGroup(caG)
+    ;
+  
   // LOCK GROUP
   lockG = cp5.addGroup("lockBox")
     .setSize(width, height)
@@ -918,6 +957,18 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextfield("inputPaletteColorVoid")
+    .setLabel("Stato 0 (INATTIVO)")
+    .setPosition(100,360)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addButton("buttonGenericCancel")
     .setPosition(160,80)
     .setSize(75,25)
@@ -1006,8 +1057,11 @@ void setup()
     .setValue(1)
     .setBroadcast(true)
     .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    ; 
+    ;
 
+  /* ca name is shown only if file has been loaded */
+  caG.hide();
+  
   /* Message box is shown only upon request */
   winG.hide();
 
@@ -1108,13 +1162,23 @@ void inputPaletteColor7(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(6);
 }
+void inputPaletteColorVoid(String val) {
+  val = sanitizeHexInput(val);
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteColorVoid"));
+  txt.setValue(val);
+  color newColor = getColorFromHex(val);
+  updatePaletteDrawable(-1);
+}
 void updatePaletteDrawable(int number) {
-  String currentInput = "inputPaletteColor" + (number + 1);
+  String currentInput = number == -1 ?
+    "inputPaletteColorVoid" :
+    "inputPaletteColor" + (number + 1);
   String stringColor = cp5.getController(currentInput).getStringValue();
   color newColor = getColorFromHex(stringColor);
-  winG.remove(d[number]);
-  setDrawable(number, 50, 80 + (40 * number), 10, 10, newColor);
-  winG.addDrawable(d[number]);
+  int index = number == -1 ? d.length - 1 : number;
+  winG.remove(d[index]);
+  setDrawable(index, 50, 80 + (40 * index), 10, 10, newColor);
+  winG.addDrawable(d[index]);
 }
 void savePalette() {
   for (int i = 0; i < paletteColors; i++) {
@@ -1126,9 +1190,18 @@ void savePalette() {
       currentSettings.setColor(i, newColor);
     }
   }
+  // saving inactive color too
+  String inactiveColor = cp5.getController("inputPaletteColorVoid").getStringValue();
+  if (inactiveColor != "") {
+    color newColor = getColorFromHex(inactiveColor);
+    currentSettings.setFillRInactive((int)red(newColor));
+    currentSettings.setFillGInactive((int)green(newColor));
+    currentSettings.setFillBInactive((int)blue(newColor));
+    currentSettings.setFillAInactive((int)alpha(newColor));
+  }
 }
 void openPalette(int value) {
-  showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 420, 4, 2);
+  showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 450, 4, 2);
   showPalette();
 }
 void showPalette() {
@@ -1138,16 +1211,19 @@ void showPalette() {
     Textfield content = ((Textfield)cp5.getController(currentInput));
     // String hexedColor = hex(palette.getColor(i));
     String hexedColor = hex(currentSettings.getColor(i));
- content.setValue(hexedColor.substring(2));
+    content.setValue(hexedColor.substring(2));
     winG.controller(currentInput).show();
   }
-  // setDrawable(0, 50, 80, 10, 10, palette.getColor(0));
-  // setDrawable(1, 50, 120, 10, 10, palette.getColor(1));
-  // setDrawable(2, 50, 160, 10, 10, palette.getColor(2));
-  // setDrawable(3, 50, 200, 10, 10, palette.getColor(3));
-  // setDrawable(4, 50, 240, 10, 10, palette.getColor(4));
-  // setDrawable(5, 50, 280, 10, 10, palette.getColor(5));
-  // setDrawable(6, 50, 320, 10, 10, palette.getColor(6));
+
+  // inactive states part
+  color colorInactive = color(currentSettings.getFillRInactive(),
+                              currentSettings.getFillGInactive(),
+                              currentSettings.getFillBInactive(),
+                              currentSettings.getFillAInactive());
+  Textfield content = (Textfield)cp5.getController("inputPaletteColorVoid");
+  content.setValue(hex(colorInactive).substring(2));
+  winG.controller("inputPaletteColorVoid").show();
+  
   setDrawable(0, 50, 80, 10, 10, currentSettings.getColor(0));
   setDrawable(1, 50, 120, 10, 10, currentSettings.getColor(1));
   setDrawable(2, 50, 160, 10, 10, currentSettings.getColor(2));
@@ -1155,6 +1231,7 @@ void showPalette() {
   setDrawable(4, 50, 240, 10, 10, currentSettings.getColor(4));
   setDrawable(5, 50, 280, 10, 10, currentSettings.getColor(5));
   setDrawable(6, 50, 320, 10, 10, currentSettings.getColor(6));
+  setDrawable(7, 50, 360, 10, 10, colorInactive);
   winG.addDrawable(d[0]);
   winG.addDrawable(d[1]);
   winG.addDrawable(d[2]);
@@ -1162,6 +1239,7 @@ void showPalette() {
   winG.addDrawable(d[4]);
   winG.addDrawable(d[5]);
   winG.addDrawable(d[6]);
+  winG.addDrawable(d[7]);
 }
 void killPalette() {
   // if you are asking, no, it wont work in a loop...
@@ -1173,6 +1251,7 @@ void killPalette() {
   winG.remove(d[4]);
   winG.remove(d[5]);
   winG.remove(d[6]);
+  winG.remove(d[7]);
   winG.controller("labelPalettePreview").hide();
   winG.controller("inputPaletteColor1").hide();
   winG.controller("inputPaletteColor2").hide();
@@ -1181,6 +1260,7 @@ void killPalette() {
   winG.controller("inputPaletteColor5").hide();
   winG.controller("inputPaletteColor6").hide();
   winG.controller("inputPaletteColor7").hide();
+  winG.controller("inputPaletteColorVoid").hide();
 }
 void buttonPaletteOK() {
   savePalette();
@@ -1221,7 +1301,7 @@ void showPopup(String message, int buttonA, int buttonB) {
     }
     popupXSize = chars * 5 + 20;
     popupXSize = popupXSize > 300 ? popupXSize : 300; // not going under 300p in width
-    popupYSize = lines * 40;
+    popupYSize = lines * 45;
   }
   
   cp5.group("messageBox").setPosition((width - popupXSize) / 2 - 50,
@@ -1481,12 +1561,14 @@ void forwardConfigHistory(int status)
   manager.forwardHistory();
   updateHistory();
   updateControls();
+  updateCAName();
 }
 void rewindConfigHistory(int status)
 {
   manager.rewindHistory();
   updateHistory();
   updateControls();
+  updateCAName();
 }
 
 void updateHistory()
@@ -1503,7 +1585,7 @@ void loadRleConfig(int status)
 }
 void exportToPDF(int status)
 {
-  File defaultFile = createDefaultFile();
+  File defaultFile = createDefaultFile() != null ? createDefaultFile() : new File("Untitled");
   selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
 }
 void checkForUpdate(boolean flag)
