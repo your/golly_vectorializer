@@ -4,6 +4,8 @@ public class ColorPalette
   int maxLength;
   /* colors are stored as an array of ints */
   int[] colors;
+
+  private static final int EMPTY_COLOR = Integer.MIN_VALUE;
   
   /* random generator */
   CategoricalDistribution distribution;
@@ -31,7 +33,7 @@ public class ColorPalette
     /* -1 represents no color */
     for(int i = 0; i < maxLength; ++i)
     {
-      colors[i] = -1;
+      colors[i] = EMPTY_COLOR;
     }
 
     length = 0;
@@ -39,11 +41,9 @@ public class ColorPalette
 
   public void setColor(int index, int color)
   {
-    if (index < maxLength) {
-      if(colors[index] == -1)
-	length++;
-    } else
-      index = maxLength - 1; //def write @ last position
+
+    if(index > maxLength - 1)
+      index = maxLength - 1; //def write @ last positionr
     
     colors[index] = color; //FIXED: index always in boundaries
   }
@@ -68,7 +68,7 @@ public class ColorPalette
     
     int color = colors[index]; //FIXED
     /* if the chosen index leads to a non color, try the last one */
-    if(color == -1)
+    if(color == EMPTY_COLOR)
     {
       /* if zero colors are present, raise exception */
       color = colors[length - 1];
