@@ -103,6 +103,9 @@ void manageControls(boolean lock)
   setLock(cp5.getController("pickAStroke"), lock);
   setLock(cp5.getController("toggleStroke"), lock);
   setLock(cp5.getController("toggleWorkingStates"), lock);
+  setLock(cp5.getController("Normale"), lock);
+  setLock(cp5.getController("Random"), lock);
+  setLock(cp5.getController("RL"), lock);
   
   if (!lock)
   {
@@ -124,6 +127,11 @@ void manageControls(boolean lock)
     cp5.getController("toggleWorkingStates").setBroadcast(true);
     cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
     cp5.getController("toggleShapesLikeCells").setBroadcast(true);
+
+    // enabling default filling mode
+    RadioButton r = (RadioButton)cp5.getGroup("modeRadio");
+    r.activate(0);
+
   }
 }
 void updateControls()
@@ -237,6 +245,36 @@ void updateControls()
   cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
   cp5.getController("toggleShapesLikeCells").setBroadcast(true);
 
+}
+
+void modeRadio(int value) {
+  switch(value) {
+  case -1:
+    /* workaround to keep the button enabled */
+    RadioButton r = (RadioButton)cp5.getGroup("modeRadio");
+    switch(currentSettings.getColorMode()) {
+    case NORMAL:
+      r.activate(0);
+      break;
+    case RANDOM:
+      r.activate(1);
+      break;
+    case RANDOM_LOCAL:
+      r.activate(2);
+      break;
+    }
+    break;
+  default:
+  case 1:
+    currentSettings.setColorMode(ColorMode.NORMAL);
+    break;
+  case 2:
+    currentSettings.setColorMode(ColorMode.RANDOM);
+    break;
+  case 3:
+    currentSettings.setColorMode(ColorMode.RANDOM_LOCAL);
+    break;
+  }
 }
 
 void setDefaultPaletteColors(GollyPatternSettings settings)
@@ -535,21 +573,34 @@ void setup()
     .setMode(ControlP5.SWITCH)
     .moveTo(settG)
     ;
-  cp5.addTextlabel("paletteLabel")
-    .setPosition(5, 90)
-    .setText("PALETTE FORME ATTIVE")
+   cp5.addTextlabel("modeLabel")
+     .setPosition(5, 90)
+     .setText("MODALITA' RIEMPIMENTO")
+     .moveTo(settG)
+     ;
+  cp5.addRadioButton("modeRadio")
+    .setPosition(5,105)
+    .setSize(20,20)
+    .setColorForeground(color(120))
+    .setColorActive(color(255))
+    .setColorLabel(color(255))
+    .setItemsPerRow(3)
+    .setSpacingColumn(47)
+    .setGroup(settG)
+    .addItem("Normale",1)
+    .addItem("Random",2)
+    .addItem("RL",3)
+    ;
+  cp5.addTextlabel("pickerFillLabel")
+    .setPosition(5, 140)
+    .setText("RIEMPIMENTO FORME ATTIVE")
     .moveTo(settG)
     ;
   cp5.addButton("openPalette")
-    .setLabel("APRI PALETTE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setPosition(50, 105)
-    .setSize(80, 20)
+    .setLabel("PALETTE COLORI").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(80, 155)
+    .setSize(80, 15)
     .setColorBackground(cp)
-    .moveTo(settG)
-    ;
-  cp5.addTextlabel("pickerFillLabel")
-    .setPosition(5, 135)
-    .setText("RIEMPIMENTO FORME ATTIVE")
     .moveTo(settG)
     ;
   cp5.addToggle("toggleWorkingStates")
@@ -648,7 +699,7 @@ void setup()
   //   ;
   cp5.addToggle("toggleFill")
     .setLabel("Riempimento ON")
-    .setPosition(5, 150)
+    .setPosition(5, 155)
     .setSize(42, 15)
     .setValue(currentSettings.isFillOnActive())
     .setMode(ControlP5.SWITCH)
