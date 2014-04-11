@@ -128,8 +128,15 @@ public class ColorAssingment
   public ColorAssingment newRandomColorAssignment(CategoricalDistribution distribution)
   {
     ColorAssingment randomAssignment = new ColorAssingment(matrixHeight, matrixWidth);
+    randomAssignment.copyAssignment(this);
+    randomAssignment.shuffle(distribution);
+    
+    return randomAssignment;
+  }
 
-    int code = -1;
+  /*  random shuffles the colors assigned */
+  public void shuffle(CategoricalDistribution distribution)
+  {
     for(int i = 0; i < matrixHeight; ++i)
     {
       for(int j = 0; j < matrixWidth; ++j)
@@ -138,20 +145,22 @@ public class ColorAssingment
         if(matrix[i][j] >= 0)
         {
           /* get a random state */
-          code = distribution.nextValue();
+          matrix[i][j] = distribution.nextValue();
         }
-        else
-        {
-          code = matrix[i][j];
-        }
-      
-        randomAssignment.setColorCode(i, j, code);
       }
     }
-    
-    return randomAssignment;
   }
-  
+
+  public void copyAssignment(ColorAssingment assignment)
+  {
+    for(int i = 0; i < matrixHeight; ++i)
+    {
+      for(int j = 0; j < matrixWidth; ++j)
+      {
+	matrix[i][j] = assignment.getColorCode(i, j);
+      }
+    }
+  }
 }
 
 
