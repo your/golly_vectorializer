@@ -44,10 +44,11 @@ public class GollyPatternSettings
   private CategoricalDistribution distribution;
   private ColorPalette colorPalette;
   private ColorMode colorMode = ColorMode.NORMAL;
-  private ColorAssingment currentColorAssignment = null;
-  private ColorAssingment normalColorAssignment = null;
-  private ColorAssingment randomColorAssignment = null;
-  private ColorAssingment randomLocalColorAssignment = null;
+  private ColorAssignment currentColorAssignment = null;
+  private ColorAssignment normalColorAssignment = null;
+  private ColorAssignment randomColorAssignment = null;
+  private ColorAssignment randomLocalColorAssignment = null;
+  private int windowRadius = 1;
 
   /* Utilities */
   public void initTransformer(float xOffset, float yOffset,
@@ -251,7 +252,7 @@ public class GollyPatternSettings
     return colorMode;
   }
 
-  public ColorAssingment getCurrentColorAssingment()
+  public ColorAssignment getCurrentColorAssingment()
   {
     return currentColorAssignment;
   }
@@ -473,6 +474,12 @@ public class GollyPatternSettings
       break;
 
     case RANDOM_LOCAL:
+      if(randomLocalColorAssignment == null)
+      {
+        randomLocalColorAssignment =
+          currentColorAssignment.newRandomLocalColorAssignment(distribution,
+                                                               windowRadius);
+      }
       currentColorAssignment = randomLocalColorAssignment;
       break;
 
@@ -496,7 +503,7 @@ public class GollyPatternSettings
     colorPalette = new ColorPalette(numColors, distribution);
 
     /* creating a new color assignment */
-    normalColorAssignment = new ColorAssingment(config);
+    normalColorAssignment = new ColorAssignment(config);
     /* setting it as the current one */
     currentColorAssignment = normalColorAssignment;
   }

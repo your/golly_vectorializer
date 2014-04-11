@@ -1016,6 +1016,34 @@ void setup()
 
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
+
+  // ColorAssignment stub = new ColorAssignment(4,4);
+  // stub.setColorCode(0, 0, 0);
+  // stub.setColorCode(0, 1, -1);
+  // stub.setColorCode(0, 2, -1);
+  // stub.setColorCode(0, 3, -1);
+  
+  // stub.setColorCode(1, 0, 0);
+  // stub.setColorCode(1, 1, -1);
+  // stub.setColorCode(1, 2, -1);
+  // stub.setColorCode(1, 3, -1);
+
+  // stub.setColorCode(2, 0, -1);
+  // stub.setColorCode(2, 1, 0);
+  // stub.setColorCode(2, 2, 0);
+  // stub.setColorCode(2, 3, 0);
+
+  // stub.setColorCode(3, 0, -1);
+  // stub.setColorCode(3, 1, 0);
+  // stub.setColorCode(3, 2, 0);
+  // stub.setColorCode(3, 3, -1);
+
+  // CategoricalDistribution distp = new CategoricalDistribution(4);
+  // ColorAssignment randStub = stub.newRandomLocalColorAssignment(distp, 1);
+  // println(randStub.getColorCode(0,0),randStub.getColorCode(0,1),randStub.getColorCode(0,2),randStub.getColorCode(0,3));
+  // println(randStub.getColorCode(1,0),randStub.getColorCode(1,1),randStub.getColorCode(1,2),randStub.getColorCode(1,3));
+  // println(randStub.getColorCode(2,0),randStub.getColorCode(2,1),randStub.getColorCode(2,2),randStub.getColorCode(2,3));
+  // println(randStub.getColorCode(3,0),randStub.getColorCode(3,1),randStub.getColorCode(3,2),randStub.getColorCode(3,3));
   
 }
 
