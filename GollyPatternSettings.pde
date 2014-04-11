@@ -24,7 +24,7 @@ public class GollyPatternSettings
   private float shapeWidthInactive = 5;
   private float shapeHeightActive = 7;
   private float shapeHeightInactive = 5;
-  private float scaleFactor = 1.0f;
+  // private float scaleFactor = 1.0f;
   private boolean showGrid = true;
   private boolean showInactives = false;
   private boolean keepCellRatio = true;
@@ -176,10 +176,10 @@ public class GollyPatternSettings
     return transformer;
   }
 
-  public float getScaleFactor()
-  {
-    return scaleFactor;
-  }
+  // public float getScaleFactor()
+  // {
+  //   return scaleFactor;
+  // }
 
   public boolean getShowGrid()
   {
@@ -382,10 +382,10 @@ public class GollyPatternSettings
     shapeHeightInactive = val;
   }
   
-  public void setScaleFactor(float val)
-  {
-    scaleFactor = val;
-  }
+  // public void setScaleFactor(float val)
+  // {
+  //   scaleFactor = val;
+  // }
   
   public void setShowGrid(boolean flag)
   {

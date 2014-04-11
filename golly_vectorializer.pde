@@ -75,8 +75,9 @@ void manageControls(boolean lock)
   setLock(cp5.getController("zoomOut"), lock);
   setLock(cp5.getController("zoomSlider"), lock);
   setLock(cp5.getController("center"), lock);
-  setLock(cp5.getController("scaleIn"), lock);
-  setLock(cp5.getController("scaleOut"), lock);
+  setLock(cp5.getController("scaleMe"), lock);
+  // setLock(cp5.getController("scaleIn"), lock);
+  // setLock(cp5.getController("scaleOut"), lock);
   // settG
   setLock(cp5.getController("rowsNum"), lock); // temp disabled
   setLock(cp5.getController("colsNum"), lock); // temp disabled
@@ -146,7 +147,7 @@ void updateControls()
   cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives() ? 1 : 0);
   cp5.getController("zoomSlider").setValue(transformer.getScaleFactor() * 100);
   cp5.getController("zoomPercentage").setStringValue((int)(transformer.getScaleFactor() * 100) + "%");
-  cp5.getController("scaleFactor").setStringValue((int)(currentSettings.getScaleFactor()) + "x");
+  // cp5.getController("scaleFactor").setStringValue((int)(currentSettings.getScaleFactor()) + "x");
   // broadcasting values again
   cp5.getController("rowsNum").setBroadcast(true);
   cp5.getController("colsNum").setBroadcast(true);
@@ -432,26 +433,33 @@ void setup()
     .setColorBackground(cp)
     .moveTo(gridG)
     ;
-  cp5.addButton("scaleIn")
-    .setLabel("Scala+")
+  cp5.addButton("scaleMe")
+    .setLabel("Scalami!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(75, 183)
-    .setSize(35, 15)
+    .setSize(55, 15)
     .setColorBackground(cp)
     .moveTo(gridG)
     ;
-  cp5.addButton("scaleOut")
-    .setLabel("Scala-")
-    .setPosition(115, 183)
-    .setSize(35, 15)
-    .setColorBackground(cp)
-    .moveTo(gridG)
-    ;
-  cp5.addTextlabel("scaleFactor")
-    .setText("1x")
-    .setPosition(150, 187)
-    .setSize(35, 15)
-    .moveTo(gridG)
-    ;
+  // cp5.addButton("scaleIn")
+  //   .setLabel("Scala+")
+  //   .setPosition(75, 183)
+  //   .setSize(35, 15)
+  //   .setColorBackground(cp)
+  //   .moveTo(gridG)
+  //   ;
+  // cp5.addButton("scaleOut")
+  //   .setLabel("Scala-")
+  //   .setPosition(115, 183)
+  //   .setSize(35, 15)
+  //   .setColorBackground(cp)
+  //   .moveTo(gridG)
+  //   ;
+  // cp5.addTextlabel("scaleFactor")
+  //   .setText("1x")
+  //   .setPosition(150, 187)
+  //   .setSize(35, 15)
+  //   .moveTo(gridG)
+  //   ;
   // SETTINGS SUBGROUP AREA
   settG = cp5.addGroup("settControls")
     .setPosition(10, 395)
@@ -1694,64 +1702,55 @@ void zoomOut(int status)
   updateZoomPercentage();
 }
 
-void updateScale(float newScale)
-{
-  mainG.getController("scaleFactor").setStringValue((int)newScale + "x");
-  updateControls();
-}
+// void updateScale(float newScale)
+// {
+//   mainG.getController("scaleFactor").setStringValue((int)newScale + "x");
+//   updateControls();
+// }
   
-void scaleIn(int value)
-{
-  if(currentConfig != null)
-  {
-    float currentScaleFactor = currentSettings.getScaleFactor();
-    float newScaleFactor = 2 * currentScaleFactor;
+// void scaleIn(int value)
+// {
+//   if(currentConfig != null)
+//   {
+//     float currentScaleFactor = currentSettings.getScaleFactor();
+//     float newScaleFactor = 2 * currentScaleFactor;
     
-    /* updating scale right now */
-    currentSettings.setScaleFactor(newScaleFactor);
+//     /* updating scale right now */
+//     currentSettings.setScaleFactor(newScaleFactor);
     
-    scaleConfiguration(2); // default multiplier
+//     scaleConfiguration(2); // default multiplier
 
-    updateScale(newScaleFactor);
-  }
-}
+//     updateScale(newScaleFactor);
+//   }
+// }
 
-void scaleOut(int value)
-{
-  if(currentConfig != null)
-  {
-    float currentScaleFactor = currentSettings.getScaleFactor();
-    float newScaleFactor = currentScaleFactor == 1? 1 : currentScaleFactor / 2;
-    
-    /* updating scale right now */
-    currentSettings.setScaleFactor(newScaleFactor);
-    
-    scaleConfiguration(currentScaleFactor == 1? 1 : 0.5f);
-
-    updateScale(newScaleFactor);
-  }
-}
 // void scaleOut(int value)
 // {
 //   if(currentConfig != null)
 //   {
 //     float currentScaleFactor = currentSettings.getScaleFactor();
 //     float newScaleFactor = currentScaleFactor == 1? 1 : currentScaleFactor / 2;
-//     println(currentScaleFactor, newScaleFactor);
-
+    
 //     /* updating scale right now */
 //     currentSettings.setScaleFactor(newScaleFactor);
-
-//     /* overwriting current config */
-//     GollyRleConfiguration x2Config =
-//       currentConfig.newScaledConfiguration(currentScaleFactor == 1? 1 : 0.5f);
-
-//     /* overwriting current config */
-//     overwriteConfiguration(x2Config);
+    
+//     scaleConfiguration(currentScaleFactor == 1? 1 : 0.5f);
 
 //     updateScale(newScaleFactor);
 //   }
 // }
+void scaleMe(int value)
+{
+  if(currentConfig != null)
+  {
+      GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
+      currentConfig = x2Config;
+      /* Init current configuration */
+      initConfiguration(currentConfig);
+      /* da shit */
+      updateControls();
+    }
+}
 
 File createDefaultFile()
 {
@@ -2163,21 +2162,21 @@ Grid2D generateGridFrom(GollyRleConfiguration config)
   return genGrid;
 }
 
-void scaleConfiguration(float newScaleFactor)
-{
-  GollyRleConfiguration newConfig = currentConfig.newScaledConfiguration(newScaleFactor);
-  Grid2D newGrid = generateGridFrom(newConfig);
+// void scaleConfiguration(float newScaleFactor)
+// {
+//   GollyRleConfiguration newConfig = currentConfig.newScaledConfiguration(newScaleFactor);
+//   Grid2D newGrid = generateGridFrom(newConfig);
  
-  /* overwriting configuration */
-  manager.setCurrentConfiguration(newConfig);
-  currentConfig = manager.getCurrentConfiguration();
+//   /* overwriting configuration */
+//   manager.setCurrentConfiguration(newConfig);
+//   currentConfig = manager.getCurrentConfiguration();
   
-  /* overwriting grid */
-  manager.setCurrentGrid(newGrid);
-  currentGrid = manager.getCurrentGrid();
+//   /* overwriting grid */
+//   manager.setCurrentGrid(newGrid);
+//   currentGrid = manager.getCurrentGrid();
   
-  /* settings are kept */
-}
+//   /* settings are kept */
+// }
 
 void initConfiguration(GollyRleConfiguration configuration)
 {
