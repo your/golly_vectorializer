@@ -2583,10 +2583,13 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (currentSettings.getTransformer() != null && !popupOn)
+  if (mouseX < x - sizeCP5Group)
   {
-    draggingOn = true;
-    transformer.updateTranslationOffset(mouseX, mouseY);
+    if (currentSettings.getTransformer() != null && !popupOn)
+    {
+      draggingOn = true;
+      transformer.updateTranslationOffset(mouseX, mouseY);
+    }
   }
 }
 
