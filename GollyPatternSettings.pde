@@ -546,8 +546,13 @@ public class GollyPatternSettings
   {
     currentColorAssignment.previousColor(i, j);
   }
-    
-  /* file utils */  
+
+  public void shuffleColorAssignment()
+  {
+    randomColorAssignment.shuffle(distribution);
+  }
+  
+  /* file utils */
   public void setSVGPath(String path)
   {
     SVGPath = path;
