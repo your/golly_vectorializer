@@ -1301,7 +1301,7 @@ void showPopup(String message, int buttonA, int buttonB) {
     }
     popupXSize = chars * 5 + 20;
     popupXSize = popupXSize > 300 ? popupXSize : 300; // not going under 300p in width
-    popupYSize = lines * 45;
+    popupYSize = lines * 40 + 20;
   }
   
   cp5.group("messageBox").setPosition((width - popupXSize) / 2 - 50,
