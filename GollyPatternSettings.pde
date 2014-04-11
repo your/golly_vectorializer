@@ -501,6 +501,11 @@ public class GollyPatternSettings
     currentColorAssignment = normalColorAssignment;
   }
 
+  public boolean isActiveState(int i, int j)
+  {
+    return currentColorAssignment.getColorCode(i, j) >= 0;
+  }
+
   public void setColorProbability(int index, double prob)
   {
     colorPalette.setColorProbability(index, prob);
@@ -526,6 +531,20 @@ public class GollyPatternSettings
     }
 
     return cellColor;
+  }
+
+  public void nextColorAssignment(int i, int j)
+  {
+    println("curr ass", currentColorAssignment.getColorCode(i, j));
+    if(currentColorAssignment.getColorCode(i, j) + 1 < colorPalette.getPaletteLength())
+    {
+      currentColorAssignment.nextColor(i, j);
+    }
+  }
+
+  public void previousColorAssignment(int i, int j)
+  {
+    currentColorAssignment.previousColor(i, j);
   }
     
   /* file utils */  

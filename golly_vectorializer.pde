@@ -1972,10 +1972,13 @@ void drawGollyPattern(PGraphics ctx,
         // if (i==startX && j==startY) println(mi,mj);
         // if (i==endX-1 && j==endY-1) println(mi,mj);
 
-        int currentState = config.getCellState(mi, mj);
+         /* it is not a matter of the original cell state anymore */
+         int currentState = config.getCellState(mi, mj);
 
-        if (currentState > 0) /* each state > 0 is considered active */
-        {
+         // boolean isActiveState = settings.isActiveState(mi, mj);
+          if (currentState > 0) /* each state > 0 is considered active */
+         // if(isActiveState)
+         {
           // Setting PShape fill&stroke up
           if (settings.isFillOnActive())
           {
@@ -2425,13 +2428,19 @@ void mouseReleased()
         {
           
           println("RIGHT mouse button, decrementing status", currentState);
+          /* update the real pattern and the color assignment as well  */
           currentConfig.decrementState(mi, mj);
+          currentSettings.previousColorAssignment(mi, mj);
+
         }
         else if (mouseButton == LEFT)
         {
           println("LEFT mouse button, incrementing status", currentState);
           if (currentConfig.getCellState(mi, mj) < paletteColors)
+          {
             currentConfig.incrementState(mi, mj);
+          }
+          currentSettings.nextColorAssignment(mi, mj);
         }
       }
       

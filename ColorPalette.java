@@ -109,5 +109,10 @@ public class ColorPalette
   {
     colors[0] = color;
   }
+
+  public int getPaletteLength()
+  {
+    return length;
+  }
 }
 

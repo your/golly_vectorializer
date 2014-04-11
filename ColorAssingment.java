@@ -75,6 +75,20 @@ public class ColorAssingment
     return matrix[i][j];
   }
 
+  public void nextColor(int i, int j)
+  {
+    matrix[i][j]++;
+  }
+
+  public void previousColor(int i, int j)
+  {
+    matrix[i][j]--;
+    if(matrix[i][j] < -1)
+    {
+      matrix[i][j] = -1;
+    }
+  }
+
   // public int getColor(int i, int j)
   // {
   //   int code = matrix[i][j];
