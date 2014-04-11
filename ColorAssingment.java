@@ -121,7 +121,7 @@ public class ColorAssingment
       for(int j = 0; j < matrixWidth; ++j)
       {
         /* cell is active */
-        if(matrix[i][j] > 0)
+        if(matrix[i][j] >= 0)
         {
           /* get a random state */
           code = distribution.nextValue();

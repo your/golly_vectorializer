@@ -519,8 +519,8 @@ public class GollyPatternSettings
   public int getColor(int i, int j)
   {
     int code = currentColorAssignment.getColorCode(i, j);
-    int cellColor = 0; /* TODO: set the inactive color */
-    if(code > 0)
+    int cellColor = -1; /* TODO: set the inactive color */
+    if(code >= 0)
     {
       cellColor = colorPalette.getColor(code);
     }

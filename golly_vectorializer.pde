@@ -55,8 +55,6 @@ int remotePort = 3300;
 String remoteScript = "cgi-bum/mmupdate.icg";
 String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 
-/* color palette stub, each pattern can have its own as a setting */
-ColorPalette palette;
 int paletteColors = 7;
 
 
@@ -239,6 +237,27 @@ void updateControls()
   cp5.getController("toggleShapesLikeCells").setBroadcast(true);
 
 }
+
+void setDefaultPaletteColors(GollyPatternSettings settings)
+{
+  /* setting just the first three colors */
+  color rc = color(23, 123, 123);
+  color gc = color(180, 45, 11);
+  color bc = color(123, 100, 89);
+  color tc = color(34, 55, 89);
+  color zc = color(222, 90, 111);
+  color mc = color(4, 34, 230);
+  color hc = color(114, 73, 2);
+  
+  settings.setColor(0, rc);
+  settings.setColor(1, gc);
+  settings.setColor(2, bc);
+  settings.setColor(3, tc);
+  settings.setColor(4, zc);
+  settings.setColor(5, mc);
+  settings.setColor(6, hc);
+}
+
 void setup()
 {   
   /* Setting up main display settings */
@@ -253,22 +272,7 @@ void setup()
 
   /* palette stuff */
   d = new CDrawable[paletteColors];
-  palette = new ColorPalette(paletteColors);
 
-  /* setting just the first three colors */
-  color rc = color(23, 123, 123);
-  color gc = color(180, 45, 11);
-  color bc = color(123, 100, 89);
-  color tc = color(34, 55, 89);
-  color zc = color(222, 90, 111);
-  color mc = color(4, 34, 230);
-  
-  palette.setColor(0, rc);
-  palette.setColor(1, gc);
-  palette.setColor(2, bc);
-  palette.setColor(3, tc);
-  palette.setColor(4, zc);
-  palette.setColor(5, zc);
   
   /* init ApplicationUpdater */
   CodeSource codeSource =
@@ -1059,7 +1063,8 @@ void savePalette() {
     String stringColor = cp5.getController(currentInput).getStringValue();
     if (stringColor != "") {
       color newColor = getColorFromHex(stringColor);
-      palette.setColor(i, newColor);
+      //palette.setColor(i, newColor);
+      currentSettings.setColor(i, newColor);
     }
   }
 }
@@ -1072,17 +1077,25 @@ void showPalette() {
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
-    String hexedColor = hex(palette.getColor(i));
-    content.setValue(hexedColor.substring(2));
+    // String hexedColor = hex(palette.getColor(i));
+    String hexedColor = hex(currentSettings.getColor(i));
+ content.setValue(hexedColor.substring(2));
     winG.controller(currentInput).show();
   }
-  setDrawable(0, 50, 80, 10, 10, palette.getColor(0));
-  setDrawable(1, 50, 120, 10, 10, palette.getColor(1));
-  setDrawable(2, 50, 160, 10, 10, palette.getColor(2));
-  setDrawable(3, 50, 200, 10, 10, palette.getColor(3));
-  setDrawable(4, 50, 240, 10, 10, palette.getColor(4));
-  setDrawable(5, 50, 280, 10, 10, palette.getColor(5));
-  setDrawable(6, 50, 320, 10, 10, palette.getColor(6));
+  // setDrawable(0, 50, 80, 10, 10, palette.getColor(0));
+  // setDrawable(1, 50, 120, 10, 10, palette.getColor(1));
+  // setDrawable(2, 50, 160, 10, 10, palette.getColor(2));
+  // setDrawable(3, 50, 200, 10, 10, palette.getColor(3));
+  // setDrawable(4, 50, 240, 10, 10, palette.getColor(4));
+  // setDrawable(5, 50, 280, 10, 10, palette.getColor(5));
+  // setDrawable(6, 50, 320, 10, 10, palette.getColor(6));
+  setDrawable(0, 50, 80, 10, 10, currentSettings.getColor(0));
+  setDrawable(1, 50, 120, 10, 10, currentSettings.getColor(1));
+  setDrawable(2, 50, 160, 10, 10, currentSettings.getColor(2));
+  setDrawable(3, 50, 200, 10, 10, currentSettings.getColor(3));
+  setDrawable(4, 50, 240, 10, 10, currentSettings.getColor(4));
+  setDrawable(5, 50, 280, 10, 10, currentSettings.getColor(5));
+  setDrawable(6, 50, 320, 10, 10, currentSettings.getColor(6));
   winG.addDrawable(d[0]);
   winG.addDrawable(d[1]);
   winG.addDrawable(d[2]);
@@ -1967,7 +1980,9 @@ void drawGollyPattern(PGraphics ctx,
           if (settings.isFillOnActive())
           {
             //ctx.fill(colorFillActive);
-            ctx.fill(palette.getColor(currentState - 1));
+            // ctx.fill(palette.getColor(currentState - 1));
+            ctx.fill(settings.getColor(mi, mj));
+
           }
           //cellShape.setFill(colorFillActive);
           else
@@ -2177,6 +2192,10 @@ void initConfiguration(GollyRleConfiguration configuration)
   /* Associating default settings to config */
   currentSettings = new GollyPatternSettings();
   currentSettings.setRleFilePath(gollyFilePath);
+
+  /* initing a default palette */
+  currentSettings.initColors(paletteColors, configuration);
+  setDefaultPaletteColors(currentSettings);
   
   manager.addSettings(currentSettings); // start pattern with defaults
 
