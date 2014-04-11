@@ -41,6 +41,13 @@ public class GollyPatternSettings
   private String SVGPath = null;
   private SketchTransformer transformer;
   private String rleFilePath = null;
+  private CategoricalDistribution distribution;
+  private ColorPalette colorPalette;
+  private ColorMode colorMode = ColorMode.NORMAL;
+  private ColorAssingment currentColorAssignment = null;
+  private ColorAssingment normalColorAssignment = null;
+  private ColorAssingment randomColorAssignment = null;
+  private ColorAssingment randomLocalColorAssignment = null;
 
   /* Utilities */
   public void initTransformer(float xOffset, float yOffset,
@@ -239,6 +246,16 @@ public class GollyPatternSettings
     return cellShape;
   }
 
+  public ColorMode getColorMode()
+  {
+    return colorMode;
+  }
+
+  public ColorAssingment getCurrentColorAssingment()
+  {
+    return currentColorAssignment;
+  }
+
   public String getSVGPath()
   {
     return SVGPath;
@@ -435,6 +452,83 @@ public class GollyPatternSettings
     this.cellShape = cellShape;
   }
 
+  /* TODO check for nullness of assignment */
+  public void setColorMode(ColorMode mode)
+  {
+    colorMode = mode;
+    /* updating the color assignment */
+    switch(mode)
+    {
+    case NORMAL:
+      currentColorAssignment = normalColorAssignment;
+      break;
+
+    case RANDOM:
+      if(randomColorAssignment == null)
+      {
+        randomColorAssignment =
+          currentColorAssignment.newRandomColorAssignment(distribution);
+      }
+      currentColorAssignment = randomColorAssignment;
+      break;
+
+    case RANDOM_LOCAL:
+      currentColorAssignment = randomLocalColorAssignment;
+      break;
+
+    default:
+      currentColorAssignment = normalColorAssignment;
+      break;
+    }
+  }
+
+  // public void setColorPalette(ColorPalette palette)
+  // {
+  //   colorPalette = palette;
+  // }
+
+  /* color management, hiding the palette and the assignment */
+  public void initColors(int numColors, GollyRleConfiguration config)
+  {
+    /* assuming a uniform distribution at start
+       creating a palette */
+    distribution = new CategoricalDistribution(numColors);
+    colorPalette = new ColorPalette(numColors, distribution);
+
+    /* creating a new color assignment */
+    normalColorAssignment = new ColorAssingment(config);
+    /* setting it as the current one */
+    currentColorAssignment = normalColorAssignment;
+  }
+
+  public void setColorProbability(int index, double prob)
+  {
+    colorPalette.setColorProbability(index, prob);
+  }
+
+  public void setColor(int index, int code)
+  {
+    colorPalette.setColor(index, code);
+  }
+
+  public int getColor(int index)
+  {
+    return colorPalette.getColor(index);
+  }
+
+  public int getColor(int i, int j)
+  {
+    int code = currentColorAssignment.getColorCode(i, j);
+    int cellColor = 0; /* TODO: set the inactive color */
+    if(code > 0)
+    {
+      cellColor = colorPalette.getColor(code);
+    }
+
+    return cellColor;
+  }
+    
+  /* file utils */  
   public void setSVGPath(String path)
   {
     SVGPath = path;

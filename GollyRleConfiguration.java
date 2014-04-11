@@ -224,6 +224,40 @@ public class GollyRleConfiguration
     return scaledConfig;
   }
 
+  /*
+    DEPRECATED: use the colorAssignment in the settings
+    creating a new random configuration changing only the active cell states */
+  public GollyRleConfiguration newRandomStateConfiguration(CategoricalDistribution distribution)
+  {
+    GollyRleConfiguration randomConfig = new GollyRleConfiguration();
+    randomConfig.setMatrixHeight(this.matrixHeight);
+    randomConfig.setMatrixWidth(this.matrixWidth);
+    
+    randomConfig.initMatrix();
+    randomConfig.setRule(this.rule);
+
+    int state = 0;
+    for(int i = 0; i < matrixHeight; ++i)
+    {
+      for(int j = 0; j < matrixWidth; ++j)
+      {
+	/* cell is active */
+	if(matrix[i][j] > 0)
+	{
+	  /* get a random state */
+	  state = distribution.nextValue();
+	}
+	else
+	{
+	  state = 0;
+	}
+      
+	randomConfig.setCellState(i, j, state);
+      }
+    }
+    return randomConfig;
+  }
+
   /********** config checks ***********/
 /*public int checkMatrixHeight()
   {
