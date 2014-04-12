@@ -19,7 +19,7 @@ public class GollyPatternSettings
   private int strokeAInactive = 255;
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
-  // private int scaleFactor = 1;
+  private int scaleFactor = 1;
   private float shapeWidthActive = 7;
   private float shapeWidthInactive = 5;
   private float shapeHeightActive = 7;
@@ -147,10 +147,10 @@ public class GollyPatternSettings
     return strokeWeightInactive;
   }
 
-  // public int getScaleFactor()
-  // {
-  //   return scaleFactor;
-  // }
+  public int getScaleFactor()
+  {
+    return scaleFactor;
+  }
 
   public float getShapeWidthActive()
   {
@@ -358,10 +358,10 @@ public class GollyPatternSettings
     strokeWeightInactive = val;
   }
 
-  // public void setScaleFactor(int val)
-  // {
-  //   scaleFactor = val;
-  // }
+  public void setScaleFactor(int val)
+  {
+    scaleFactor = val;
+  }
 
   public void setShapeWidthActive(float val)
   {

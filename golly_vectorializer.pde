@@ -256,11 +256,13 @@ void removeConfig() {
 }
 void updateCAName() {
   String nameBase = "CA: ";
+  String nameScale = currentSettings.getScaleFactor() > 1 ?
+    "(SCALATO X" + currentSettings.getScaleFactor() + ") " : "";
   String nameCA = createDefaultFile() != null ? createDefaultFile().toString() : "Untitled";
   Textarea txt = (Textarea)cp5.getGroup("nameConfig");
-  txt.setText(nameBase + nameCA);
+  txt.setText(nameBase + nameScale + nameCA);
   
-  int newLength = (nameBase.length() + nameCA.length()) * 7;
+  int newLength = (nameBase.length() + nameScale.length() + nameCA.length()) * 6 + 20;
   txt.setWidth(newLength);
   caG.setWidth(newLength);
 }
@@ -1904,13 +1906,16 @@ void scaleMe(int value)
 {
   if(currentConfig != null)
   {
-      GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
-      currentConfig = x2Config;
-      /* Init current configuration */
-      initConfiguration(currentConfig);
-      /* da shit */
-      updateControls();
-    }
+    int currentScale = currentSettings.getScaleFactor(); // saving orig scale
+    GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
+    currentConfig = x2Config;
+    /* Init current configuration */
+    initConfiguration(currentConfig);
+    /* da shit */
+    currentSettings.setScaleFactor(currentScale * 2); // updating scale
+    updateControls();
+    updateCAName();
+  }
 }
 
 File createDefaultFile()
