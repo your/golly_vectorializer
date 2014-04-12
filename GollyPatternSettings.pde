@@ -266,6 +266,11 @@ public class GollyPatternSettings
   {
     return rleFilePath;
   }
+
+  public int getWindowRadius()
+  {
+    return windowRadius;
+  }
   
   /* Setters */
   public void setFillRActive(int val)
@@ -558,6 +563,14 @@ public class GollyPatternSettings
   {
     randomColorAssignment.shuffle(distribution);
   }
+
+  public void shuffleRLColorAssignment()
+  {
+    randomLocalColorAssignment =
+      currentColorAssignment.newRandomLocalColorAssignment(distribution,
+                                                           windowRadius);
+    currentColorAssignment = randomLocalColorAssignment;
+  }
   
   /* file utils */
   public void setSVGPath(String path)
@@ -568,5 +581,18 @@ public class GollyPatternSettings
   public void setRleFilePath(String path)
   {
     rleFilePath = path;
+  }
+
+  public void setWindowRadius(int radius)
+  {
+    if (windowRadius != radius) {
+      windowRadius = radius;
+      if (colorMode == ColorMode.RANDOM_LOCAL) {
+        randomLocalColorAssignment =
+          currentColorAssignment.newRandomLocalColorAssignment(distribution,
+                                                               windowRadius);
+        currentColorAssignment = randomLocalColorAssignment;
+      }
+    }
   }
 }

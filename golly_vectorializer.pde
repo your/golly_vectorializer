@@ -107,6 +107,8 @@ void manageControls(boolean lock)
   setLock(cp5.getController("Normale"), lock);
   setLock(cp5.getController("Random"), lock);
   setLock(cp5.getController("RL"), lock);
+  setLock(cp5.getController("randomRadius"), lock);
+  setLock(cp5.getController("shuffleColors"), lock);
   
   if (!lock)
   {
@@ -147,6 +149,7 @@ void updateControls()
   cp5.getController("toggleShowGrid").setBroadcast(false);
   cp5.getController("toggleShowInactives").setBroadcast(false);
   cp5.getController("zoomSlider").setBroadcast(false);
+  cp5.getController("randomRadius").setBroadcast(false);
   // doing stuff on controls
   cp5.getController("rowsNum").setValue(currentGrid.getRows());
   cp5.getController("colsNum").setValue(currentGrid.getColumns());
@@ -159,6 +162,7 @@ void updateControls()
   cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives() ? 1 : 0);
   cp5.getController("zoomSlider").setValue(transformer.getScaleFactor() * 100);
   cp5.getController("zoomPercentage").setStringValue((int)(transformer.getScaleFactor() * 100) + "%");
+  cp5.getController("randomRadius").setValue(currentSettings.getWindowRadius());
   // cp5.getController("scaleFactor").setStringValue((int)(currentSettings.getScaleFactor()) + "x");
   // broadcasting values again
   cp5.getController("rowsNum").setBroadcast(true);
@@ -167,6 +171,7 @@ void updateControls()
   cp5.getController("toggleShowGrid").setBroadcast(true);
   cp5.getController("toggleShowInactives").setBroadcast(true);
   cp5.getController("zoomSlider").setBroadcast(true);
+  cp5.getController("randomRadius").setBroadcast(true);
 
   // this shit needs to be broadcasted off
   cp5.getController("toggleFill").setBroadcast(false);
@@ -249,6 +254,9 @@ void updateControls()
   cp5.getController("toggleKeepShapeRatio").setBroadcast(true);
   cp5.getController("toggleShapesLikeCells").setBroadcast(true);
 
+  // updating coloring mode
+  updateColorMode();
+
 }
 
 void removeConfig() {
@@ -286,6 +294,24 @@ void updateCAName() {
   caG.setWidth(newLength);
 }
 
+void updateColorMode() {
+  ColorMode actualColorMode = currentSettings.getColorMode();
+  RadioButton r = (RadioButton)cp5.getGroup("modeRadio");
+  switch(actualColorMode) {
+  case NORMAL:
+    r.activate(0);
+    modeRadio(1);
+    break;
+  case RANDOM:
+    r.activate(1);
+    modeRadio(2);
+    break;
+  case RANDOM_LOCAL:
+    r.activate(2);
+    modeRadio(3);
+    break;
+  }
+}
 void modeRadio(int value) {
   switch(value) {
   case -1:
@@ -306,16 +332,30 @@ void modeRadio(int value) {
   default:
   case 1:
     currentSettings.setColorMode(ColorMode.NORMAL);
+    setLock(cp5.getController("shuffleColors"), true);
+    setLock(cp5.getController("randomRadius"), true);
     break;
   case 2:
     currentSettings.setColorMode(ColorMode.RANDOM);
+    setLock(cp5.getController("shuffleColors"), false);
+    setLock(cp5.getController("randomRadius"), true);
     break;
   case 3:
     currentSettings.setColorMode(ColorMode.RANDOM_LOCAL);
+    setLock(cp5.getController("shuffleColors"), false);
+    setLock(cp5.getController("randomRadius"), false);
     break;
   }
 }
-
+void randomRadius(int val) {
+  currentSettings.setWindowRadius(val);
+}
+void shuffleColors(int val) {
+  if (currentSettings.getColorMode() == ColorMode.RANDOM)
+    currentSettings.shuffleColorAssignment();
+  else if (currentSettings.getColorMode() == ColorMode.RANDOM_LOCAL)
+    currentSettings.shuffleRLColorAssignment();
+}
 void setDefaultPaletteColors(GollyPatternSettings settings)
 {
   /* setting just the first three colors */
@@ -622,22 +662,38 @@ void setup()
     .setColorForeground(color(120))
     .setColorActive(color(255))
     .setColorLabel(color(255))
-    .setItemsPerRow(3)
+    .setItemsPerRow(2)
     .setSpacingColumn(47)
     .setGroup(settG)
     .addItem("Normale",1)
     .addItem("Random",2)
     .addItem("RL",3)
     ;
-  cp5.addTextlabel("pickerFillLabel")
-    .setPosition(5, 140)
-    .setText("RIEMPIMENTO FORME ATTIVE")
+  cp5.addSlider("randomRadius")
+    .setLabel("Raggio")
+    .setPosition(50, 130)
+    .setSize(90, 12)
+    .setRange(0, 10)
+    .setSliderMode(Slider.FLEXIBLE)
+    .setColorForeground(color(240,0,0))
     .moveTo(settG)
     ;
+  // cp5.addTextlabel("pickerFillLabel")
+  //   .setPosition(5, 140)
+  //   .setText("RIEMPIMENTO FORME ATTIVE")
+  //   .moveTo(settG)
+  //   ;
   cp5.addButton("openPalette")
-    .setLabel("PALETTE COLORI").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setPosition(80, 155)
-    .setSize(80, 15)
+    .setLabel("APRI PALETTE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(5, 155)
+    .setSize(90, 25)
+    .setColorBackground(cp)
+    .moveTo(settG)
+    ;
+  cp5.addButton("shuffleColors")
+    .setLabel("Shuffle!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(110, 155)
+    .setSize(60, 25)
     .setColorBackground(cp)
     .moveTo(settG)
     ;
@@ -737,7 +793,7 @@ void setup()
   //   ;
   cp5.addToggle("toggleFill")
     .setLabel("Riempimento ON")
-    .setPosition(5, 155)
+    .setPosition(100, 255)
     .setSize(42, 15)
     .setValue(currentSettings.isFillOnActive())
     .setMode(ControlP5.SWITCH)
@@ -1511,8 +1567,8 @@ void toggleWorkingStates(boolean flag)
     "IMPOSTAZIONI STATI " + status + "I");
   mainG.getController("resizeShapes").setStringValue(
     "DIMENSIONI FORME " + status + "E");
-  mainG.getController("pickerFillLabel").setStringValue(
-    "RIEMPIMENTO FORME " + status + "E");
+  // mainG.getController("pickerFillLabel").setStringValue(
+  //   "RIEMPIMENTO FORME " + status + "E");
   mainG.getController("pickerStrokeLabel").setStringValue(
     "CONTORNO FORME " + status + "E");
   updateControls();
