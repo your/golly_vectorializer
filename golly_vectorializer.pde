@@ -2529,7 +2529,7 @@ void mousePressed()
   if (draggingOn)
     draggingOn = false;
     popupOn = lockG.isVisible(); // update this guy at each press
-  if (mouseX < x - sizeCP5Group)
+  if (mouseX < width - sizeCP5Group && mouseY < height - 60)
   {
     if (currentSettings.getTransformer() != null && !popupOn)
     { 
@@ -2565,7 +2565,7 @@ PVector getPointInMatrix(PVector point,
 
 void mouseReleased()
 {
-  if (mouseX < x - sizeCP5Group)
+  if (mouseX < width - sizeCP5Group && mouseY < height - 60)
   {
     if (currentSettings.getTransformer() != null && !popupOn && !draggingOn)
     {
@@ -2611,7 +2611,7 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (mouseX < x - sizeCP5Group)
+  if (mouseX < width - sizeCP5Group && mouseY < height - 60)
   {
     if (currentSettings.getTransformer() != null && !popupOn)
     {
