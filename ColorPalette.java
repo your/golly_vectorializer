@@ -46,6 +46,9 @@ public class ColorPalette
       index = maxLength - 1; //def write @ last positionr
     
     colors[index] = color; //FIXED: index always in boundaries
+    
+    if (length < maxLength)
+      length++; // FIXED: increment currently set colors of palette
   }
 
   /* DEPRECATED use setColor instead */
