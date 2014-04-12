@@ -252,7 +252,26 @@ void updateControls()
 }
 
 void removeConfig() {
-  //TODO
+  showPopup("Vuoi davvero cancellare questa configurazione dalla memoria?"
+            + "\n\n(Le modifiche non esportate andranno perse!)", 5, 0);
+}
+void buttonConfigRemovalOK() {
+  boolean havePrev = manager.hasPrevConfig();
+  boolean haveNext = manager.hasNextConfig();
+  //setLock(caG.getController("removeConfig"), !lockNext ? !lockPrev : !lockNext);
+  /* removing currents */
+  if (haveNext || havePrev) {
+    setLock(caG.getController("removeConfig"), false);
+    manager.removeCurrentConfiguration();
+    manager.removeCurrentGrid();
+    manager.removeCurrentSettings();
+    /* updating currents & stuff */
+    updateHistory();
+    updateCAName();
+    updateControls();
+  } else
+    setLock(caG.getController("removeConfig"), true);
+  killPopup();
 }
 void updateCAName() {
   String nameBase = "CA: ";
@@ -801,7 +820,7 @@ void setup()
     .setPosition(5, 9)
     .setSize(12,12)
     .setGroup(caG)
-    .lock()
+    //.lock()
     ;
   cp5.addTextarea("nameConfig")
     .setPosition(20,10)
@@ -1004,6 +1023,17 @@ void setup()
     .setValue(1)
     .setBroadcast(true)
     .setLabel("Sovrascrivi").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    ;
+  cp5.addButton("buttonConfigRemovalOK")
+    .setPosition(60,80)
+    .setSize(75,25)
+    .moveTo(winG)
+    .setColorBackground(color(5))
+    .setColorActive(color(20))
+    .setBroadcast(false)
+    .setValue(1)
+    .setBroadcast(true)
+    .setLabel("Rimuovi!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonDownloadUpdateOK")
     .setPosition(60,80)
@@ -1307,6 +1337,7 @@ void resetPopup() {
   winG.controller("buttonOverwriteOK").hide();
   winG.controller("buttonDownloadUpdateOK").hide();
   winG.controller("buttonApplyUpdateOK").hide();
+  winG.controller("buttonConfigRemovalOK").hide();
   winG.controller("buttonGenericCancel").hide();
   winG.controller("buttonApplyUpdateCancel").hide();
   winG.controller("buttonPaletteOK").hide();
@@ -1354,6 +1385,7 @@ void showPopup(String message, int buttonA, int buttonB) {
   // 2: downloadUpdateOK
   // 3: applyUpdateOK
   // 4: paletteOK
+  // 5: configRemovalOK
 
   /// button B
   // 0: genericCancel
@@ -1385,6 +1417,12 @@ void showPopup(String message, int buttonA, int buttonB) {
     cp5.controller("buttonPaletteOK").setPosition(popupXSize / 2 - 100,
                                                   popupYSize - 45);
     cp5.controller("buttonPaletteOK").show();
+    break;
+  case 5:
+    cp5.controller("buttonConfigRemovalOK").setPosition(popupXSize / 2 - 100,
+                                                        popupYSize - 45);
+    cp5.controller("buttonConfigRemovalOK").show();
+    break;
   }
 
   switch(buttonB) {
@@ -1402,6 +1440,7 @@ void showPopup(String message, int buttonA, int buttonB) {
     cp5.controller("buttonPaletteCancel").setPosition(popupXSize / 2 + 25,
                                                       popupYSize - 45);
     cp5.controller("buttonPaletteCancel").show();
+    break;
   }
   
   winG.show();
@@ -1926,16 +1965,16 @@ File createDefaultFile()
   String currentRlePath = currentSettings.getRleFilePath();
   if(currentRlePath != null)
   {
-    println("Current path ", currentRlePath);
+    //println("Current path ", currentRlePath);
     /* get the filename */
     int index = currentRlePath.lastIndexOf(File.separator);
     
     String filename = currentRlePath.substring(index + 1);
-    println("Current filename", filename);
+    //println("Current filename", filename);
     /* removing the extension */
     index = filename.lastIndexOf(".rle");
     String rawName = filename.substring(0, index);
-    println("Current rawname ", rawName);
+    //println("Current rawname ", rawName);
     
     defaultFile = new File(rawName);
   }
@@ -2301,16 +2340,21 @@ void drawLoadingWheel(PGraphics ctx)
 
 void checkConfigHistory()
 {
-  println(currentConfig);
   /* Config history handling */
-  if (manager.hasPrevConfig())
-    setLock(mainG.getController("rewindConfigHistory"), false);
-  else
-    setLock(mainG.getController("rewindConfigHistory"), true);
-  if (manager.hasNextConfig())
-    setLock(mainG.getController("forwardConfigHistory"), false);
-  else
-    setLock(mainG.getController("forwardConfigHistory"), true);
+  boolean lockPrev = manager.hasPrevConfig();
+  boolean lockNext = manager.hasNextConfig();
+  setLock(mainG.getController("rewindConfigHistory"), !lockPrev);
+  setLock(mainG.getController("forwardConfigHistory"), !lockNext);
+  // force to keep at least one item
+  setLock(caG.getController("removeConfig"), !lockNext ? !lockPrev : !lockNext);
+  // if (manager.hasPrevConfig())
+  //   setLock(mainG.getController("rewindConfigHistory"), false);
+  // else
+  //   setLock(mainG.getController("rewindConfigHistory"), true);
+  // if (manager.hasNextConfig())
+  //   setLock(mainG.getController("forwardConfigHistory"), false);
+  // else
+  //   setLock(mainG.getController("forwardConfigHistory"), true);
 }
 
 Grid2D generateGridFrom(GollyRleConfiguration config)
@@ -2570,7 +2614,7 @@ PVector getPointInMatrix(PVector point,
 
 void mouseReleased()
 {
-  if (mouseX < width - sizeCP5Group && mouseY < height - 60)
+  if (mouseX < width - sizeCP5Group && mouseY < height - 60 && mouseY > 50)
   {
     if (currentSettings.getTransformer() != null && !popupOn && !draggingOn)
     {
@@ -2616,7 +2660,7 @@ void mouseReleased()
 
 void mouseDragged()
 {
-  if (mouseX < width - sizeCP5Group && mouseY < height - 60)
+  if (mouseX < width - sizeCP5Group)
   {
     if (currentSettings.getTransformer() != null && !popupOn)
     {

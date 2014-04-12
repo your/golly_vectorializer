@@ -45,6 +45,24 @@ public class GollyHistoryManager {
     gridHistory.set(gridHistoryIndex, overwritingGrid);
     //println("dopo: " + gridHistory.get(gridHistoryIndex));
   }
+
+  public void removeCurrentConfiguration() {
+    configHistory.remove(configHistoryIndex);
+    rewindConfigHistory();
+    //configHistoryIndex--;
+  }
+
+  public void removeCurrentGrid() {
+    gridHistory.remove(gridHistoryIndex);
+    rewindGridHistory();
+    //gridHistoryIndex--;
+  }
+
+  public void removeCurrentSettings() {
+    settingsHistory.remove(settingsHistoryIndex);
+    rewindSettingsHistory();
+    //settingsHistoryIndex--;
+  }
   
   /* Getters */
   public GollyRleConfiguration getCurrentConfiguration() {
