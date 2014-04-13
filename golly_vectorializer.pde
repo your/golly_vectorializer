@@ -390,10 +390,10 @@ void setDefaultPaletteColors(GollyPatternSettings settings)
   settings.setColor(0, rc);
   settings.setColor(1, gc);
   settings.setColor(2, bc);
-  // settings.setColor(3, tc);
-  // settings.setColor(4, zc);
-  // settings.setColor(5, mc);
-  // settings.setColor(6, hc);
+  settings.setColor(3, tc);
+  settings.setColor(4, zc);
+  settings.setColor(5, mc);
+  settings.setColor(6, hc);
 }
 
 void setup()

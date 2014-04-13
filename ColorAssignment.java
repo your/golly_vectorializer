@@ -91,10 +91,10 @@ public class ColorAssignment implements java.io.Serializable
     matrix[i][j]--;
     // this block inhibits staus decrement once reached latest state
     // commenting out for now
-    // if(matrix[i][j] < -1)
-    // {
-    //   matrix[i][j] = -1;
-    // }
+    if(matrix[i][j] < -1)
+    {
+      matrix[i][j] = -1;
+    }
   }
 
   // public int getColor(int i, int j)
