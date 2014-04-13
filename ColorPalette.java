@@ -47,22 +47,26 @@ public class ColorPalette
     
     colors[index] = color; //FIXED: index always in boundaries
     
-    if (length < maxLength)
+    if (index == length) {
       length++; // FIXED: increment currently set colors of palette
+      System.out.println("Aggiunti finora colori: " + length);
+    } else if (index >= length && index < maxLength) {
+      length = index + 1;
+    }
   }
 
   /* DEPRECATED use setColor instead */
-  public boolean addColor(int color)
-  {
-    boolean added = false;
-    if(length < maxLength)
-    {
-      colors[length] = color;
-      length++;
-      added = true;
-    }
-    return added;
-  }
+  // public boolean addColor(int color)
+  // {
+  //   boolean added = false;
+  //   if(length < maxLength)
+  //   {
+  //     colors[length] = color;
+  //     length++;
+  //     added = true;
+  //   }
+  //   return added;
+  // }
 
   public int getColor(int index)
   {

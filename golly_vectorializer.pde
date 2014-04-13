@@ -387,10 +387,10 @@ void setDefaultPaletteColors(GollyPatternSettings settings)
   settings.setColor(0, rc);
   settings.setColor(1, gc);
   settings.setColor(2, bc);
-  settings.setColor(3, tc);
-  settings.setColor(4, zc);
-  settings.setColor(5, mc);
-  settings.setColor(6, hc);
+  // settings.setColor(3, tc);
+  // settings.setColor(4, zc);
+  // settings.setColor(5, mc);
+  // settings.setColor(6, hc);
 }
 
 void setup()
@@ -1324,22 +1324,22 @@ void updatePaletteDrawable(int number) {
 void savePalette() {
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
-    String stringColor = cp5.getController(currentInput).getStringValue();
-    if (stringColor != "") {
-      color newColor = getColorFromHex(stringColor);
-      //palette.setColor(i, newColor);
-      currentSettings.setColor(i, newColor);
-    }
+    Textfield content = ((Textfield)cp5.getController(currentInput));
+    String stringColor = content.getText(); //cp5.getController(currentInput).getStringValue();
+    color newColor = getColorFromHex(stringColor);
+    currentSettings.setColor(i, newColor);
   }
   // saving inactive color too
-  String inactiveColor = cp5.getController("inputPaletteColorVoid").getStringValue();
-  if (inactiveColor != "") {
-    color newColor = getColorFromHex(inactiveColor);
-    currentSettings.setFillRInactive((int)red(newColor));
-    currentSettings.setFillGInactive((int)green(newColor));
-    currentSettings.setFillBInactive((int)blue(newColor));
-    currentSettings.setFillAInactive((int)alpha(newColor));
-  }
+  Textfield content = ((Textfield)cp5.getController("inputPaletteColorVoid"));
+  String inactiveColor = content.getText();
+  //String inactiveColor = cp5.getController("inputPaletteColorVoid").getStringValue();
+  //if (inactiveColor != "") {
+  color newColor = getColorFromHex(inactiveColor);
+  currentSettings.setFillRInactive((int)red(newColor));
+  currentSettings.setFillGInactive((int)green(newColor));
+  currentSettings.setFillBInactive((int)blue(newColor));
+  currentSettings.setFillAInactive((int)alpha(newColor));
+  //}
 }
 void openPalette(int value) {
   showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 450, 4, 2);
@@ -1351,8 +1351,11 @@ void showPalette() {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
     // String hexedColor = hex(palette.getColor(i));
+    println(currentSettings.getColor(i));
     String hexedColor = hex(currentSettings.getColor(i));
+    content.setBroadcast(false);
     content.setValue(hexedColor.substring(2));
+    content.setBroadcast(true);
     winG.controller(currentInput).show();
   }
 
@@ -1362,7 +1365,9 @@ void showPalette() {
                               currentSettings.getFillBInactive(),
                               currentSettings.getFillAInactive());
   Textfield content = (Textfield)cp5.getController("inputPaletteColorVoid");
+  content.setBroadcast(false);
   content.setValue(hex(colorInactive).substring(2));
+  content.setBroadcast(true);
   winG.controller("inputPaletteColorVoid").show();
   
   setDrawable(0, 50, 80, 10, 10, currentSettings.getColor(0));
