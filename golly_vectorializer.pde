@@ -141,6 +141,16 @@ void manageControls(boolean lock)
     // showing ca name
     caG.show();
     updateCAName();
+
+    // setting grid size sliders max range values
+    Slider s1 = (Slider)cp5.getController("rowsNum");
+    Slider s2 = (Slider)cp5.getController("colsNum");
+    s1.setBroadcast(false);
+    s2.setBroadcast(false);
+    s1.setRange(0, currentConfig.getMatrixHeight());
+    s2.setRange(0, currentConfig.getMatrixWidth());
+    s1.setBroadcast(true);
+    s2.setBroadcast(true);
   }
 }
 void updateControls()
@@ -435,7 +445,7 @@ void setup()
     .setPosition(5, 25)
     .setSize(145, 10)
     .setValue(currentGrid.getRows())
-    .setRange(0, 1000)
+    //.setRange(0, 1000)
     .moveTo(gridG)
     ;
   cp5.addSlider("colsNum")
@@ -443,7 +453,7 @@ void setup()
     .setPosition(5, 36)
     .setSize(145, 10)
     .setValue(currentGrid.getColumns())
-    .setRange(0, 1000)
+    //.setRange(0, 1000)
     .moveTo(gridG)
     ;
   cp5.addTextlabel("resizeCells")
