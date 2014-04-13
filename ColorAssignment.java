@@ -247,12 +247,25 @@ public class ColorAssignment
   {
     ColorAssignment randomAssignment = new ColorAssignment(matrixHeight, matrixWidth);
 
+    randomAssignment.shuffleLocal(this,
+				  distribution,
+				  windowRadius);
+
+    
+    return randomAssignment;
+  }
+
+  public void shuffleLocal(ColorAssignment original,
+			   CategoricalDistribution distribution,
+			   int windowRadius)
+  {
     /* setting all unseen values  */
     for(int i = 0; i < matrixHeight; ++i)
     {
       for(int j = 0; j < matrixWidth; ++j)
       {
-	randomAssignment.setColorCode(i, j, unseen);
+        // setColorCode(i, j, unseen);
+	matrix[i][j] = unseen;
       }
     }
 
@@ -262,35 +275,35 @@ public class ColorAssignment
       for(int j = 0; j < matrixWidth; ++j)
       {
         /* if the cell is active */
-	if(matrix[i][j] >= 0)
-	{
-	  /* if it is not seen */
-	  if(randomAssignment.getColorCode(i, j) == unseen)
-	  {
-	    /* get random color code */
-	    int randomCode = distribution.nextValue();
+        // if(matrix[i][j] >= 0)
+	int originalCode = original.getColorCode(i, j);
+	if( originalCode >= 0)
+        {
+          /* if it is not seen */
+          // if(randomAssignment.getColorCode(i, j) == unseen)
+          if(matrix[i][j] == unseen)
+          {
+            /* get random color code */
+            int randomCode = distribution.nextValue();
             // System.out.println("new random col " + randomCode + " " + i + " " +  j);
-	    /* color the cell and mark it as seen */
-	    // randomAssignment.setColorCode(i, j, randomCode);
-	    /* propagate the color to unseen connected neighbours */
-	    randomAssignment.colorConnectedNeighbours(this,
-						      i,
-						      j,
-						      windowRadius,
-						      randomCode);
-	  }
-	}
-	else
-	{
-	  randomAssignment.setColorCode(i, j, matrix[i][j]);
-	}
+            /* color the cell and mark it as seen */
+            // randomAssignment.setColorCode(i, j, randomCode);
+            /* propagate the color to unseen connected neighbours */
+            colorConnectedNeighbours(original,
+				     i,
+				     j,
+				     windowRadius,
+				     randomCode);
+          }
+        }
+        else
+        {
+          // randomAssignment.setColorCode(i, j, matrix[i][j]);
+	  matrix[i][j] = originalCode;
+        }
       }
     }
-
-    
-    return randomAssignment;
   }
-  
 }
 
 

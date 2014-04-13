@@ -566,10 +566,13 @@ public class GollyPatternSettings
 
   public void shuffleRLColorAssignment()
   {
-    randomLocalColorAssignment =
-      currentColorAssignment.newRandomLocalColorAssignment(distribution,
-                                                           windowRadius);
-    currentColorAssignment = randomLocalColorAssignment;
+    // randomLocalColorAssignment =
+    //   currentColorAssignment.newRandomLocalColorAssignment(distribution,
+    //                                                        windowRadius);
+    // currentColorAssignment = randomLocalColorAssignment;
+    randomLocalColorAssignment.shuffleLocal(normalColorAssignment,
+                                            distribution,
+                                            windowRadius);
   }
   
   /* file utils */
