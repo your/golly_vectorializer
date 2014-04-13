@@ -39,7 +39,7 @@ public class GollyPatternSettings implements java.io.Serializable
   private boolean workingOnActiveStates = true;
   private CellShape cellShape = CellShape.SQUARE;
   private String SVGPath = null;
-  private SketchTransformer transformer;
+  // private SketchTransformer transformer;
   private String rleFilePath = null;
   private CategoricalDistribution distribution;
   private ColorPalette colorPalette;
@@ -51,10 +51,10 @@ public class GollyPatternSettings implements java.io.Serializable
   private int windowRadius = 1;
 
   /* Utilities */
-  public void initTransformer(float xOffset, float yOffset,
-			      float scaleFactor) {
-    transformer = new SketchTransformer(xOffset, yOffset, scaleFactor);
-  }
+  // public void initTransformer(float xOffset, float yOffset,
+	// 		      float scaleFactor) {
+  //   transformer = new SketchTransformer(xOffset, yOffset, scaleFactor);
+  // }
   
   /* Getters: */
   public int getFillRActive()
@@ -172,10 +172,10 @@ public class GollyPatternSettings implements java.io.Serializable
     return shapeHeightInactive;
   }
 
-  public SketchTransformer getTransformer()
-  {
-    return transformer;
-  }
+  // public SketchTransformer getTransformer()
+  // {
+  //   return transformer;
+  // }
 
   // public float getScaleFactor()
   // {
@@ -547,7 +547,7 @@ public class GollyPatternSettings implements java.io.Serializable
 
   public void nextColorAssignment(int i, int j)
   {
-    println("curr ass", currentColorAssignment.getColorCode(i, j));
+    //   println("curr ass", currentColorAssignment.getColorCode(i, j));
     if(currentColorAssignment.getColorCode(i, j) + 1 < colorPalette.getPaletteLength())
     {
       currentColorAssignment.nextColor(i, j);

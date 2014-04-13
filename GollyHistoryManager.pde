@@ -8,10 +8,13 @@ public class GollyHistoryManager {
   private ArrayList<GollyPatternSettings> settingsHistory =
     new ArrayList<GollyPatternSettings>();
   private ArrayList<Grid2D> gridHistory = new ArrayList<Grid2D>();
+  private ArrayList<SketchTransformer> transformerHistory =
+    new ArrayList<SketchTransformer>();
 
   private int configHistoryIndex = -1;
   private int settingsHistoryIndex = -1;
   private int gridHistoryIndex = -1;
+  private int transformerHistoryIndex = -1;
 
   /* Methods */
   public void addConfiguration(GollyRleConfiguration newConfig) {
@@ -29,39 +32,46 @@ public class GollyHistoryManager {
     gridHistoryIndex++;
   }
 
-  public void updateSettingsHistory(GollyPatternSettings updatedSettings) {
-    if (settingsHistoryIndex > -1)
-      settingsHistory.set(settingsHistoryIndex, updatedSettings);
+  public void addTransformer(SketchTransformer newTransformer) {
+    transformerHistory.add(newTransformer);
+    transformerHistoryIndex++;
   }
 
-  public void setCurrentConfiguration(GollyRleConfiguration overwritingConfig) {
-    //println("prima: " + configHistory.get(configHistoryIndex));
-    configHistory.set(configHistoryIndex, overwritingConfig);
-    //println("dopo: " + configHistory.get(configHistoryIndex));
-  }
+  // public void updateSettingsHistory(GollyPatternSettings updatedSettings) {
+  //   if (settingsHistoryIndex > -1)
+  //     settingsHistory.set(settingsHistoryIndex, updatedSettings);
+  // }
 
-  public void setCurrentGrid(Grid2D overwritingGrid) {
-    //println("prima: " + gridHistory.get(gridHistoryIndex));
-    gridHistory.set(gridHistoryIndex, overwritingGrid);
-    //println("dopo: " + gridHistory.get(gridHistoryIndex));
-  }
+  // public void setCurrentConfiguration(GollyRleConfiguration overwritingConfig) {
+  //   //println("prima: " + configHistory.get(configHistoryIndex));
+  //   configHistory.set(configHistoryIndex, overwritingConfig);
+  //   //println("dopo: " + configHistory.get(configHistoryIndex));
+  // }
+
+  // public void setCurrentGrid(Grid2D overwritingGrid) {
+  //   //println("prima: " + gridHistory.get(gridHistoryIndex));
+  //   gridHistory.set(gridHistoryIndex, overwritingGrid);
+  //   //println("dopo: " + gridHistory.get(gridHistoryIndex));
+  // }
 
   public void removeCurrentConfiguration() {
     configHistory.remove(configHistoryIndex);
     rewindConfigHistory();
-    //configHistoryIndex--;
   }
 
   public void removeCurrentGrid() {
     gridHistory.remove(gridHistoryIndex);
     rewindGridHistory();
-    //gridHistoryIndex--;
   }
 
   public void removeCurrentSettings() {
     settingsHistory.remove(settingsHistoryIndex);
     rewindSettingsHistory();
-    //settingsHistoryIndex--;
+  }
+
+  public void removeCurrentTransformer() {
+    transformerHistory.remove(transformerHistoryIndex);
+    rewindTransformerHistory();
   }
   
   /* Getters */
@@ -85,6 +95,13 @@ public class GollyHistoryManager {
       currentGrid = gridHistory.get(gridHistoryIndex);
     }
     return currentGrid;
+  }
+  public SketchTransformer getCurrentTransformer() {
+    SketchTransformer currentTransformer = null;
+    if (transformerHistoryIndex > -1) {
+      currentTransformer = transformerHistory.get(transformerHistoryIndex);
+    }
+    return currentTransformer;
   }
   
   /* Going back-and-forth */
@@ -112,17 +129,27 @@ public class GollyHistoryManager {
     if (gridHistoryIndex > 0)
       gridHistoryIndex--;
   }
-
+  private void forwardTransformerHistory() {
+    if (transformerHistoryIndex < transformerHistory.size() - 1)
+      transformerHistoryIndex++;
+  }
+  private void rewindTransformerHistory() {
+    if (transformerHistoryIndex > 0)
+      transformerHistoryIndex--;
+  }
+  
   public void forwardHistory() {
     forwardConfigHistory();
     forwardGridHistory();
     forwardSettingsHistory();
+    forwardTransformerHistory();
   }
 
   public void rewindHistory() {
     rewindConfigHistory();
     rewindGridHistory();
     rewindSettingsHistory();
+    rewindTransformerHistory();
   }
 
   /* Other utilities */

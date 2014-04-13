@@ -17,7 +17,7 @@ GollyRleReader reader;
 GollyHistoryManager manager;
 GollyRleConfiguration currentConfig;
 GollyPatternSettings currentSettings;
-SketchTransformer transformer;
+SketchTransformer currentTransformer;
 Grid2D currentGrid;
 ControlP5 cp5;
 CDrawable[] d;
@@ -180,8 +180,8 @@ void updateControls()
   cp5.getController("toggleKeepCellRatio").setValue(currentSettings.getKeepCellRatio() ? 1 : 0);
   cp5.getController("toggleShowGrid").setValue(currentSettings.getShowGrid()?1:0);
   cp5.getController("toggleShowInactives").setValue(currentSettings.getShowInactives() ? 1 : 0);
-  cp5.getController("zoomSlider").setValue(transformer.getScaleFactor() * 100);
-  cp5.getController("zoomPercentage").setStringValue((int)(transformer.getScaleFactor() * 100) + "%");
+  cp5.getController("zoomSlider").setValue(currentTransformer.getScaleFactor() * 100);
+  cp5.getController("zoomPercentage").setStringValue((int)(currentTransformer.getScaleFactor() * 100) + "%");
   cp5.getController("randomRadius").setValue(currentSettings.getWindowRadius());
   // cp5.getController("scaleFactor").setStringValue((int)(currentSettings.getScaleFactor()) + "x");
   // broadcasting values again
@@ -293,6 +293,7 @@ void buttonConfigRemovalOK() {
     manager.removeCurrentConfiguration();
     manager.removeCurrentGrid();
     manager.removeCurrentSettings();
+    manager.removeCurrentTransformer();
     /* updating currents & stuff */
     updateHistory();
     updateCAName();
@@ -424,6 +425,7 @@ void setup()
   reader = new GollyRleReader();
   currentSettings = new GollyPatternSettings();
   currentGrid = new Grid2D();
+  currentTransformer = null;
 
   /* Building CP5 objects */
   cp5 = new ControlP5(this);
@@ -1677,13 +1679,13 @@ void toggleWorkingStates(boolean flag)
 void rowsNum(int val)
 {
   currentGrid.setRows(val);
-  if (currentSettings.getTransformer() != null)
+  if (currentTransformer != null)
     centerSketch();
 }
 void colsNum(int val)
 {
   currentGrid.setColumns(val);
-  if (currentSettings.getTransformer() != null)
+  if (currentTransformer != null)
     centerSketch();
 }
 void cellWidth(float val) {
@@ -1800,7 +1802,7 @@ void updateHistory()
   currentGrid = manager.getCurrentGrid();
   currentConfig = manager.getCurrentConfiguration();
   currentSettings = manager.getCurrentSettings();
-  transformer = currentSettings.getTransformer();
+  currentTransformer = manager.getCurrentTransformer();
   checkConfigHistory();
 }
 void loadRleConfig(int status)
@@ -2030,7 +2032,7 @@ void pickAStroke(int val)
 
 void updateZoomPercentage()
 {
-  float scaleFactor = transformer.getScaleFactor();
+  float scaleFactor = currentTransformer.getScaleFactor();
   int percentage = ceil(100 * scaleFactor);
   mainG.getController("zoomPercentage").setStringValue(percentage + "%");
   updateControls();
@@ -2047,9 +2049,9 @@ void zoomSlider(int value)
 {
   float scaleFactor = (float)value / 100; 
   //scaleFactor += scaleUnit;
-  if (currentSettings.getTransformer() != null)
+  if (currentTransformer != null)
   {
-    transformer.setScaleFactor(scaleFactor);
+    currentTransformer.setScaleFactor(scaleFactor);
     centerSketch();
     updateZoomPercentage();
   }
@@ -2058,19 +2060,19 @@ void zoomSlider(int value)
 
 void zoomIn(int status)
 {
-  float scaleFactor = transformer.getScaleFactor();
+  float scaleFactor = currentTransformer.getScaleFactor();
   scaleFactor += scaleUnit;
-  transformer.setScaleFactor(scaleFactor);
+  currentTransformer.setScaleFactor(scaleFactor);
   centerSketch();
   updateZoomPercentage();
 }
 
 void zoomOut(int status)
 {
-  float scaleFactor = transformer.getScaleFactor();
+  float scaleFactor = currentTransformer.getScaleFactor();
   if (scaleFactor > scaleUnit) 
     scaleFactor -= scaleUnit;
-  transformer.setScaleFactor(scaleFactor);
+  currentTransformer.setScaleFactor(scaleFactor);
   centerSketch();
   updateZoomPercentage();
 }
@@ -2470,7 +2472,7 @@ void draw()
   else
   {
   
-    if (currentSettings.getTransformer() != null)
+    if (currentTransformer != null)
     {
 
       if (loadingSomething)
@@ -2478,14 +2480,14 @@ void draw()
       else
       {
         /* getting ready for drawing */
-        transformer.startDrawing();
+        currentTransformer.startDrawing();
       
         /* are we ready to draw? */
         if (currentSettings.getShowGrid()) currentGrid.draw(g, color(204, 204, 204));
         drawGollyPattern(g, currentGrid, currentConfig, currentSettings);
 
         /* ended drawing */
-        transformer.endDrawing();
+        currentTransformer.endDrawing();
       }
     }
   }
@@ -2586,10 +2588,14 @@ void initConfiguration(GollyRleConfiguration configuration)
   manageControls(false);
 
   /* Init SketchTransformer */
-  currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
+  currentTransformer = new SketchTransformer((width - sizeCP5Group) / 2,
+                                             height / 2,
+                                             1.0);
+  manager.addTransformer(currentTransformer);
+  // currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
 
   /* Loading current transformer */
-  transformer = currentSettings.getTransformer();
+  //transformer = currentSettings.getTransformer();
 
   /* Centering sketch */
   centerSketch();
@@ -2717,7 +2723,7 @@ void centerSketch()
   float patternHeight = rows * cellHeight + (shapeHeight-cellHeight);
 
   /* centering sketch */
-  transformer.centerSketch(width, sizeCP5Group, height, 0, patternWidth, patternHeight);
+  currentTransformer.centerSketch(width, sizeCP5Group, height, 0, patternWidth, patternHeight);
 }
 
 String GetTextFromClipboard()
@@ -2764,9 +2770,9 @@ void mousePressed()
     popupOn = lockG.isVisible(); // update this guy at each press
   if (mouseX < width - sizeCP5Group && mouseY < height - 60)
   {
-    if (currentSettings.getTransformer() != null && !popupOn)
+    if (currentTransformer != null && !popupOn)
     { 
-      transformer.saveMousePosition(mouseX, mouseY);
+      currentTransformer.saveMousePosition(mouseX, mouseY);
     }
   }
 }
@@ -2800,14 +2806,14 @@ void mouseReleased()
 {
   if (mouseX < width - sizeCP5Group && mouseY < height - 60 && mouseY > 50)
   {
-    if (currentSettings.getTransformer() != null && !popupOn && !draggingOn)
+    if (currentTransformer != null && !popupOn && !draggingOn)
     {
       /* allowing drawing only in normal mode */
       if(currentSettings.getColorMode() == ColorMode.NORMAL)
       {
         /* if there is a transformer there's a pattern too */
         PVector currentTransformPoint =
-          currentSettings.getTransformer().convertCoordinates(mouseX, mouseY);
+          currentTransformer.convertCoordinates(mouseX, mouseY);
         /* get point inside the grid */
         PVector pointInGrid =
           currentGrid.getPointForCoordinates(currentTransformPoint);
@@ -2841,7 +2847,7 @@ void mouseReleased()
         }
       }
        
-      transformer.resetMousePosition();
+      currentTransformer.resetMousePosition();
     }
   }  
 }
@@ -2850,10 +2856,10 @@ void mouseDragged()
 {
   if (mouseX < width - sizeCP5Group)
   {
-    if (currentSettings.getTransformer() != null && !popupOn)
+    if (currentTransformer != null && !popupOn)
     {
       draggingOn = true;
-      transformer.updateTranslationOffset(mouseX, mouseY);
+      currentTransformer.updateTranslationOffset(mouseX, mouseY);
     }
   }
 }
