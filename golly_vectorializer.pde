@@ -1448,41 +1448,53 @@ void serialize()
   {
     defaultFile = new File("Untitled");
   }
-  selectOutput("Selezionare destinazione salvataggio:", "serializeConfig", defaultFile);
+  selectOutput("Selezionare destinazione salvataggio:", "serializeConfigAndSettings", defaultFile);
 }
 
 void deserialize()
 {
-  selectInput("Selezionare file da caricare:", "deserializeConfig");
+  selectInput("Selezionare file da caricare:", "deserializeConfigAndSettings");
 }
 
-void serializeConfig(File selected)
+void serializeConfigAndSettings(File selected)
 {
   if(selected != null)
   {
     String path = selected.getAbsolutePath();
     println("Serializing file", path);
 
-    serializationManager.serializeConfiguration(currentConfig,
-                                                path);
+    serializationManager.serializeConfigurationAndSettings(currentConfig,
+                                                           currentSettings,
+                                                           path);
   }
 }
 
-void deserializeConfig(File selected)
+void deserializeConfigAndSettings(File selected)
 {
   if(selected != null)
   {
     String path = selected.getAbsolutePath();
     println("Deserializing file", path);
 
-    GollyRleConfiguration deConfig =
-      serializationManager.deserializeConfiguration(path);
+    Map<String, Object> deserializedObjects =
+      (HashMap<String, Object>) serializationManager.deserializeConfigurationAndSettings(path);
 
-    println(deConfig, deConfig.getMatrixHeight(), deConfig.getMatrixWidth());
-
-    currentConfig = deConfig;
+    //println(deConfig, deConfig.getMatrixHeight(), deConfig.getMatrixWidth());
+    
+    GollyRleConfiguration loadedConfig = (GollyRleConfiguration) deserializedObjects.get("config");
+    GollyPatternSettings loadedSettings = (GollyPatternSettings) deserializedObjects.get("settings");
+    
+    
     /* Init current configuration */
-    initConfiguration(currentConfig);
+    initConfiguration(loadedConfig);
+    initSettings(loadedConfig, loadedSettings);
+    
+    initTransformer();
+
+    updateHistory();
+    //checkConfigHistory();
+    manageControls(false);
+
     /* update controls */
     updateControls();
   }
@@ -2121,8 +2133,8 @@ void scaleMe(int value)
     int currentScale = currentSettings.getScaleFactor(); // saving orig scale
     GollyRleConfiguration x2Config = currentConfig.newScaledConfiguration(2);
     currentConfig = x2Config;
-    /* Init current configuration */
-    initConfiguration(currentConfig);
+    /* Init new pattern configuration */
+    initNewPatternFrom(currentConfig);
     /* da shit */
     currentSettings.setScaleFactor(currentScale * 2); // updating scale
     updateControls();
@@ -2561,6 +2573,34 @@ Grid2D generateGridFrom(GollyRleConfiguration config)
 //   /* settings are kept */
 // }
 
+void initSettings(GollyRleConfiguration configuration,
+                       GollyPatternSettings settings) {
+  settings.setRleFilePath(gollyFilePath);
+
+  /* initing a default palette */
+  settings.initColors(paletteColors, configuration);
+  setDefaultPaletteColors(settings);
+  
+  manager.addSettings(settings); // start pattern with defaults
+}
+void initNewPatternFrom(GollyRleConfiguration configuration) {
+  
+  /* Associating default settings to config */
+  currentSettings = new GollyPatternSettings();
+
+  /* init config and settings */
+  initConfiguration(configuration);
+  initSettings(configuration, currentSettings);
+
+  /* init standard transformer */
+  initTransformer();
+  
+  /* Can we enable nextConfig button? */
+  checkConfigHistory();
+
+  /* Init GUI controls */
+  manageControls(false);
+}
 void initConfiguration(GollyRleConfiguration configuration)
 {
   /* Adding config history */
@@ -2570,32 +2610,14 @@ void initConfiguration(GollyRleConfiguration configuration)
   currentGrid = generateGridFrom(configuration);
   /* Adding grid to history */
   manager.addGrid(currentGrid);
+}
 
-  /* Can we enable nextConfig button? */
-  checkConfigHistory();
-
-  /* Associating default settings to config */
-  currentSettings = new GollyPatternSettings();
-  currentSettings.setRleFilePath(gollyFilePath);
-
-  /* initing a default palette */
-  currentSettings.initColors(paletteColors, configuration);
-  setDefaultPaletteColors(currentSettings);
-  
-  manager.addSettings(currentSettings); // start pattern with defaults
-
-  /* Init GUI controls */
-  manageControls(false);
-
+void initTransformer() {
   /* Init SketchTransformer */
   currentTransformer = new SketchTransformer((width - sizeCP5Group) / 2,
                                              height / 2,
                                              1.0);
   manager.addTransformer(currentTransformer);
-  // currentSettings.initTransformer((width-sizeCP5Group)/2, height/2, 1.0);
-
-  /* Loading current transformer */
-  //transformer = currentSettings.getTransformer();
 
   /* Centering sketch */
   centerSketch();
@@ -2620,8 +2642,8 @@ void loadGollyRle()
       currentConfig = reader.parseFile(gollyFilePath);
     }
     
-    /* Init current configuration */
-    initConfiguration(currentConfig);
+    /* Init pattern from current configuration */
+    initNewPatternFrom(currentConfig);
 
     /* da shit */
     updateControls();
@@ -2650,7 +2672,7 @@ void newGollyPattern()
   currentConfig =
     GollyRleConfiguration.newEmptyConfiguration(defaultPatternHeight,
                                                 defaultPatternWidth);
-  initConfiguration(currentConfig);
+  initNewPatternFrom(currentConfig);
   /* set UI accordingly */
   updateControls();
 }
