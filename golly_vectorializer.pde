@@ -2674,41 +2674,45 @@ void mouseReleased()
   {
     if (currentSettings.getTransformer() != null && !popupOn && !draggingOn)
     {
-      /* if there is a transformer there's a pattern too */
-      PVector currentTransformPoint =
-        currentSettings.getTransformer().convertCoordinates(mouseX, mouseY);
-      /* get point inside the grid */
-      PVector pointInGrid =
-        currentGrid.getPointForCoordinates(currentTransformPoint);
-      /* right click decrement the status, left one increments it */
-      if(pointInGrid != null)
+      /* allowing drawing only in normal mode */
+      if(currentSettings.getColorMode() == ColorMode.NORMAL)
       {
-        PVector pointInMatrix = getPointInMatrix(pointInGrid,
-                                                 currentGrid,
-                                                 currentConfig);
-        int mi = (int)pointInMatrix.x;
-        int mj = (int)pointInMatrix.y;
-        int currentState = currentConfig.getCellState(mi, mj);
-        if(mouseButton == RIGHT)
+        /* if there is a transformer there's a pattern too */
+        PVector currentTransformPoint =
+          currentSettings.getTransformer().convertCoordinates(mouseX, mouseY);
+        /* get point inside the grid */
+        PVector pointInGrid =
+          currentGrid.getPointForCoordinates(currentTransformPoint);
+        /* right click decrement the status, left one increments it */
+        if(pointInGrid != null)
         {
-          
-          println("RIGHT mouse button, decrementing status", currentState);
-          /* update the real pattern and the color assignment as well  */
-          currentConfig.decrementState(mi, mj);
-          currentSettings.previousColorAssignment(mi, mj);
-
-        }
-        else if (mouseButton == LEFT)
-        {
-          println("LEFT mouse button, incrementing status", currentState);
-          if (currentConfig.getCellState(mi, mj) < paletteColors)
+          PVector pointInMatrix = getPointInMatrix(pointInGrid,
+                                                   currentGrid,
+                                                   currentConfig);
+          int mi = (int)pointInMatrix.x;
+          int mj = (int)pointInMatrix.y;
+          int currentState = currentConfig.getCellState(mi, mj);
+          if(mouseButton == RIGHT)
           {
-            currentConfig.incrementState(mi, mj);
+          
+            println("RIGHT mouse button, decrementing status", currentState);
+            /* update the real pattern and the color assignment as well  */
+            currentConfig.decrementState(mi, mj);
+            currentSettings.previousColorAssignment(mi, mj);
+
           }
-          currentSettings.nextColorAssignment(mi, mj);
+          else if (mouseButton == LEFT)
+          {
+            println("LEFT mouse button, incrementing status", currentState);
+            if (currentConfig.getCellState(mi, mj) < paletteColors)
+            {
+              currentConfig.incrementState(mi, mj);
+            }
+            currentSettings.nextColorAssignment(mi, mj);
+          }
         }
       }
-      
+       
       transformer.resetMousePosition();
     }
   }  
