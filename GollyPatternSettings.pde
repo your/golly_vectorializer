@@ -1,4 +1,4 @@
-public class GollyPatternSettings
+public class GollyPatternSettings implements java.io.Serializable
 {
   /* Members */
   private int fillRActive = 0;

@@ -1,7 +1,7 @@
 import java.util.*;
 import java.lang.Math;
 
-public class GollyRleConfiguration
+public class GollyRleConfiguration implements java.io.Serializable
 {
   /******* members *********/
   private int matrixWidth;

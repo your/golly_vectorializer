@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class CategoricalDistribution
+public class CategoricalDistribution implements java.io.Serializable
 {
   /* the number of possible outcomes */
   int outcomes;

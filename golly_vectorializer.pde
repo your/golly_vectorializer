@@ -62,6 +62,9 @@ int paletteColors = 7;
 int defaultPatternHeight = 65;
 int defaultPatternWidth = 65;
 
+/* Serialization manager */
+SerializationManager serializationManager;
+
 void manageControls(boolean lock)
 {
   /* Locking/unlocking controls */
@@ -403,6 +406,8 @@ void setup()
 
   drop = new SDrop(this);
 
+  serializationManager = new SerializationManager();
+  
   background(bg);
 
   /* palette stuff */
@@ -940,6 +945,22 @@ void setup()
     .setColorBackground(cp)
     .moveTo(mainG)
     ;
+
+  cp5.addButton("serialize")
+    .setLabel("Salva").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(40, 100)
+    .setSize(50, 19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
+  cp5.addButton("deserialize")
+    .setLabel("Carica").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(95, 100)
+    .setSize(50, 19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
+  
   // HISTORY AREA
   cp5.addButton("rewindConfigHistory")
     .setLabel("< prev")
@@ -1417,6 +1438,54 @@ void buttonPaletteCancel() {
   killPalette();
   killPopup();
 }
+
+void serialize()
+{
+  File defaultFile = createDefaultFile();
+  if(defaultFile == null)
+  {
+    defaultFile = new File("Untitled");
+  }
+  selectOutput("Selezionare destinazione salvataggio:", "serializeConfig", defaultFile);
+}
+
+void deserialize()
+{
+  selectInput("Selezionare file da caricare:", "deserializeConfig");
+}
+
+void serializeConfig(File selected)
+{
+  if(selected != null)
+  {
+    String path = selected.getAbsolutePath();
+    println("Serializing file", path);
+
+    serializationManager.serializeConfiguration(currentConfig,
+                                                path);
+  }
+}
+
+void deserializeConfig(File selected)
+{
+  if(selected != null)
+  {
+    String path = selected.getAbsolutePath();
+    println("Deserializing file", path);
+
+    GollyRleConfiguration deConfig =
+      serializationManager.deserializeConfiguration(path);
+
+    println(deConfig, deConfig.getMatrixHeight(), deConfig.getMatrixWidth());
+
+    currentConfig = deConfig;
+    /* Init current configuration */
+    initConfiguration(currentConfig);
+    /* update controls */
+    updateControls();
+  }
+}
+
 void resetPopup() {
   // reset buttons
   winG.controller("buttonGenericOK").hide();
@@ -1746,7 +1815,11 @@ void newEmptyConfig(int status)
 
 void exportToPDF(int status)
 {
-  File defaultFile = createDefaultFile() != null ? createDefaultFile() : new File("Untitled");
+  File defaultFile = createDefaultFile();
+  if(defaultFile == null)
+  {
+    defaultFile = new File("Untitled");
+  }
   selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
 }
 

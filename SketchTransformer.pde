@@ -1,4 +1,4 @@
-public class SketchTransformer
+public class SketchTransformer implements java.io.Serializable
 {
   private float xOffset;
   private float yOffset;

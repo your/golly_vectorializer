@@ -1,4 +1,4 @@
-public class ColorPalette
+public class ColorPalette implements java.io.Serializable
 {
   int length;
   int maxLength;
