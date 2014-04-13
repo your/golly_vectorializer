@@ -143,15 +143,18 @@ void manageControls(boolean lock)
     updateCAName();
 
     // setting grid size sliders max range values
-    Slider s1 = (Slider)cp5.getController("rowsNum");
-    Slider s2 = (Slider)cp5.getController("colsNum");
-    s1.setBroadcast(false);
-    s2.setBroadcast(false);
-    s1.setRange(0, currentConfig.getMatrixHeight());
-    s2.setRange(0, currentConfig.getMatrixWidth());
-    s1.setBroadcast(true);
-    s2.setBroadcast(true);
+    updateGridSlidersRange();
   }
+}
+void updateGridSlidersRange() {
+  Slider s1 = (Slider)cp5.getController("rowsNum");
+  Slider s2 = (Slider)cp5.getController("colsNum");
+  s1.setBroadcast(false);
+  s2.setBroadcast(false);
+  s1.setRange(0, currentConfig.getMatrixHeight());
+  s2.setRange(0, currentConfig.getMatrixWidth());
+  s1.setBroadcast(true);
+  s2.setBroadcast(true);
 }
 void updateControls()
 {
@@ -166,6 +169,7 @@ void updateControls()
   // doing stuff on controls
   cp5.getController("rowsNum").setValue(currentGrid.getRows());
   cp5.getController("colsNum").setValue(currentGrid.getColumns());
+  updateGridSlidersRange(); // update ranges too
   cp5.getController("cellWidth").setValue(currentGrid.getCellWidth());
   cp5.getController("cellHeight").setValue(currentGrid.getCellHeight());
   cp5.getController("inputCellWidth").setValue(currentGrid.getCellWidth());
