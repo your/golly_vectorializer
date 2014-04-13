@@ -58,6 +58,9 @@ String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 
 int paletteColors = 7;
 
+/* empty sketch parameters */
+int defaultPatternHeight = 65;
+int defaultPatternWidth = 65;
 
 void manageControls(boolean lock)
 {
@@ -900,17 +903,25 @@ void setup()
         .setSize(110, 19)
           .setColorBackground(cp)
             .moveTo(mainG)
-              ;
+    ;
+  cp5.addButton("newEmptyConfig")
+    .setLabel("Nuovo pattern vuoto").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(40, 40)
+    .setSize(110, 19)
+    .setColorBackground(cp)
+    .moveTo(mainG)
+    ;
+  
   cp5.addButton("exportToPDF").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setLabel("Esporta in PDF")
-      .setPosition(40, 43)
+      .setPosition(40, 60)
         .setSize(110, 19)
           .setColorBackground(cp)
             .moveTo(mainG)
     ;
   cp5.addButton("checkForUpdate")
     .setLabel("Controlla Aggiornamenti").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setPosition(40, 70)
+    .setPosition(40, 80)
     .setSize(110, 19)
     .setColorBackground(cp)
     .moveTo(mainG)
@@ -1708,27 +1719,38 @@ void loadRleConfig(int status)
 {
   selectInput("Selezionare un file RLE di Golly:", "fileSelected");
 }
+
+void newEmptyConfig(int status)
+{
+  newGollyPattern();
+}
+
 void exportToPDF(int status)
 {
   File defaultFile = createDefaultFile() != null ? createDefaultFile() : new File("Untitled");
   selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
 }
+
 void checkForUpdate(boolean flag)
 {
   updateReady(true);
 }
+
 void toggleShowGrid(boolean flag)
 {
   currentSettings.setShowGrid(flag);
 }
+
 void toggleShowInactives(boolean flag)
 {
   currentSettings.setShowInactives(flag);
 }
+
 void toggleKeepCellRatio(boolean flag)
 {
   currentSettings.setKeepCellRatio(flag);
 }
+
 void toggleKeepShapeRatio(boolean flag)
 {
   if (currentSettings.workingOnActiveStates())
@@ -1737,6 +1759,7 @@ void toggleKeepShapeRatio(boolean flag)
     currentSettings.setKeepShapeRatioInactive(flag);
   updateControls();
 }
+
 void toggleShapesLikeCells(boolean flag)
 {
   if (flag)
@@ -2519,6 +2542,19 @@ void loadGollyRle()
     pastedMessage = null; // reset
     loadingSomething = false; ///
   }
+}
+
+
+/* creating an empty drawing prototyping area */
+void newGollyPattern()
+{
+  /* empty verstion of initConfiguration with  a default grid */
+  currentConfig =
+    GollyRleConfiguration.newEmptyConfiguration(defaultPatternHeight,
+                                                defaultPatternWidth);
+  initConfiguration(currentConfig);
+  /* set UI accordingly */
+  updateControls();
 }
 
 void checkForUpdate()

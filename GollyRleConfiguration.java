@@ -224,6 +224,18 @@ public class GollyRleConfiguration
     return scaledConfig;
   }
 
+  static public GollyRleConfiguration newEmptyConfiguration(int height,
+							    int width)
+  {
+    GollyRleConfiguration config = new GollyRleConfiguration();
+    config.setMatrixHeight(height);
+    config.setMatrixWidth(width);
+    config.initMatrix();
+    config.setRule("Custom"); /* we shall put a valid rule name if we want to export */
+    
+    return config;
+  }
+
   /*
     DEPRECATED: use the colorAssignment in the settings
     creating a new random configuration changing only the active cell states */
