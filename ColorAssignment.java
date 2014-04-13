@@ -1,7 +1,7 @@
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class ColorAssignment
+public class ColorAssignment implements java.io.Serializable
 {
   /*
     colors are assigned as a matrix of integers:
