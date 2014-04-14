@@ -134,9 +134,9 @@ public class ApplicationUpdater {
 
     String scriptHeader = "#!/bin/sh";
     String killCommand = "kill $(ps x | grep " + appName + " | awk '{print $1}' | head -1)";
-    String moveCommand = "mv " + savedUpdate + " " + toUpdate;
+    String moveCommand = "mv '" + savedUpdate + "' '" + toUpdate + "'";
     String sleepCommand = "sleep 3";
-    String openCommand = "open -a " + appPath;
+    String openCommand = "open -a '" + appPath + "'";
 
     String[] cmd0 = {"/bin/sh", "-c", "echo \"" +  scriptHeader + "\" > " + updateScript};
     String[] cmd1 = {"/bin/sh", "-c", "echo \"" +  killCommand + "\" >> " + updateScript};
