@@ -133,7 +133,7 @@ public class ApplicationUpdater {
     File savedUpdate = new File(jarPath + updateExtension);
 
     String scriptHeader = "#!/bin/sh";
-    String killCommand = "kill $(ps x | grep " + appName + " | awk '{print $1}' | head -1)";
+    String killCommand = "kill $(ps x | grep '" + appName + "' | awk '{print $1}' | head -1)";
     String moveCommand = "mv '" + savedUpdate + "' '" + toUpdate + "'";
     String sleepCommand = "sleep 3";
     String openCommand = "open -a '" + appPath + "'";
