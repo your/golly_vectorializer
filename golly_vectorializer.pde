@@ -1495,7 +1495,7 @@ void serializeConfigAndSettings(File selected)
                                                              currentSettings,
                                                              path);
     } catch(IOException e) {
-      showPopup("Impossibile salvare la configurazione corrente!", 0, -1);
+      showPopup("Impossibile salvare la configurazione corrente!\n\n", 0, -1);
       e.printStackTrace();
     }
   }
@@ -2721,7 +2721,7 @@ void checkForUpdate()
     if (updater.updateAvailable()) {
       showPopup("E' disponibile un aggiornamento!\n\nScaricarlo?", 2, 0);
     } else {
-      showPopup("Nessun aggiornamento disponibile!", 0, -1);
+      showPopup("Nessun aggiornamento disponibile!\n\n", 0, -1);
     }
   } catch(Exception e) {
     showPopup("Non sono riuscito a verificare la presenza di aggiornamenti:(\n\n" +
