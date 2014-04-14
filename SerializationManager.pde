@@ -8,15 +8,15 @@ public class SerializationManager
 
   public void serializeConfigurationAndSettings(GollyRleConfiguration config,
                                                 GollyPatternSettings settings,
-                                                String destination)
+                                                String destination) throws IOException
   {
     /* to serialize both let's use a map */
     Map<String, Object> objects2Serialize = new HashMap<String, Object>();
     objects2Serialize.put("config", config);
     objects2Serialize.put("settings", settings);
 
-    try
-    {
+    // try
+    // {
       /* opening an object stream */
       FileOutputStream fileOut = new FileOutputStream(destination);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -27,20 +27,20 @@ public class SerializationManager
       /* closing */
       out.close();
       fileOut.close();
-    }
-    catch(IOException e)
-    {
-      System.out.println("Error with file " + destination);
-      e.printStackTrace();
-    }
+    // }
+    // catch(IOException e)
+    // {
+    //   System.out.println("Error with file " + destination);
+    //   e.printStackTrace();
+    // }
 
   }
 
   public void serializeConfiguration(GollyRleConfiguration config,
-                                     String destination)
+                                     String destination) throws IOException
   {
-    try
-    {
+    // try
+    // {
       /* opening an object stream */
       FileOutputStream fileOut = new FileOutputStream(destination);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -51,20 +51,21 @@ public class SerializationManager
       /* closing */
       out.close();
       fileOut.close();
-    }
-    catch(IOException e)
-    {
-      System.out.println("Error with file " + destination);
-      e.printStackTrace();
-    }
+    // }
+    // catch(IOException e)
+    // {
+    //   System.out.println("Error with file " + destination);
+    //   e.printStackTrace();
+    // }
 
   }
 
   public Map<String, Object> deserializeConfigurationAndSettings(String origin)
+    throws IOException, ClassNotFoundException
   {
     Map<String, Object> deserializedObjects = null;
-    try
-    {
+    // try
+    // {
       /* Trying to open the file */
       FileInputStream fileIn = new FileInputStream(origin);
       ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -75,26 +76,27 @@ public class SerializationManager
       /* Closing the streams */
       in.close();
       fileIn.close();
-    }
-    catch(IOException e)
-    {
-      System.out.println("Error with file " + origin);
-      e.printStackTrace();
-    }
-    catch(ClassNotFoundException e)
-    {
-      System.out.println("Class not found while deserializing !");
-      e.printStackTrace();
-    }
+    // }
+    // catch(IOException e)
+    // {
+    //   System.out.println("Error with file " + origin);
+    //   e.printStackTrace();
+    // }
+    // catch(ClassNotFoundException e)
+    // {
+    //   System.out.println("Class not found while deserializing !");
+    //   e.printStackTrace();
+    // }
 
     return deserializedObjects;
   }
 
   public GollyRleConfiguration deserializeConfiguration(String origin)
+    throws IOException, ClassNotFoundException
   {
     GollyRleConfiguration config = null;
-    try
-    {
+    // try
+    // {
       /* Trying to open the file */
       FileInputStream fileIn = new FileInputStream(origin);
       ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -106,17 +108,17 @@ public class SerializationManager
       /* Closing the streams */
       in.close();
       fileIn.close();
-    }
-    catch(IOException e)
-    {
-      System.out.println("Error with file " + origin);
-      e.printStackTrace();
-    }
-    catch(ClassNotFoundException e)
-    {
-      System.out.println("Class not found while deserializing !");
-      e.printStackTrace();
-    }
+    // }
+    // catch(IOException e)
+    // {
+    //   System.out.println("Error with file " + origin);
+    //   e.printStackTrace();
+    // }
+    // catch(ClassNotFoundException e)
+    // {
+    //   System.out.println("Class not found while deserializing !");
+    //   e.printStackTrace();
+    // }
     return config;
   }
 }

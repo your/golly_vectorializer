@@ -1463,9 +1463,14 @@ void serializeConfigAndSettings(File selected)
     String path = selected.getAbsolutePath();
     println("Serializing file", path);
 
-    serializationManager.serializeConfigurationAndSettings(currentConfig,
-                                                           currentSettings,
-                                                           path);
+    try {
+      serializationManager.serializeConfigurationAndSettings(currentConfig,
+                                                             currentSettings,
+                                                             path);
+    } catch(IOException e) {
+      showPopup("Impossibile salvare la configurazione corrente!", 0, -1);
+      e.printStackTrace();
+    }
   }
 }
 
@@ -1476,27 +1481,35 @@ void deserializeConfigAndSettings(File selected)
     String path = selected.getAbsolutePath();
     println("Deserializing file", path);
 
-    Map<String, Object> deserializedObjects =
-      (HashMap<String, Object>) serializationManager.deserializeConfigurationAndSettings(path);
+    try {
+      Map<String, Object> deserializedObjects =
+        (HashMap<String, Object>) serializationManager.deserializeConfigurationAndSettings(path);
+    
+      GollyRleConfiguration loadedConfig = (GollyRleConfiguration) deserializedObjects.get("config");
+      GollyPatternSettings loadedSettings = (GollyPatternSettings) deserializedObjects.get("settings");
 
-    //println(deConfig, deConfig.getMatrixHeight(), deConfig.getMatrixWidth());
+      /* Init current configuration */
+      initConfiguration(loadedConfig);
+      initSettings(loadedConfig, loadedSettings);
     
-    GollyRleConfiguration loadedConfig = (GollyRleConfiguration) deserializedObjects.get("config");
-    GollyPatternSettings loadedSettings = (GollyPatternSettings) deserializedObjects.get("settings");
-    
-    
-    /* Init current configuration */
-    initConfiguration(loadedConfig);
-    initSettings(loadedConfig, loadedSettings);
-    
-    initTransformer();
+      initTransformer();
 
-    updateHistory();
-    //checkConfigHistory();
-    manageControls(false);
+      updateHistory();
+      //checkConfigHistory();
+      manageControls(false);
 
-    /* update controls */
-    updateControls();
+      /* update controls */
+      updateControls();
+      
+    } catch(IOException e) {
+      showPopup("Impossibile caricare la configurazione dal file selezionato!" +
+                "\n\n(Formato file errato?)", 0, -1);
+      e.printStackTrace();
+    } catch(ClassNotFoundException e) {
+      showPopup("Impossibile caricare la configurazione dal file selezionato!" +
+                "\n\n(Formato file errato o di una versione precedente?)", 0, -1);
+      e.printStackTrace();
+    }
   }
 }
 
