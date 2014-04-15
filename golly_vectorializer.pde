@@ -33,7 +33,7 @@ boolean[] keys = new boolean[526];
 int x = 1024;
 int y = 768;
 int sizeCP5Group = 200;
-int cellDim = 10;
+float cellDim = 8.50f;
 int popupXSize, popupYSize = 0;
 float scaleUnit = 0.05;
 float pdfBorder = 5.0;
@@ -380,13 +380,20 @@ void shuffleColors(int val) {
 void setDefaultPaletteColors(GollyPatternSettings settings)
 {
   /* setting just the first three colors */
-  color rc = color(23, 123, 123);
-  color gc = color(180, 45, 11);
-  color bc = color(123, 100, 89);
-  color tc = color(34, 55, 89);
-  color zc = color(222, 90, 111);
-  color mc = color(4, 34, 230);
-  color hc = color(114, 73, 2);
+  // color rc = color(23, 123, 123);
+  // color gc = color(180, 45, 11);
+  // color bc = color(123, 100, 89);
+  // color tc = color(34, 55, 89);
+  // color zc = color(222, 90, 111);
+  // color mc = color(4, 34, 230);
+  // color hc = color(114, 73, 2);
+  color rc = #ED2627;
+  color gc = #FFC716;
+  color bc = #ACCD36;
+  color tc = #1A84C6;
+  color zc = #2C348D;
+  color mc = #F9ED2B;
+  color hc = #F05A27;
   
   settings.setColor(0, rc);
   settings.setColor(1, gc);

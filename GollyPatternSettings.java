@@ -5,9 +5,9 @@ public class GollyPatternSettings implements java.io.Serializable
   private int fillGActive = 0;
   private int fillBActive = 0;
   private int fillAActive = 255;
-  private int fillRInactive = 100;
-  private int fillGInactive = 100;
-  private int fillBInactive = 100;
+  private int fillRInactive = 255; //100
+  private int fillGInactive = 199; //100
+  private int fillBInactive = 22; //100
   private int fillAInactive = 255;
   private int strokeRActive = 100;
   private int strokeGActive = 100;
@@ -20,10 +20,10 @@ public class GollyPatternSettings implements java.io.Serializable
   private int strokeWeightActive = 1;
   private int strokeWeightInactive = 0;
   private int scaleFactor = 1;
-  private float shapeWidthActive = 7;
-  private float shapeWidthInactive = 5;
-  private float shapeHeightActive = 7;
-  private float shapeHeightInactive = 5;
+  private float shapeWidthActive = 8;
+  private float shapeWidthInactive = 8;
+  private float shapeHeightActive = 8;
+  private float shapeHeightInactive = 8;
   // private float scaleFactor = 1.0f;
   private boolean showGrid = true;
   private boolean showInactives = false;
