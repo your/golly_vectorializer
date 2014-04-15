@@ -125,17 +125,18 @@ public class ApplicationUpdater {
   // N.B. this will force application shutdown, act safe
   public void applyUpdate() throws IOException, InterruptedException {
 
-    String[] tokens = jarPath.split("/");
-    String jarName = tokens[tokens.length - 1];
-    String appName = jarName.substring(0, jarName.length() - 3);
+    String[] tokens = appPath.split("/");
+    String pkgName = tokens[tokens.length - 1];
+    String appName = pkgName.substring(0, pkgName.length() - 4);
 
     File toUpdate = new File(jarPath);
     File savedUpdate = new File(jarPath + updateExtension);
 
     String scriptHeader = "#!/bin/sh";
     String killCommand = "kill $(ps x | grep '" + appName + "' | awk '{print $1}' | head -1)";
+    //String killCommand = "pkill " + appName; // experimental new kill (it seems like it won't require app shutdown! WOW!)
     String moveCommand = "mv '" + savedUpdate + "' '" + toUpdate + "'";
-    String sleepCommand = "sleep 3";
+    String sleepCommand = "sleep 2";
     String openCommand = "open -a '" + appPath + "'";
 
     String[] cmd0 = {"/bin/sh", "-c", "echo \"" +  scriptHeader + "\" > " + updateScript};
@@ -152,6 +153,8 @@ public class ApplicationUpdater {
     proc.waitFor();
     proc = rt.exec(cmd1);
     proc.waitFor();
+    proc = rt.exec(cmd3); // try to ensure app has been killed
+    proc.waitFor();
     proc = rt.exec(cmd2);
     proc.waitFor();
     proc = rt.exec(cmd3);
@@ -161,6 +164,7 @@ public class ApplicationUpdater {
     proc = rt.exec(cmd5);
     proc.waitFor();
     proc = rt.exec(cmd6);
+    proc.waitFor();
  
     // getting killed now
   }

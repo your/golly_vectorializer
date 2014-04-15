@@ -2753,9 +2753,9 @@ void applyUpdate()
   try {
     updater.applyUpdate();
     if (updater.updateSuccessfull()) {
-      showPopup("L'ultimo aggiornamento è stato installato con successo! :D", 0, -1);
+      showPopup("L'ultimo aggiornamento è stato installato con successo! :D\n\n", 0, -1);
     } else {
-      showPopup("Sì e' verificato un errore durante l'aggiornamento :O", 0, -1);
+      showPopup("Sì e' verificato un errore durante l'aggiornamento :O\n\n", 0, -1);
     }
   } catch(Exception e) {
     showPopup("Sì e' verificato un errore durante l'aggiornamento :O\n\n" +
