@@ -39,8 +39,33 @@ public class GollyFileSaver
 	
 	public void exportConfigurationToRle(GollyRleConfiguration config, String path)
 	{
-	    File exportingFile = new File(path);
-		InputStreamBuffer io = new InputStreamBuffer();
+	    int matrixWidth = config.matrixWidth;
+	    int matrixHeight = config.matrixHeight;
+	    String rule = config.rule;
+		
+        File outputFile = new File (path);
+        PrintWriter printWriter = new PrintWriter(outputFile);
+		
+		printWriter.println("x = " + matrixWidth +
+		                    "y = " + matrixHeight +
+							"rule = " + rule);
+							
+		printWriter.println("\r\n");
+							
+		for (int i = 0; i < matrixWidth; ++i)
+		{
+		   for (int j = 0; j < matrixHeight; ++j)
+		   {
+		       int state = config.getCellState(i, j);
+			   String stateString = translateCellState(state);
+			   printWriter.println(stateString);
+		   }
+		   printWtriter.println("$");
+		}
+		
+		printWriter.println("!\r\n");
+		
+        printWriter.close();    
 	}
 
 }
