@@ -1058,6 +1058,18 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextfield("inputPaletteProb1")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,80)
+    .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addTextfield("inputPaletteColor2")
     .setLabel("Stato 2")
     .setPosition(100,120)
@@ -1330,6 +1342,12 @@ void inputPaletteColor1(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(0);
 }
+
+void inputPaletteProb1(String val) {
+  val = val.replace(',', '.');
+  currentSettings.setColorProbability(0, Float.parseFloat(val));
+}
+
 void inputPaletteColor2(String val) {
   if (val != "") {
   val = sanitizeHexInput(val);
@@ -1418,11 +1436,15 @@ void openPalette(int value) {
 }
 void showPalette() {
   winG.controller("labelPalettePreview").show();
+  winG.controller("inputPaletteProb1").show();
+  winG.controller("inputPaletteProb1").setBroadcast(false);
+  winG.controller("inputPaletteProb1").setValue((float)currentSettings.getColorProbability(0));
+  winG.controller("inputPaletteProb1").setBroadcast(true);
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
     // String hexedColor = hex(palette.getColor(i));
-    println(currentSettings.getColor(i));
+    // println(currentSettings.getColor(i));
     String hexedColor = hex(currentSettings.getColor(i));
     content.setBroadcast(false);
     content.setValue(hexedColor.substring(2));
@@ -1478,6 +1500,7 @@ void killPalette() {
   winG.controller("inputPaletteColor6").hide();
   winG.controller("inputPaletteColor7").hide();
   winG.controller("inputPaletteColorVoid").hide();
+  winG.controller("inputPaletteProb1").hide();
 }
 void buttonPaletteOK() {
   savePalette();

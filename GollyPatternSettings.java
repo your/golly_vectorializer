@@ -271,6 +271,15 @@ public class GollyPatternSettings implements java.io.Serializable
   {
     return windowRadius;
   }
+
+  public double getColorProbability(int index)
+  {
+    return distribution.getOutcomeProbability(index);
+  }
+  public void setColorProbability(int index, float value)
+  {
+    distribution.setOutcomeProbability(index, (double)value);
+  }
   
   /* Setters */
   public void setFillRActive(int val)
