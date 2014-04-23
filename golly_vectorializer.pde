@@ -2278,14 +2278,14 @@ void rleSelected(File selection)
   {
     String rleFile = selection.getAbsolutePath() + ".rle";
     println("User selected " + rleFile);
-    if(!fileExists(rleFile))
-    {
+    // if(!fileExists(rleFile))
+    // {
       rleSaver.exportConfigurationToRle(currentConfig, rleFile);
-    }
-    else
-    {
-      showPopup("File already exists! Overwrite it?", 1, 0);
-    }
+    // }
+    // else
+    // {
+    //   showPopup("File already exists! Overwrite it?", 1, 0);
+    // }
   }
 }
 
