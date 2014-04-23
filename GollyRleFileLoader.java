@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.regex.*;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -95,6 +96,15 @@ public class GollyRleFileLoader extends GollyRleBaseListener
   public void exitHeader(GollyRleParser.HeaderContext ctx)
   {
     config.initMatrix();
+
+    /*
+      this is cumbersome, need to get the text of the whole header
+      in order to get the rule name
+    */
+    String ruleString = ctx.CA_RULE().getText();
+    String[] splits = ruleString.split("=");
+    String ruleName = splits[1].trim();
+    config.setRule(ruleName);
   }
 
   public void exitRle(GollyRleParser.RleContext ctx)

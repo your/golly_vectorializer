@@ -159,7 +159,7 @@ public class GollyRleParser extends Parser {
 		public TerminalNode WS(int i) {
 			return getToken(GollyRleParser.WS, i);
 		}
-		public WidthContext width() {
+	  public WidthContext width() {
 			return getRuleContext(WidthContext.class,0);
 		}
 		public TerminalNode COMMA(int i) {
@@ -168,7 +168,7 @@ public class GollyRleParser extends Parser {
 		public HeaderContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_header; }
+	  @Override public int getRuleIndex() { return RULE_header; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GollyRleListener ) ((GollyRleListener)listener).enterHeader(this);
@@ -532,7 +532,7 @@ public class GollyRleParser extends Parser {
 				_la = _input.LA(1);
 				if (_la==ENDLINE) {
 					{
-					setState(108); match(ENDLINE);
+					  setState(108); match(ENDLINE);
 					}
 				}
 

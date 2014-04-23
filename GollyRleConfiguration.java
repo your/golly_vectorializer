@@ -79,6 +79,11 @@ public class GollyRleConfiguration implements java.io.Serializable
     return this.cellState;
   }
 
+  public String getRule()
+  {
+    return rule;
+  }
+
   public int getCellState(int row, int col)
   {
     return this.matrix[row][col];

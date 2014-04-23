@@ -14,6 +14,7 @@ import java.security.CodeSource;
 
 /* Global variables */
 GollyRleReader reader;
+GollyFileSaver rleSaver; //We should have created a GollyRleSaver, btw it is not important now
 GollyHistoryManager manager;
 GollyRleConfiguration currentConfig;
 GollyPatternSettings currentSettings;
@@ -430,6 +431,7 @@ void setup()
   /* Global objects init */
   manager = new GollyHistoryManager();
   reader = new GollyRleReader();
+  rleSaver = new GollyFileSaver();
   currentSettings = new GollyPatternSettings();
   currentGrid = new Grid2D();
   currentTransformer = null;
@@ -470,10 +472,19 @@ void setup()
   cp5.addButton("exportToPDF").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setLabel("Esporta PDF")
     .setPosition(115, 10)
-    .setSize(60, 31)
+    .setSize(60, 15)
     .setColorBackground(cp)
     .moveTo(fileG)
     ;
+  
+  cp5.addButton("exportToRLE")
+    .setLabel("Esporta RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setPosition(115, 26)
+    .setSize(60, 15)
+    .setColorBackground(cp)
+    .moveTo(fileG)
+    ;
+  
   cp5.addButton("info")
     .setLabel("?").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 65)
@@ -481,6 +492,7 @@ void setup()
     .setColorBackground(cp)
     .moveTo(fileG)
     ;
+  
   cp5.addButton("checkForUpdate")
     .setLabel("Controlla Aggiornamenti").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(25, 65)
@@ -496,6 +508,7 @@ void setup()
     .setColorBackground(cp)
     .moveTo(fileG)
     ;
+  
   cp5.addButton("deserialize")
     .setLabel("Carica Config..").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(95, 45)
@@ -503,7 +516,8 @@ void setup()
     .setColorBackground(cp)
     .moveTo(fileG)
     ;
-  // GRID SUBGROUP AREA
+
+ // GRID SUBGROUP AREA
   gridG = cp5.addGroup("gridControls")
     .setPosition(10, 130)
     .setSize(180, 250)
@@ -1884,6 +1898,16 @@ void exportToPDF(int status)
   selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
 }
 
+void exportToRLE(int status)
+{
+  File defaultFile = createDefaultFile();
+  if(defaultFile == null)
+  {
+    defaultFile = new File("Untitled");
+  }
+  selectOutput("Selezionare destinazione PDF:", "rleSelected", defaultFile);
+}
+
 void checkForUpdate(boolean flag)
 {
   updateReady(true);
@@ -1961,6 +1985,7 @@ void toggleFill(boolean flag)
 }
 void buttonOverwriteOK(boolean flag)
 {
+  /* FIXME: now it can either export a PDF or an RLE */
   exportNow();
   killPopup();
 }
@@ -2215,24 +2240,52 @@ File createDefaultFile()
 }
 
 /* Processing file selection callback */
-void fileSelected(File selection) {
-  if (selection == null) {
+void fileSelected(File selection)
+{
+  if (selection == null)
+  {
     println("Window was closed or the user hit cancel.");
   } 
-  else {
+  else
+  {
     gollyFilePath = selection.getAbsolutePath();
     println("User selected " + gollyFilePath);
     loadGollyRle();
   }
 }
-void pdfSelected(File selection) {
-  if (selection == null) {
+void pdfSelected(File selection)
+{
+  if (selection == null)
+  {
     println("Window was closed or the user hit cancel.");
-  } else {
+  }
+  else
+  {
     pdfFile = selection.getAbsolutePath() + ".pdf";
     println("User selected " + pdfFile);
     if (!fileExists(pdfFile)) exportNow();
     else showPopup("Ao, questo file PDF esiste gia'!\n\nSovrascriverlo?", 1, 0);
+  }
+}
+
+void rleSelected(File selection)
+{
+  if (selection == null)
+  {
+    println("Window was closed or the user hit cancel.");
+  }
+  else
+  {
+    String rleFile = selection.getAbsolutePath() + ".rle";
+    println("User selected " + rleFile);
+    if(!fileExists(rleFile))
+    {
+      rleSaver.exportConfigurationToRle(currentConfig, rleFile);
+    }
+    else
+    {
+      showPopup("File already exists! Overwrite it?", 1, 0);
+    }
   }
 }
 
