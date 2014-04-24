@@ -96,6 +96,7 @@ public class CategoricalDistribution implements java.io.Serializable
 
   public double getOutcomeProbability(int index)
   {
+    //System.out.println("outcome prob: " + distribution[index]);
     return distribution[index];
   }
   

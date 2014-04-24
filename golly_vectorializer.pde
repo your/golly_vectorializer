@@ -1046,6 +1046,13 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextlabel("labelPaletteProb")
+    .setValue("Probabilita' %:")
+    .setPosition(190,60)
+    .setSize(20,10)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addTextfield("inputPaletteColor1")
     .setLabel("Stato 1")
     .setPosition(100,80)
@@ -1059,9 +1066,10 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteProb1")
+    .setLabel("")
     .setInputFilter(ControlP5.FLOAT)
     .setPosition(200,80)
-    .setSize(50,13)
+    .setSize(40,13)
     .setColorBackground(0)
     .setFocus(false)
     .setAutoClear(false)
@@ -1082,10 +1090,36 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextfield("inputPaletteProb2")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,120)
+    .setSize(40,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addTextfield("inputPaletteColor3")
     .setLabel("Stato 3")
     .setPosition(100,160)
     .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteProb3")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,160)
+    .setSize(40,13)
     .setColorBackground(0)
     .setFocus(false)
     .setAutoClear(false)
@@ -1106,10 +1140,36 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextfield("inputPaletteProb4")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,200)
+    .setSize(40,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addTextfield("inputPaletteColor5")
     .setLabel("Stato 5")
     .setPosition(100,240)
     .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteProb5")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,240)
+    .setSize(40,13)
     .setColorBackground(0)
     .setFocus(false)
     .setAutoClear(false)
@@ -1130,10 +1190,36 @@ void setup()
     .moveTo(winG)
     .hide()
     ;
+  cp5.addTextfield("inputPaletteProb6")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,280)
+    .setSize(40,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
   cp5.addTextfield("inputPaletteColor7")
     .setLabel("Stato 7")
     .setPosition(100,320)
     .setSize(50,13)
+    .setColorBackground(0)
+    .setFocus(false)
+    .setAutoClear(false)
+    .setColor(color(255,0,0))
+    .setColorActive(255)
+    .moveTo(winG)
+    .hide()
+    ;
+  cp5.addTextfield("inputPaletteProb7")
+    .setLabel("")
+    .setInputFilter(ControlP5.FLOAT)
+    .setPosition(200,320)
+    .setSize(40,13)
     .setColorBackground(0)
     .setFocus(false)
     .setAutoClear(false)
@@ -1345,7 +1431,8 @@ void inputPaletteColor1(String val) {
 
 void inputPaletteProb1(String val) {
   val = val.replace(',', '.');
-  currentSettings.setColorProbability(0, Float.parseFloat(val));
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb1"));
+  txt.setValue(val);
 }
 
 void inputPaletteColor2(String val) {
@@ -1357,6 +1444,13 @@ void inputPaletteColor2(String val) {
   updatePaletteDrawable(1);
   }
 }
+
+void inputPaletteProb2(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb2"));
+  txt.setValue(val);
+}
+
 void inputPaletteColor3(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColor3"));
@@ -1364,6 +1458,13 @@ void inputPaletteColor3(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(2);
 }
+
+void inputPaletteProb3(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb3"));
+  txt.setValue(val);
+}
+
 void inputPaletteColor4(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColor4"));
@@ -1371,6 +1472,13 @@ void inputPaletteColor4(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(3);
 }
+
+void inputPaletteProb4(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb4"));
+  txt.setValue(val);
+}
+
 void inputPaletteColor5(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColor5"));
@@ -1378,6 +1486,13 @@ void inputPaletteColor5(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(4);
 }
+
+void inputPaletteProb5(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb5"));
+  txt.setValue(val);
+}
+
 void inputPaletteColor6(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColor6"));
@@ -1385,6 +1500,13 @@ void inputPaletteColor6(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(5);
 }
+
+void inputPaletteProb6(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb6"));
+  txt.setValue(val);
+}
+
 void inputPaletteColor7(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColor7"));
@@ -1392,6 +1514,13 @@ void inputPaletteColor7(String val) {
   color newColor = getColorFromHex(val);
   updatePaletteDrawable(6);
 }
+
+void inputPaletteProb7(String val) {
+  val = val.replace(',', '.');
+  Textfield txt = ((Textfield)cp5.getController("inputPaletteProb7"));
+  txt.setValue(val);
+}
+
 void inputPaletteColorVoid(String val) {
   val = sanitizeHexInput(val);
   Textfield txt = ((Textfield)cp5.getController("inputPaletteColorVoid"));
@@ -1410,7 +1539,17 @@ void updatePaletteDrawable(int number) {
   setDrawable(index, 50, 80 + (40 * index), 10, 10, newColor);
   winG.addDrawable(d[index]);
 }
+void saveProbabilities() {
+  for (int i = 0; i < paletteColors; i++) {
+    String currentInput = "inputPaletteProb" + (i + 1);
+    Textfield content = ((Textfield)cp5.getController(currentInput));
+    double prob = Double.parseDouble(content.getText()) / 100;
+    println(prob);
+    currentSettings.setColorProbability(i, (float)prob);
+  }
+}
 void savePalette() {
+  saveProbabilities();
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
@@ -1434,12 +1573,22 @@ void openPalette(int value) {
   showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 450, 4, 2);
   showPalette();
 }
+void showProbabilities() {
+  winG.controller("labelPaletteProb").show();
+  for (int i = 0; i < paletteColors; i++) {
+    String currentInput = "inputPaletteProb" + (i + 1);
+    winG.controller(currentInput).show();
+    winG.controller(currentInput).setBroadcast(true);
+    Textfield txt = ((Textfield)cp5.getController(currentInput));
+    double prob = currentSettings.getColorProbability(i) * 100;
+    String probString = String.format("%.2f", prob);
+    txt.setText(probString.replace(",", "."));
+    winG.controller(currentInput).setBroadcast(false);
+  }
+}
 void showPalette() {
+  showProbabilities();
   winG.controller("labelPalettePreview").show();
-  winG.controller("inputPaletteProb1").show();
-  winG.controller("inputPaletteProb1").setBroadcast(false);
-  winG.controller("inputPaletteProb1").setValue((float)currentSettings.getColorProbability(0));
-  winG.controller("inputPaletteProb1").setBroadcast(true);
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
@@ -1500,6 +1649,7 @@ void killPalette() {
   winG.controller("inputPaletteColor6").hide();
   winG.controller("inputPaletteColor7").hide();
   winG.controller("inputPaletteColorVoid").hide();
+  winG.controller("labelPaletteProb").show();
   winG.controller("inputPaletteProb1").hide();
 }
 void buttonPaletteOK() {
