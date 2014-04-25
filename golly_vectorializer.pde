@@ -1539,14 +1539,20 @@ void updatePaletteDrawable(int number) {
   setDrawable(index, 50, 80 + (40 * index), 10, 10, newColor);
   winG.addDrawable(d[index]);
 }
-void saveProbabilities() {
-  for (int i = 0; i < paletteColors; i++) {
+
+void saveProbabilities()
+{
+  double[] paletteDistribution = new double[paletteColors];
+  
+  for (int i = 0; i < paletteColors; i++)
+  {
     String currentInput = "inputPaletteProb" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
     double prob = Double.parseDouble(content.getText()) / 100;
     println(prob);
-    currentSettings.setColorProbability(i, (float)prob);
+    paletteDistribution[i] = prob;
   }
+  currentSettings.setColorProbability(paletteDistribution);
 }
 void savePalette() {
   saveProbabilities();

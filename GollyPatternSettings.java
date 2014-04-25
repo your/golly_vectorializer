@@ -276,12 +276,13 @@ public class GollyPatternSettings implements java.io.Serializable
   {
     return distribution.getOutcomeProbability(index);
   }
-  public void setColorProbability(int index, float value)
-  {
-    distribution.setOutcomeProbability(index, (double)value);
-  }
   
-  /* Setters */
+  // public void setColorProbability(int index, double value)
+  // {
+  //   distribution.setOutcomeProbability(index, value);
+  // }
+
+ /* Setters */
   public void setFillRActive(int val)
   {
     fillRActive = val;
@@ -530,6 +531,11 @@ public class GollyPatternSettings implements java.io.Serializable
   public void setColorProbability(int index, double prob)
   {
     colorPalette.setColorProbability(index, prob);
+  }
+
+  public void setColorProbability(double[] distribution)
+  {
+    colorPalette.setColorProbability(distribution);
   }
 
   public void setColor(int index, int code)
