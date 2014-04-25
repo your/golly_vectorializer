@@ -11,6 +11,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.security.CodeSource;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 /* Global variables */
 GollyRleReader reader;
@@ -1353,6 +1355,8 @@ void setup()
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
 
+
+  addFocusListener();
   // ColorAssignment stub = new ColorAssignment(4,4);
   // stub.setColorCode(0, 0, 0);
   // stub.setColorCode(0, 1, -1);
@@ -1555,6 +1559,23 @@ void saveProbabilities()
   currentSettings.setColorProbability(paletteDistribution);
 }
 
+void addFocusListener()
+{
+  this.addFocusListener(new FocusAdapter(){
+    public void focusGained(FocusEvent e)
+    {
+      /* looping again */
+      println("GainedFocus");
+      loop();
+    }
+    public void focusLost(FocusEvent e)
+    {
+      /* lost focus, stop looping */
+      println("UNLOL");
+      noLoop();
+    }
+  });
+}
 
 void savePalette() {
   saveProbabilities();
