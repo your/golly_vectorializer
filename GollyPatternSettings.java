@@ -641,7 +641,7 @@ public class GollyPatternSettings implements java.io.Serializable
 							       0);
         currentColorAssignment = randomLocalColorAssignment;
       }
-      else if(ColorMode == ColorMode.RANDOM_LOCAL_STAR)
+      else if(colorMode == ColorMode.RANDOM_LOCAL_STAR)
       {
 	randomLocalStarColorAssignment =
           currentColorAssignment.newRandomLocalColorAssignment(distribution,
