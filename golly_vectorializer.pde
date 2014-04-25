@@ -1554,6 +1554,8 @@ void saveProbabilities()
   }
   currentSettings.setColorProbability(paletteDistribution);
 }
+
+
 void savePalette() {
   saveProbabilities();
   for (int i = 0; i < paletteColors; i++) {

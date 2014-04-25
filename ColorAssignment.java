@@ -211,12 +211,64 @@ public class ColorAssignment implements java.io.Serializable
     // System.out.println("in list " + neighbours.size());
   }
 
+  private void enqueueNeighboursStar(ColorAssignment original,
+				     int centerX,
+				     int centerY,
+				     int windowRadius,
+				     int code,
+				     Queue<Pair<Integer, Integer>> neighbours)
+  {
+    int startX = (centerX - windowRadius) >= 0 ? centerX - windowRadius : 0;
+    int startY = (centerY - windowRadius) >= 0 ? centerY - windowRadius : 0;
+    int endX = (centerX + windowRadius) < matrixHeight ?
+      centerX + windowRadius : matrixHeight - 1;
+    int endY = (centerY + windowRadius) < matrixWidth ?
+      centerY + windowRadius : matrixWidth - 1;
+
+    /* vertical cycle */
+    for(int i = startX; i <= endX; ++i)
+    {
+      /* if the cell is active and not seen */
+      if(original.getColorCode(i, centerY) >= 0 &&
+         matrix[i][centerY] == unseen)
+      {
+        /* color the cell and mark it as seen */
+        // System.out.println("coloring code " + code);
+        matrix[i][centerY] = code;
+        if(i != centerX)
+        {
+          // System.out.println("adding neigh " + i + " " +  j);
+          neighbours.add(new Pair<Integer, Integer>(i, centerY));
+        }
+      }
+    }
+
+    /* horizontal cycle */
+    for(int j = startY; j <= endY; ++j)
+    {
+      /* if the cell is active and not seen */
+      if(original.getColorCode(centerX, j) >= 0 &&
+         matrix[centerX][j] == unseen)
+      {
+        /* color the cell and mark it as seen */
+        // System.out.println("coloring code " + code);
+        matrix[centerX][j] = code;
+        if(j != centerY)
+        {
+          // System.out.println("adding neigh " + i + " " +  j);
+          neighbours.add(new Pair<Integer, Integer>(centerX, j));
+        }
+      }
+    }
+  }
+
   /* graph search */
   private void colorConnectedNeighbours(ColorAssignment originalAssignment,
 					int startX,
 					int startY,
 					int windowRadius,
-					int randomCode)
+					int randomCode,
+					int neighbourExpansionMode)
   {
     /* creating a queue */
     Queue<Pair<Integer, Integer>> neighboursList =
@@ -234,24 +286,41 @@ public class ColorAssignment implements java.io.Serializable
       
       // System.out.println("coloring " + randomCode + " " + i + " " +  j);
       /* expand all the neighbours */
-      enqueueNeighbours(originalAssignment,
-			i,
-			j,
-			windowRadius,
-			randomCode,
-			neighboursList);
+      if(neighbourExpansionMode == 0)
+      {
+	/* classical (2*windowRadius + 1) window */
+	enqueueNeighbours(originalAssignment,
+                          i,
+                          j,
+                          windowRadius,
+                          randomCode,
+                          neighboursList);
+      }
+      else if(neighbourExpansionMode == 1)
+      {
+	/* star (cross) neighbourhood window */
+	enqueueNeighboursStar(originalAssignment,
+			      i,
+			      j,
+			      windowRadius,
+			      randomCode,
+			      neighboursList);
+      }
+
       // System.out.println("in list " + neighboursList.size());
     }
   }
   
   public ColorAssignment newRandomLocalColorAssignment(CategoricalDistribution distribution,
-						       int windowRadius)
+						       int windowRadius,
+						       int neighbourExpansionMode)
   {
     ColorAssignment randomAssignment = new ColorAssignment(matrixHeight, matrixWidth);
 
     randomAssignment.shuffleLocal(this,
 				  distribution,
-				  windowRadius);
+				  windowRadius,
+				  neighbourExpansionMode);
 
     
     return randomAssignment;
@@ -259,7 +328,8 @@ public class ColorAssignment implements java.io.Serializable
 
   public void shuffleLocal(ColorAssignment original,
 			   CategoricalDistribution distribution,
-			   int windowRadius)
+			   int windowRadius,
+			   int neighbourExpansionMode)
   {
     /* setting all unseen values  */
     for(int i = 0; i < matrixHeight; ++i)
@@ -295,7 +365,8 @@ public class ColorAssignment implements java.io.Serializable
 				     i,
 				     j,
 				     windowRadius,
-				     randomCode);
+				     randomCode,
+				     neighbourExpansionMode);
           }
         }
         else

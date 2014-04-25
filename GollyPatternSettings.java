@@ -48,7 +48,10 @@ public class GollyPatternSettings implements java.io.Serializable
   private ColorAssignment normalColorAssignment = null;
   private ColorAssignment randomColorAssignment = null;
   private ColorAssignment randomLocalColorAssignment = null;
+  private ColorAssignment randomLocalStarColorAssignment = null;
   private int windowRadius = 1;
+
+  private static final int defaultNeighbourExpansionMode = 1;
 
   /* Utilities */
   // public void initTransformer(float xOffset, float yOffset,
@@ -468,7 +471,7 @@ public class GollyPatternSettings implements java.io.Serializable
     this.cellShape = cellShape;
   }
 
-  /* TODO check for nullness of assignment */
+  /* TODO: propagate this through the UI */
   public void setColorMode(ColorMode mode)
   {
     colorMode = mode;
@@ -493,11 +496,23 @@ public class GollyPatternSettings implements java.io.Serializable
       {
         randomLocalColorAssignment =
           currentColorAssignment.newRandomLocalColorAssignment(distribution,
-                                                               windowRadius);
+                                                               windowRadius,
+					                       0);
       }
       currentColorAssignment = randomLocalColorAssignment;
       break;
 
+    case RANDOM_LOCAL_STAR:
+      if (randomLocalStarColorAssignment == null)
+      {
+	randomLocalStarColorAssignment =
+          currentColorAssignment.newRandomLocalColorAssignment(distribution,
+                                                               windowRadius,
+                                                               1);
+      }
+      currentColorAssignment = randomLocalStarColorAssignment;
+      break;
+      
     default:
       currentColorAssignment = normalColorAssignment;
       break;
@@ -585,9 +600,21 @@ public class GollyPatternSettings implements java.io.Serializable
     //   currentColorAssignment.newRandomLocalColorAssignment(distribution,
     //                                                        windowRadius);
     // currentColorAssignment = randomLocalColorAssignment;
-    randomLocalColorAssignment.shuffleLocal(normalColorAssignment,
-                                            distribution,
-                                            windowRadius);
+    if(colorMode == ColorMode.RANDOM_LOCAL)
+    {
+      randomLocalColorAssignment.shuffleLocal(normalColorAssignment,
+                                              distribution,
+                                              windowRadius,
+                                              0);
+    }
+    else if(colorMode == ColorMode.RANDOM_LOCAL_STAR)
+    {
+      randomLocalStarColorAssignment.shuffleLocal(normalColorAssignment,
+						  distribution,
+						  windowRadius,
+						  1);
+    }
+    
   }
   
   /* file utils */
@@ -603,13 +630,24 @@ public class GollyPatternSettings implements java.io.Serializable
 
   public void setWindowRadius(int radius)
   {
-    if (windowRadius != radius) {
+    if (windowRadius != radius)
+    {
       windowRadius = radius;
-      if (colorMode == ColorMode.RANDOM_LOCAL) {
+      if (colorMode == ColorMode.RANDOM_LOCAL)
+      {
         randomLocalColorAssignment =
           currentColorAssignment.newRandomLocalColorAssignment(distribution,
-                                                               windowRadius);
+                                                               windowRadius,
+							       0);
         currentColorAssignment = randomLocalColorAssignment;
+      }
+      else if(ColorMode == ColorMode.RANDOM_LOCAL_STAR)
+      {
+	randomLocalStarColorAssignment =
+          currentColorAssignment.newRandomLocalColorAssignment(distribution,
+                                                               windowRadius,
+                                                               1);
+        currentColorAssignment = randomLocalStarColorAssignment;
       }
     }
   }
