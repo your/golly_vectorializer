@@ -1357,6 +1357,9 @@ void setup()
 
 
   addFocusListener();
+  /* capping the frame rate, shall we go even lower? */
+  frameRate(27);
+  
   // ColorAssignment stub = new ColorAssignment(4,4);
   // stub.setColorCode(0, 0, 0);
   // stub.setColorCode(0, 1, -1);
@@ -1565,13 +1568,13 @@ void addFocusListener()
     public void focusGained(FocusEvent e)
     {
       /* looping again */
-      println("GainedFocus");
+      println("focus gained");
       loop();
     }
     public void focusLost(FocusEvent e)
     {
       /* lost focus, stop looping */
-      println("UNLOL");
+      println("focus lost");
       noLoop();
     }
   });
