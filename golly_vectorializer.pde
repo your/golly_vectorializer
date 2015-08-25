@@ -113,7 +113,7 @@ void manageControls(boolean lock)
   setLock(cp5.getController("pickAStroke"), lock);
   setLock(cp5.getController("toggleStroke"), lock);
   setLock(cp5.getController("toggleWorkingStates"), lock);
-  setLock(cp5.getController("Normale"), lock);
+  setLock(cp5.getController("Standard"), lock);
   setLock(cp5.getController("Random"), lock);
   setLock(cp5.getController("RL"), lock);
   setLock(cp5.getController("randomRadius"), lock);
@@ -283,8 +283,8 @@ void updateControls()
 }
 
 void removeConfig() {
-  showPopup("Vuoi davvero cancellare questa configurazione dalla memoria?"
-            + "\n\n(Le modifiche non esportate andranno perse!)", 5, 0);
+  showPopup("Do you relly want to delete this configuration?"
+            + "\n\n(Unexported changes will be lost!)", 5, 0);
 }
 void buttonConfigRemovalOK() {
   boolean havePrev = manager.hasPrevConfig();
@@ -308,7 +308,7 @@ void buttonConfigRemovalOK() {
 void updateCAName() {
   String nameBase = "CA: ";
   String nameScale = currentSettings.getScaleFactor() > 1 ?
-    "(SCALATO X" + currentSettings.getScaleFactor() + ") " : "";
+    "(SCALED X" + currentSettings.getScaleFactor() + ") " : "";
   String nameCA = createDefaultFile() != null ? createDefaultFile().toString() : "Untitled";
   Textarea txt = (Textarea)cp5.getGroup("nameConfig");
   txt.setText(nameBase + nameScale + nameCA);
@@ -452,19 +452,19 @@ void setup()
     .setPosition(10, 20)
     .setSize(180, 90)
     .setBackgroundColor(color(102, 102, 102))
-    .setLabel("Gestione").setColorBackground(color(10, 0, 10, 200))
+    .setLabel("MAINS").setColorBackground(color(10, 0, 10, 200))
     .moveTo(mainG)
     ;
   // LOAD RLE AREA
   cp5.addButton("loadRleConfig")
-    .setLabel("Aggiungi Golly RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Add Golly RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 10)
     .setSize(105, 15)
     .setColorBackground(cp)
     .moveTo(fileG)
     ;
   cp5.addButton("newEmptyConfig")
-    .setLabel("Nuovo pattern vuoto").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("New void pattern").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 26)
     .setSize(105, 15)
     .setColorBackground(cp)
@@ -472,7 +472,7 @@ void setup()
     ;
   
   cp5.addButton("exportToPDF").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
-    .setLabel("Esporta PDF")
+    .setLabel("Export to PDF")
     .setPosition(115, 10)
     .setSize(60, 15)
     .setColorBackground(cp)
@@ -480,7 +480,7 @@ void setup()
     ;
   
   cp5.addButton("exportToRLE")
-    .setLabel("Esporta RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Export to RLE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(115, 26)
     .setSize(60, 15)
     .setColorBackground(cp)
@@ -496,7 +496,7 @@ void setup()
     ;
   
   cp5.addButton("checkForUpdate")
-    .setLabel("Controlla Aggiornamenti").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Check for updates").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(25, 65)
     .setSize(150, 15)
     .setColorBackground(cp)
@@ -504,7 +504,7 @@ void setup()
     ;
 
   cp5.addButton("serialize")
-    .setLabel("Salva Config..").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Save Config..").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 45)
     .setSize(80, 15)
     .setColorBackground(cp)
@@ -512,7 +512,7 @@ void setup()
     ;
   
   cp5.addButton("deserialize")
-    .setLabel("Carica Config..").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Load Config..").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(95, 45)
     .setSize(80, 15)
     .setColorBackground(cp)
@@ -526,12 +526,12 @@ void setup()
     .setBackgroundColor(color(1, 108, 158))
     //.setBackgroundColor(color(20,0,20,150))
     //.setBackgroundColor(color(175,190,175,220))
-    .setLabel("Impostazioni Griglia").setColorBackground(color(10, 0, 10, 200))
+    .setLabel("Grid Settings").setColorBackground(color(10, 0, 10, 200))
     .moveTo(mainG)
     ;
   cp5.addTextlabel("resizeGrid")
     .setPosition(5, 10)
-    .setText("DIMENSIONE GRIGLIA")
+    .setText("GRID SIZE")
     .moveTo(gridG)
     ;
   cp5.addSlider("rowsNum")
@@ -556,7 +556,7 @@ void setup()
     ;
   cp5.addTextlabel("resizeCells")
     .setPosition(5, 60)
-    .setText("DIMENSIONE CELLE")
+    .setText("CELLS SIZE")
     .moveTo(gridG)
     ;
   cp5.addTextfield("inputCellWidth")
@@ -604,7 +604,7 @@ void setup()
     .moveTo(gridG)
     ;
   cp5.addToggle("toggleKeepCellRatio")
-    .setLabel("Mantieni rapporto")
+    .setLabel("Keep ratio")
     .setPosition(5, 98)
     .setSize(42, 15)
     .setValue(currentSettings.getKeepCellRatio())
@@ -612,7 +612,7 @@ void setup()
     .moveTo(gridG)
     ;
   cp5.addToggle("toggleShowGrid")
-    .setLabel("Disegna Griglia")
+    .setLabel("Draw Grid")
     .setPosition(5, 210)
     .setSize(42, 15)
     .setValue(currentSettings.getShowGrid())
@@ -620,7 +620,7 @@ void setup()
     .moveTo(gridG)
     ;
   cp5.addToggle("toggleShowInactives")
-    .setLabel("Disegna celle inattive")
+    .setLabel("Draw inactive cells")
     .setPosition(80, 210)
     .setSize(42, 15)
     .setValue(currentSettings.getShowInactives())
@@ -658,14 +658,14 @@ void setup()
     .moveTo(gridG)
     ;
   cp5.addButton("center")
-    .setLabel("Centrami!").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Center me!").align(0, 0, ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 183)
     .setSize(55, 15)
     .setColorBackground(cp)
     .moveTo(gridG)
     ;
   cp5.addButton("scaleMe")
-    .setLabel("Scalami!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Scale me!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(75, 183)
     .setSize(55, 15)
     .setColorBackground(cp)
@@ -699,13 +699,13 @@ void setup()
     //.setBackgroundColor(color(175,190,175,220))
     //.setBackgroundColor(color(20,0,20,150))
     //.setBackgroundColor(color(0,0,0,220))
-    .setLabel("Impostazioni Pattern").setColorBackground(color(10, 0, 10, 200))
+    .setLabel("Pattern Settings").setColorBackground(color(10, 0, 10, 200))
     .moveTo(mainG)
     ;
   // SHAPES AREA
   cp5.addTextlabel("resizeShapes")
     .setPosition(5, 10)
-    .setText("DIMENSIONE FORME ATTIVE")
+    .setText("ACTIVE SHAPES SIZE")
     .moveTo(settG)
     ;
   cp5.addTextfield("inputShapeWidth")
@@ -753,7 +753,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleKeepShapeRatio")
-    .setLabel("Mantieni Rapporto")
+    .setLabel("Keep Ratio")
     .setPosition(5, 48)
     .setSize(42, 15)
     .setBroadcast(false)
@@ -762,7 +762,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleShapesLikeCells")
-    .setLabel("Copia Dimensioni Celle")
+    .setLabel("Copy cells size")
     .setPosition(85, 48)
     .setSize(63, 15)
     .setBroadcast(false)
@@ -772,7 +772,7 @@ void setup()
     ;
    cp5.addTextlabel("modeLabel")
      .setPosition(5, 90)
-     .setText("MODALITA' RIEMPIMENTO")
+     .setText("FILLING MODE")
      .moveTo(settG)
      ;
   cp5.addRadioButton("modeRadio")
@@ -784,12 +784,12 @@ void setup()
     .setItemsPerRow(2)
     .setSpacingColumn(47)
     .setGroup(settG)
-    .addItem("Normale",1)
+    .addItem("Standard",1)
     .addItem("Random",2)
     .addItem("RL",3)
     ;
   cp5.addSlider("randomRadius")
-    .setLabel("Raggio")
+    .setLabel("Radius")
     .setPosition(50, 130)
     .setSize(90, 12)
     .setRange(0, 20)
@@ -803,7 +803,7 @@ void setup()
   //   .moveTo(settG)
   //   ;
   cp5.addButton("openPalette")
-    .setLabel("APRI PALETTE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("OPEN PALETTE").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(5, 155)
     .setSize(90, 25)
     .setColorBackground(cp)
@@ -817,7 +817,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleWorkingStates")
-    .setLabel("Impostazioni stati attivi")
+    .setLabel("Active states settings")
     .setPosition(40, 300)
     .setSize(100, 15)
     .setBroadcast(false) // needed as explained above
@@ -911,7 +911,7 @@ void setup()
   //   .moveTo(settG)
   //   ;
   cp5.addToggle("toggleFill")
-    .setLabel("Riempimento ON")
+    .setLabel("Fill ON")
     .setPosition(100, 255)
     .setSize(42, 15)
     .setValue(currentSettings.isFillOnActive())
@@ -920,7 +920,7 @@ void setup()
     ;
   cp5.addTextlabel("pickerStrokeLabel")
     .setPosition(5, 195)
-    .setText("CONTORNO FORME ATTIVE")
+    .setText("ACTIVE CELLS STROKE")
     .moveTo(settG)
     ;
   cp5.addSlider("pickRStroke")
@@ -960,7 +960,7 @@ void setup()
     .moveTo(settG)
     ;
   cp5.addToggle("toggleStroke")
-    .setLabel("Contorno ON")
+    .setLabel("Stroke ON")
     .setPosition(5, 255)
     .setSize(42, 15)
     .setValue(currentSettings.isStrokeOnActive())
@@ -1042,21 +1042,21 @@ void setup()
     .hideBar()
     ;
   cp5.addTextlabel("labelPalettePreview")
-    .setValue("Anteprime:")
+    .setValue("Previews:")
     .setPosition(30,60)
     .setSize(10,10)
     .moveTo(winG)
     .hide()
     ;
   cp5.addTextlabel("labelPaletteProb")
-    .setValue("Probabilita' %:")
+    .setValue("Probability %:")
     .setPosition(190,60)
     .setSize(20,10)
     .moveTo(winG)
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor1")
-    .setLabel("Stato 1")
+    .setLabel("State 1")
     .setPosition(100,80)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1081,7 +1081,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor2")
-    .setLabel("Stato 2")
+    .setLabel("State 2")
     .setPosition(100,120)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1106,7 +1106,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor3")
-    .setLabel("Stato 3")
+    .setLabel("State 3")
     .setPosition(100,160)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1131,7 +1131,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor4")
-    .setLabel("Stato 4")
+    .setLabel("State 4")
     .setPosition(100,200)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1156,7 +1156,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor5")
-    .setLabel("Stato 5")
+    .setLabel("State 5")
     .setPosition(100,240)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1181,7 +1181,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor6")
-    .setLabel("Stato 6")
+    .setLabel("State 6")
     .setPosition(100,280)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1206,7 +1206,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColor7")
-    .setLabel("Stato 7")
+    .setLabel("State 7")
     .setPosition(100,320)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1231,7 +1231,7 @@ void setup()
     .hide()
     ;
   cp5.addTextfield("inputPaletteColorVoid")
-    .setLabel("Stato 0 (INATTIVO)")
+    .setLabel("State 0 (INACTIVE)")
     .setPosition(100,360)
     .setSize(50,13)
     .setColorBackground(0)
@@ -1274,7 +1274,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Sovrascrivi").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Overwrite").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonConfigRemovalOK")
     .setPosition(60,80)
@@ -1285,7 +1285,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Rimuovi!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Delete!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonDownloadUpdateOK")
     .setPosition(60,80)
@@ -1296,7 +1296,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Scarica").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Download").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonApplyUpdateOK")
     .setPosition(60,80)
@@ -1307,7 +1307,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Riavvia ora").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Restart now!").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonApplyUpdateCancel")
     .setPosition(160,80)
@@ -1318,7 +1318,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Riavvia dopo").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Restart later").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonPaletteOK")
     .setPosition(60,80)
@@ -1329,7 +1329,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Salva").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Save").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
   cp5.addButton("buttonPaletteCancel")
     .setPosition(160,80)
@@ -1340,7 +1340,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Cancel").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     ;
 
   /* ca name is shown only if file has been loaded */
@@ -1602,7 +1602,7 @@ void savePalette() {
   //}
 }
 void openPalette(int value) {
-  showPopup("Inserire gli esadecimali per ogni stato:\n(dare INVIO ad ogni inserimento!)", 300, 450, 4, 2);
+  showPopup("Put the hexadecimal values for each state:\n(press RETURN after EACH insertion!)", 300, 450, 4, 2);
   showPalette();
 }
 void showProbabilities() {
@@ -1941,15 +1941,15 @@ void setLock(Controller theController, boolean theValue)
 void toggleWorkingStates(boolean flag)
 {
   currentSettings.setWorkingOnActiveStates(flag);
-  String status = flag? "ATTIV" : "INATTIV";
+  String status = flag? "ACTIV" : "INACTIV";
   mainG.getController("toggleWorkingStates").setLabel(
-    "IMPOSTAZIONI STATI " + status + "I");
+    status + "E " + "STATES SETTINGS");
   mainG.getController("resizeShapes").setStringValue(
-    "DIMENSIONI FORME " + status + "E");
+    status + "E " + "SHAPES SIZE");
   // mainG.getController("pickerFillLabel").setStringValue(
   //   "RIEMPIMENTO FORME " + status + "E");
   mainG.getController("pickerStrokeLabel").setStringValue(
-    "CONTORNO FORME " + status + "E");
+    status + "E " + "SHAPES STROKE");
   updateControls();
 }
 
@@ -2085,7 +2085,7 @@ void updateHistory()
 }
 void loadRleConfig(int status)
 {
-  selectInput("Selezionare un file RLE di Golly:", "fileSelected");
+  selectInput("Selece a Golly RLE File:", "fileSelected");
 }
 
 void newEmptyConfig(int status)
@@ -2100,7 +2100,7 @@ void exportToPDF(int status)
   {
     defaultFile = new File("Untitled");
   }
-  selectOutput("Selezionare destinazione PDF:", "pdfSelected", defaultFile);
+  selectOutput("Select PDF destination:", "pdfSelected", defaultFile);
 }
 
 void exportToRLE(int status)
@@ -2110,7 +2110,7 @@ void exportToRLE(int status)
   {
     defaultFile = new File("Untitled");
   }
-  selectOutput("Selezionare destinazione PDF:", "rleSelected", defaultFile);
+  selectOutput("Select RLE destination:", "rleSelected", defaultFile);
 }
 
 void checkForUpdate(boolean flag)
@@ -2173,7 +2173,7 @@ void toggleShapesLikeCells(boolean flag)
 void toggleStroke(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleStroke").setLabel("Contorno " + status);
+  mainG.getController("toggleStroke").setLabel("Stroke " + status);
   if (currentSettings.workingOnActiveStates())
     currentSettings.setIsStrokeOnActive(flag);
   else
@@ -2182,7 +2182,7 @@ void toggleStroke(boolean flag)
 void toggleFill(boolean flag)
 {
   String status = flag? "ON" : "OFF";
-  mainG.getController("toggleFill").setLabel("Riempimento " + status);
+  mainG.getController("toggleFill").setLabel("Fill " + status);
   if (currentSettings.workingOnActiveStates())
     currentSettings.setIsFillOnActive(flag);
   else
@@ -2216,7 +2216,7 @@ void buttonApplyUpdateCancel(boolean flag)
   killPopup();
   cp5.getController("checkForUpdate").remove();
   cp5.addButton("checkForUpdate")
-    .setLabel("Riavvia e aggiorna").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Restart and update").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .setPosition(40, 66)
     .setSize(110, 19)
     .setColorBackground(cp)
@@ -2469,7 +2469,7 @@ void pdfSelected(File selection)
     pdfFile = selection.getAbsolutePath() + ".pdf";
     println("User selected " + pdfFile);
     if (!fileExists(pdfFile)) exportNow();
-    else showPopup("Ao, questo file PDF esiste gia'!\n\nSovrascriverlo?", 1, 0);
+    else showPopup("Destination PDF already exists!\n\nOverwrite it?", 1, 0);
   }
 }
 
@@ -2954,7 +2954,7 @@ void loadGollyRle()
   catch (RuntimeException e)
   {
     System.err.println("ERROR: File is possibly NOT in a valid golly RLE format!");
-    showPopup("Giovani, qui accettiamo solo file in formato RLE di Golly!\n\n", 0, -1);
+    showPopup("Please input a Golly RLE file!\n\n", 0, -1);
   }
   catch (IOException e)
   {
@@ -2984,12 +2984,12 @@ void checkForUpdate()
 {
   try {
     if (updater.updateAvailable()) {
-      showPopup("E' disponibile un aggiornamento!\n\nScaricarlo?", 2, 0);
+      showPopup("New update available!\n\nDownload it now?", 2, 0);
     } else {
-      showPopup("Nessun aggiornamento disponibile!\n\n", 0, -1);
+      showPopup("No updates available!\n\n", 0, -1);
     }
   } catch(Exception e) {
-    showPopup("Non sono riuscito a verificare la presenza di aggiornamenti:(\n\n" +
+    showPopup("Unable to check for new updates :(\n\n" +
               e.getMessage(), 0, -1);
   }
 }
@@ -2998,11 +2998,11 @@ void downloadUpdate()
   try {
     updater.downloadUpdate();
     if (updater.updateReady()) {
-      showPopup("L'aggiornamento e' pronto!\nE' necessario il riavvio del programma.\n\n" +
-                "Riavviare adesso? (se no, sara' installato al prossimo avvio)", 3, 1);
+      showPopup("Update is ready!\nThis program needs to be restart to apply it.\n\n" +
+                "Restart now? (if not, it will be applied at the next run)", 3, 1);
     }
   } catch(Exception e) {
-    showPopup("Non sono riuscito a scaricare l'aggiornamento:(\n\n" +
+    showPopup("Unable to download the update :(\n\n" +
               e.getMessage(), 0, -1);
   }
 }
@@ -3011,12 +3011,12 @@ void applyUpdate()
   try {
     updater.applyUpdate();
     if (updater.updateSuccessfull()) {
-      showPopup("L'ultimo aggiornamento è stato installato con successo! :D\n\n", 0, -1);
+      showPopup("Latest update applied successfully! :D\n\n", 0, -1);
     } else {
-      showPopup("Sì e' verificato un errore durante l'aggiornamento :O\n\n", 0, -1);
+      showPopup("An error occurred while applying the update :O\n\n", 0, -1);
     }
   } catch(Exception e) {
-    showPopup("Sì e' verificato un errore durante l'aggiornamento :O\n\n" +
+    showPopup("An error occurred while applying the update :O\n\n" +
               e.getMessage(), 0, -1);
   }
 }
@@ -3220,8 +3220,8 @@ void dropEvent(DropEvent theDropEvent) {
     File myFile = theDropEvent.file();
     println("\nisDirectory ? " + myFile.isDirectory() + "  /  isFile ? " + myFile.isFile());
     if (myFile.isDirectory()) {
-      showPopup("Hai draggato una directory intera, esagerato!" +
-                "\n\nDragga un RLE per volta, thanks :D", 0, -1);
+      showPopup("You dragged a whole directory!" +
+                "\n\nDrag ONE RLE per time, thanks :D", 0, -1);
     } else {
       gollyFilePath = myFile.getAbsolutePath();
       loadGollyRle();
