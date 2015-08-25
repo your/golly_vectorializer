@@ -1251,7 +1251,7 @@ void setup()
     .setBroadcast(false)
     .setValue(1)
     .setBroadcast(true)
-    .setLabel("Annulla").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
+    .setLabel("Cancel").align(0,0,ControlP5.CENTER, ControlP5.CENTER)
     .hide()
     ;
   cp5.addButton("buttonGenericOK")
@@ -1701,12 +1701,12 @@ void serialize()
   {
     defaultFile = new File("Untitled");
   }
-  selectOutput("Selezionare destinazione salvataggio:", "serializeConfigAndSettings", defaultFile);
+  selectOutput("Select destination:", "serializeConfigAndSettings", defaultFile);
 }
 
 void deserialize()
 {
-  selectInput("Selezionare file da caricare:", "deserializeConfigAndSettings");
+  selectInput("Select source:", "deserializeConfigAndSettings");
 }
 
 void serializeConfigAndSettings(File selected)
@@ -1721,7 +1721,7 @@ void serializeConfigAndSettings(File selected)
                                                              currentSettings,
                                                              path);
     } catch(IOException e) {
-      showPopup("Impossibile salvare la configurazione corrente!\n\n", 0, -1);
+      showPopup("An error occurred while saving the configuration!\n\n", 0, -1);
       e.printStackTrace();
     }
   }
@@ -1755,12 +1755,12 @@ void deserializeConfigAndSettings(File selected)
       updateControls();
       
     } catch(IOException e) {
-      showPopup("Impossibile caricare la configurazione dal file selezionato!" +
-                "\n\n(Formato file errato?)", 0, -1);
+      showPopup("An error occurred while loading the configuration!" +
+                "\n\n(Wrong file format?)", 0, -1);
       e.printStackTrace();
     } catch(ClassNotFoundException e) {
-      showPopup("Impossibile caricare la configurazione dal file selezionato!" +
-                "\n\n(Formato file errato o di una versione precedente?)", 0, -1);
+      showPopup("An error occurred while loading the configuration!" +
+                "\n\n(Wrong file format or from ad old version?)", 0, -1);
       e.printStackTrace();
     }
   }
