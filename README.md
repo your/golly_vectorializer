@@ -45,4 +45,4 @@ Marika Mastrandea and Michele Bozzi are the designers that originally contacted 
 The software delivered exceeded the original requirements and maybe skipped some of them... but, judging from the results, we personally don't regret that. :)
 
 ## License
-Golly Vectorializer is released under the [MIT License](http://opensource.org/licenses/MIT).
+Golly Vectorializer is released under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3.0.en.html).
