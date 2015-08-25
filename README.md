@@ -53,8 +53,7 @@ active cells by the same color, according to a notion of proximity.
 
 Special thanks to Marika Mastrandea and Michele Bozzi who are the
 designers that originally contacted the authors to work togheter on an
-identity design project for a
-**[TrackZero, a self-sustaining organization](http://www.trackzero.org/)**.
+identity design project for **[TrackZero, a self-sustaining organization](http://www.trackzero.org/)**.
 
 The identity theme naturally felt under topics such as self-organizing
 complex systems and artificial life. The main objective was to convey
