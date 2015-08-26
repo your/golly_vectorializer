@@ -51,7 +51,7 @@ active cells by the same color, according to a notion of proximity.
 
 ## Aknowledgments
 
-Special thanks to Marika Mastrandea and Michele Bozzi who are the
+Special thanks to Marika Mastrandrea and Michele Bozzi who are the
 designers that originally contacted the authors to work togheter on an
 identity design project for **[TrackZero, a self-sustaining organization](http://www.trackzero.org/)**.
 
@@ -60,7 +60,7 @@ complex systems and artificial life. The main objective was to convey
 the idea of a live, bottom-up, holistic structure in a generative design way.
 
 Some of the produced graphical artifacts can be found here, here and
-here [INSERT LINKs].
+here [links temporary unavailable].
 
 The software delivered exceeded the original requirements and maybe skipped some of them... but, judging from the results, we personally don't regret that. :)
 
