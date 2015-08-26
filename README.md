@@ -20,7 +20,7 @@ A [Processing](https://processing.org/)  app to (mainly):
 ## Main goal
 
 Golly Vectorializer was designed and developed as a support tool enabling
-*graphic designers* to work with Golly's CAs in vector graphics. 
+*graphic designers* to work with Golly's CA in vector graphics. 
 
 ## Functioning
 
@@ -52,7 +52,7 @@ active cells by the same color, according to a notion of proximity.
 
 ### Windows
 
-* **32bit**: [golly_vect-beta1-win32.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win32.zip) (sha1:cb12390764232834ff8fe5baa75895d8688da225))
+* **32bit**: [golly_vect-beta1-win32.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win32.zip) (sha1:cb12390764232834ff8fe5baa75895d8688da225)
 * **64bit**: [golly_vect-beta1-win64.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win64.zip) (sha1:cb7c2d51c3f36110532be1310269cd7e7d6eadaa)
 
 
