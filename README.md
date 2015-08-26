@@ -47,19 +47,19 @@ active cells by the same color, according to a notion of proximity.
 ### OSX
 
 * **Standard**: 
-[golly_vect-beta1-osx-no_java_embedded.zip](compiled_binaries/golly_vect-beta1-osx-no_java_embedded.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-no_java_embedded.zip) [sha1: 1b206e41f2199d1cd487191d3ed7938b36f1713d]
-* **Java7 Embedded**: [golly_vect-beta1-osx-java_embedded.zip](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-osx-java_embedded.zip) (mirror only) [sha1: 032ef7cfce25966b1f0f65bc77797b6c4eee7bd3]
+[golly_vect-beta1-osx-no_java_embedded.zip](compiled_binaries/golly_vect-beta1-osx-no_java_embedded.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-no_java_embedded.zip) (sha1:1b206e41f2199d1cd487191d3ed7938b36f1713d)
+* **Java7 Embedded**: [golly_vect-beta1-osx-java_embedded.zip](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-osx-java_embedded.zip) (mirror only) (sha1:032ef7cfce25966b1f0f65bc77797b6c4eee7bd3)
 
 ### Windows
 
-* **32bit**: [golly_vect-beta1-win32.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win32.zip) [sha1: cb12390764232834ff8fe5baa75895d8688da225]
-* **64bit**: [golly_vect-beta1-win64.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win64.zip) [sha1: cb7c2d51c3f36110532be1310269cd7e7d6eadaa]
+* **32bit**: [golly_vect-beta1-win32.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win32.zip) (sha1:cb12390764232834ff8fe5baa75895d8688da225))
+* **64bit**: [golly_vect-beta1-win64.zip](compiled_binaries/golly_vect-beta1-win32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-win64.zip) (sha1:cb7c2d51c3f36110532be1310269cd7e7d6eadaa)
 
 
 ### Linux
 
-* **32bit**: [golly_vect-beta1-linux32.zip](compiled_binaries/golly_vect-beta1-linux32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-linux32.zip) [sha1: d73de7a23f764b5483d796fc3d767ff609ce1cdd]
-* **64bit**: [golly_vect-beta1-linux64.zip](compiled_binaries/golly_vect-beta1-linux64.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-linux64.zip) [sha1: ff6dc46881f20b89794f8bf1f5a4b5625142d301]
+* **32bit**: [golly_vect-beta1-linux32.zip](compiled_binaries/golly_vect-beta1-linux32.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-linux32.zip) (sha1:d73de7a23f764b5483d796fc3d767ff609ce1cdd)
+* **64bit**: [golly_vect-beta1-linux64.zip](compiled_binaries/golly_vect-beta1-linux64.zip) [[mirror]](http://sharped.net/golly_vect/compiled_binaries/golly_vect-beta1-linux64.zip) (sha1:ff6dc46881f20b89794f8bf1f5a4b5625142d301)
 
 ## Authors
 
