@@ -38,9 +38,9 @@ active cells by the same color, according to a notion of proximity.
 
 
 ## Examples
-![image](resources/anim1.gif =600x)
-![image](resources/anim2.gif =600x)
-![image](resources/snap1.png =600x)
+![image](resources/anim1.gif)
+![image](resources/anim2.gif)
+![image](resources/snap1.png)
 
 ## Binaries
 
