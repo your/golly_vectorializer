@@ -961,7 +961,7 @@ void setup()
   /* test if any update downloaded has to be applied */
   updateReady(false); // true to enable startup updates
 
-  addFocusListener();
+  //addFocusListener();
  
 }
 
@@ -971,23 +971,23 @@ void setup()
 
 /* Focus Listener */
 
-void addFocusListener()
-{
-  this.addFocusListener(new FocusAdapter(){
-    public void focusGained(FocusEvent e)
-    {
-      /* looping again */
-      println("focus gained");
-      loop();
-    }
-    public void focusLost(FocusEvent e)
-    {
-      /* lost focus, stop looping */
-      println("focus lost");
-      noLoop();
-    }
-  });
-}
+//void addFocusListener()
+//{
+//  this.addFocusListener(new FocusAdapter(){
+//    public void focusGained(FocusEvent e)
+//    {
+//      /* looping again */
+//      println("focus gained");
+//      loop();
+//    }
+//    public void focusLost(FocusEvent e)
+//    {
+//      /* lost focus, stop looping */
+//      println("focus lost");
+//      noLoop();
+//    }
+//  });
+//}
 
 //==========================================================
 
