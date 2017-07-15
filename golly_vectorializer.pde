@@ -91,7 +91,6 @@ void setup()
   /* Setting up main display settings */
   size(1024, 700);
   background(bg);
-  smooth();
   
   /* capping the frame rate, shall we go even lower? */
   frameRate(27);
