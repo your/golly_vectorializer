@@ -1286,7 +1286,7 @@ void cellWidth(float val) {
 
 void inputCellWidth(String val) {
   val = val.replace(',', '.');
-  cp5.controller("cellWidth").setValue(float(val));
+  cp5.getController("cellWidth").setValue(float(val));
 }
 
 void cellHeight(float val) {
@@ -1315,7 +1315,7 @@ void cellHeight(float val) {
 
 void inputCellHeight(String val) {
   val = val.replace(',', '.');
-  cp5.controller("cellHeight").setValue(float(val));
+  cp5.getController("cellHeight").setValue(float(val));
 }
 
 void shapeWidth(float val) {
@@ -1337,7 +1337,7 @@ void shapeWidth(float val) {
 
 void inputShapeWidth(String val) {
   val = val.replace(',', '.');
-  cp5.controller("shapeWidth").setValue(float(val));
+  cp5.getController("shapeWidth").setValue(float(val));
 }
 
 void shapeHeight(float val) {
@@ -1359,7 +1359,7 @@ void shapeHeight(float val) {
 
 void inputShapeHeight(String val) {
   val = val.replace(',', '.');
-  cp5.controller("shapeHeight").setValue(float(val));
+  cp5.getController("shapeHeight").setValue(float(val));
 }
 
 void checkForUpdate(boolean flag)
@@ -1486,7 +1486,7 @@ void pickRFill(int val) {
 }
 
 void inputRFill(String val) {
-  cp5.controller("pickRFill").setValue(int(val));
+  cp5.getController("pickRFill").setValue(int(val));
 }
 
 void pickGFill(int val)
@@ -1500,7 +1500,7 @@ void pickGFill(int val)
 }
 
 void inputGFill(String val) {
-  cp5.controller("pickGFill").setValue(int(val));
+  cp5.getController("pickGFill").setValue(int(val));
 }
 
 void pickBFill(int val)
@@ -1514,7 +1514,7 @@ void pickBFill(int val)
 }
 
 void inputBFill(String val) {
-  cp5.controller("pickBFill").setValue(int(val));
+  cp5.getController("pickBFill").setValue(int(val));
 }
 
 void pickAFill(int val)
@@ -1528,7 +1528,7 @@ void pickAFill(int val)
 }
 
 void inputAFill(String val) {
-  cp5.controller("pickAFill").setValue(int(val));
+  cp5.getController("pickAFill").setValue(int(val));
 }
 
 void pickRStroke(int val)
@@ -1875,22 +1875,22 @@ void openPalette(int value) {
 }
 
 void showProbabilities() {
-  winG.controller("labelPaletteProb").show();
+  winG.getController("labelPaletteProb").show();
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteProb" + (i + 1);
-    winG.controller(currentInput).show();
-    winG.controller(currentInput).setBroadcast(true);
+    winG.getController(currentInput).show();
+    winG.getController(currentInput).setBroadcast(true);
     Textfield txt = ((Textfield)cp5.getController(currentInput));
     double prob = currentSettings.getColorProbability(i) * 100;
     String probString = String.format("%.2f", prob);
     txt.setText(probString.replace(",", "."));
-    winG.controller(currentInput).setBroadcast(false);
+    winG.getController(currentInput).setBroadcast(false);
   }
 }
 
 void showPalette() {
   showProbabilities();
-  winG.controller("labelPalettePreview").show();
+  winG.getController("labelPalettePreview").show();
   for (int i = 0; i < paletteColors; i++) {
     String currentInput = "inputPaletteColor" + (i + 1);
     Textfield content = ((Textfield)cp5.getController(currentInput));
@@ -1898,7 +1898,7 @@ void showPalette() {
     content.setBroadcast(false);
     content.setValue(hexedColor.substring(2));
     content.setBroadcast(true);
-    winG.controller(currentInput).show();
+    winG.getController(currentInput).show();
   }
 
   // inactive states part
@@ -1910,7 +1910,7 @@ void showPalette() {
   content.setBroadcast(false);
   content.setValue(hex(colorInactive).substring(2));
   content.setBroadcast(true);
-  winG.controller("inputPaletteColorVoid").show();
+  winG.getController("inputPaletteColorVoid").show();
   
   setDrawable(0, 50, 80, 10, 10, currentSettings.getColor(0));
   setDrawable(1, 50, 120, 10, 10, currentSettings.getColor(1));
@@ -1941,17 +1941,17 @@ void killPalette() {
   winG.remove(d[5]);
   winG.remove(d[6]);
   winG.remove(d[7]);
-  winG.controller("labelPalettePreview").hide();
-  winG.controller("inputPaletteColor1").hide();
-  winG.controller("inputPaletteColor2").hide();
-  winG.controller("inputPaletteColor3").hide();
-  winG.controller("inputPaletteColor4").hide();
-  winG.controller("inputPaletteColor5").hide();
-  winG.controller("inputPaletteColor6").hide();
-  winG.controller("inputPaletteColor7").hide();
-  winG.controller("inputPaletteColorVoid").hide();
-  winG.controller("labelPaletteProb").show();
-  winG.controller("inputPaletteProb1").hide();
+  winG.getController("labelPalettePreview").hide();
+  winG.getController("inputPaletteColor1").hide();
+  winG.getController("inputPaletteColor2").hide();
+  winG.getController("inputPaletteColor3").hide();
+  winG.getController("inputPaletteColor4").hide();
+  winG.getController("inputPaletteColor5").hide();
+  winG.getController("inputPaletteColor6").hide();
+  winG.getController("inputPaletteColor7").hide();
+  winG.getController("inputPaletteColorVoid").hide();
+  winG.getController("labelPaletteProb").show();
+  winG.getController("inputPaletteProb1").hide();
 }
 
 void buttonPaletteOK() {
@@ -2102,15 +2102,15 @@ void buttonConfigRemovalOK() {
 
 void resetPopup() {
   // reset buttons
-  winG.controller("buttonGenericOK").hide();
-  winG.controller("buttonOverwriteOK").hide();
-  winG.controller("buttonDownloadUpdateOK").hide();
-  winG.controller("buttonApplyUpdateOK").hide();
-  winG.controller("buttonConfigRemovalOK").hide();
-  winG.controller("buttonGenericCancel").hide();
-  winG.controller("buttonApplyUpdateCancel").hide();
-  winG.controller("buttonPaletteOK").hide();
-  winG.controller("buttonPaletteCancel").hide();
+  winG.getController("buttonGenericOK").hide();
+  winG.getController("buttonOverwriteOK").hide();
+  winG.getController("buttonDownloadUpdateOK").hide();
+  winG.getController("buttonApplyUpdateOK").hide();
+  winG.getController("buttonConfigRemovalOK").hide();
+  winG.getController("buttonGenericCancel").hide();
+  winG.getController("buttonApplyUpdateCancel").hide();
+  winG.getController("buttonPaletteOK").hide();
+  winG.getController("buttonPaletteCancel").hide();
 }
 
 void showPopup(String message, int xSize, int ySize, int buttonA, int buttonB) {
@@ -2136,9 +2136,9 @@ void showPopup(String message, int buttonA, int buttonB) {
     popupYSize = lines * 40 + 20;
   }
   
-  cp5.group("messageBox").setPosition((width - popupXSize) / 2 - 50,
+  cp5.getGroup("messageBox").setPosition((width - popupXSize) / 2 - 50,
                                       (height - popupYSize) / 2 - 50);
-  cp5.group("messageBox").setSize(popupXSize, popupYSize);
+  cp5.getGroup("messageBox").setSize(popupXSize, popupYSize);
   
   lockG.show();
   cp5.addTextlabel("messageBoxLabel")
@@ -2165,52 +2165,52 @@ void showPopup(String message, int buttonA, int buttonB) {
   
   switch(buttonA) {
   case 0:
-    cp5.controller("buttonGenericOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonGenericOK").setPosition(popupXSize / 2 - 100,
                                                   popupYSize - 45);
-    cp5.controller("buttonGenericOK").show();
+    cp5.getController("buttonGenericOK").show();
     break;
   case 1:
-    cp5.controller("buttonOverwriteOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonOverwriteOK").setPosition(popupXSize / 2 - 100,
                                                     popupYSize - 45);
-    cp5.controller("buttonOverwriteOK").show();
+    cp5.getController("buttonOverwriteOK").show();
     break;
   case 2:
-    cp5.controller("buttonDownloadUpdateOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonDownloadUpdateOK").setPosition(popupXSize / 2 - 100,
                                                          popupYSize - 45);
-    cp5.controller("buttonDownloadUpdateOK").show();
+    cp5.getController("buttonDownloadUpdateOK").show();
     break;
   case 3:
-    cp5.controller("buttonApplyUpdateOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonApplyUpdateOK").setPosition(popupXSize / 2 - 100,
                                                       popupYSize - 45);
-    cp5.controller("buttonApplyUpdateOK").show();
+    cp5.getController("buttonApplyUpdateOK").show();
     break;
   case 4:
-    cp5.controller("buttonPaletteOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonPaletteOK").setPosition(popupXSize / 2 - 100,
                                                   popupYSize - 45);
-    cp5.controller("buttonPaletteOK").show();
+    cp5.getController("buttonPaletteOK").show();
     break;
   case 5:
-    cp5.controller("buttonConfigRemovalOK").setPosition(popupXSize / 2 - 100,
+    cp5.getController("buttonConfigRemovalOK").setPosition(popupXSize / 2 - 100,
                                                         popupYSize - 45);
-    cp5.controller("buttonConfigRemovalOK").show();
+    cp5.getController("buttonConfigRemovalOK").show();
     break;
   }
 
   switch(buttonB) {
   case 0:
-    cp5.controller("buttonGenericCancel").setPosition(popupXSize / 2 + 25,
+    cp5.getController("buttonGenericCancel").setPosition(popupXSize / 2 + 25,
                                                       popupYSize - 45);
-    cp5.controller("buttonGenericCancel").show();
+    cp5.getController("buttonGenericCancel").show();
     break;
   case 1:
-    cp5.controller("buttonApplyUpdateCancel").setPosition(popupXSize / 2 + 25,
+    cp5.getController("buttonApplyUpdateCancel").setPosition(popupXSize / 2 + 25,
                                                           popupYSize - 45);
-    cp5.controller("buttonApplyUpdateCancel").show();
+    cp5.getController("buttonApplyUpdateCancel").show();
     break;
   case 2:
-    cp5.controller("buttonPaletteCancel").setPosition(popupXSize / 2 + 25,
+    cp5.getController("buttonPaletteCancel").setPosition(popupXSize / 2 + 25,
                                                       popupYSize - 45);
-    cp5.controller("buttonPaletteCancel").show();
+    cp5.getController("buttonPaletteCancel").show();
     break;
   }
   
