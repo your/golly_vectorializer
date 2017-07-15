@@ -35,8 +35,6 @@ String gollyFilePath = null;
 String pastedMessage;
 String pdfFile;
 
-int x = 1024;
-int y = 768;
 int sizeCP5Group = 200;
 int popupXSize, popupYSize = 0;
 int paletteColors = 7;
@@ -91,7 +89,7 @@ String remotePath = "cgi-bum/release/golly_vectorializer.app/Contents/Java/";
 void setup()
 {   
   /* Setting up main display settings */
-  size(x, y);
+  size(1024, 700);
   background(bg);
   smooth();
   
