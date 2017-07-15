@@ -1003,7 +1003,7 @@ void setDrawable(int objNum,
                  final int xWidth, final int yHeight,
                  final color fillColor) {
   d[objNum] = new CDrawable() {    
-    public void draw(PApplet p) {
+    public void draw(PGraphics p) {
       p.pushMatrix();
       p.translate(xOffset, yOffset);
       p.fill(fillColor);
