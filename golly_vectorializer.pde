@@ -13,8 +13,7 @@ import java.awt.event.KeyEvent;
 import java.security.CodeSource;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-
-
+import java.awt.Toolkit;
 
 /* Mains */
 
@@ -2846,7 +2845,7 @@ String GetTextFromClipboard()
 
 Object GetFromClipboard(DataFlavor flavor)
 {
-  Clipboard clipboard = getToolkit().getSystemClipboard();
+  Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
   Transferable contents = clipboard.getContents(null);
   Object obj = null;
   if (contents != null && contents.isDataFlavorSupported(flavor))
